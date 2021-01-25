@@ -2,3 +2,4 @@ pdflatex main.tex
 bibtex main.aux
 pdflatex main.tex
 pdflatex main.tex
+rm main.bbl main.log main.blg 
