@@ -2,114 +2,125 @@
 \newlabel{FirstPage}{{}{1}{}{}{}}
 \@writefile{toc}{\contentsline {title}{Global multivariate model learning from hierarchically correlated data}{1}{}}
 \@writefile{toc}{\contentsline {abstract}{Abstract}{1}{}}
-\citation{Inverse_problem_Berg}
-\citation{Inverse_problem_proteins}
+\citation{sayers_genbank_2019,uniprotconsortium_uniprot_2018}
+\citation{levy_potts_2017,cocco_inverse_2018}
+\citation{qin_power_2018}
+\citation{uhlenbeck_theory_1930,felsenstein_phylogenies_1988,hansen_stabilizing_1997}
+\citation{bartoszek_phylogenetic_2012,mitov_fast_2020}
+\citation{jones_psicov_2012,baldassi_fast_2014}
+\citation{morcos_direct-coupling_2011,figliuzzi_coevolutionary_2016,russ_evolution-based_2020}
 \@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{2}{}}
 \newlabel{sec:int}{{I}{2}{}{}{}}
-\newlabel{par:old}{{I\tmspace  +\thinmuskip {.1667em}\tmspace  +\thinmuskip {.1667em}0\tmspace  +\thinmuskip {.1667em}a}{2}{}{}{}}
-\@writefile{toc}{\contentsline {paragraph}{\numberline {a}Old}{2}{}}
-\citation{entropy_paper}
-\citation{Baldassi}
-\citation{gardiner}
 \@writefile{toc}{\contentsline {section}{\numberline {II}The multivariate Ornstein-Uhlenbeck process}{3}{}}
 \newlabel{sec:ornstein_uhlenbeck_dynamics}{{II}{3}{}{}{}}
+\newlabel{eq:eq_distribution}{{1}{3}{}{}{}}
+\newlabel{eq:langevin}{{2}{3}{}{}{}}
 \citation{singh2017multiOU}
-\newlabel{eq:eq_distribution}{{1}{4}{}{}{}}
-\newlabel{eq:langevin}{{2}{4}{}{}{}}
 \newlabel{eq:FP}{{3}{4}{}{}{}}
 \newlabel{eq:OUpropagator}{{4}{4}{}{}{}}
 \newlabel{eq:def_lambda}{{5}{4}{}{}{}}
-\newlabel{eq:OUjoint}{{6}{5}{}{}{}}
-\newlabel{eq:pairwisecov}{{7}{5}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {III}Methods}{6}{}}
-\newlabel{sec:methods}{{III}{6}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {A}Statement of the problem}{6}{}}
-\newlabel{sub:statement_of_the_problem}{{III\tmspace  +\thinmuskip {.1667em}A}{6}{}{}{}}
+\newlabel{eq:OUjoint}{{6}{4}{}{}{}}
+\newlabel{eq:pairwisecov}{{7}{4}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {III}Methods}{5}{}}
+\newlabel{sec:methods}{{III}{5}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {A}Statement of the problem}{5}{}}
+\newlabel{sub:statement_of_the_problem}{{III\tmspace  +\thinmuskip {.1667em}A}{5}{}{}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Schematic representation of a tree $\mathcal  {T}$ underlying the data generating process. The process starts at the root node $r$ with a configuration $\mathaccentV {vec}17Ex_r$ sampled from $P_{eq}(\mathaccentV {vec}17Ex_r)$. The dynamics consist in independent realizations of the OU process on all branches from ancestral nodes $a(n)$ to child nodes $n$ over times corresponding to the branch length $\Delta t_{n,a(n)}$, initialized in the ancestral configuration $\mathaccentV {vec}17Ex_{a(n)}$. The observable data only consist of configurations of the leaf nodes (grey circles in the figure), while configurations of ancestral nodes remain unknown. There are no restrictions on the topology of tree $\mathcal  {T}$ and the length of the branches.}}{6}{}}
 \newlabel{fig:sample_tree}{{1}{6}{}{}{}}
-\newlabel{eq:bayesian_likelihood}{{8}{8}{}{}{}}
+\newlabel{eq:bayesian_likelihood}{{8}{7}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {B}Calculation of the likelihood}{8}{}}
 \newlabel{sub:Calculation_of_the_likelihood}{{III\tmspace  +\thinmuskip {.1667em}B}{8}{}{}{}}
 \newlabel{eq:multiOU_jointall}{{9}{8}{}{}{}}
-\newlabel{eq:jointcov_1}{{10}{9}{}{}{}}
-\newlabel{eq:jointcov_2}{{11}{9}{}{}{}}
-\newlabel{eq:likelihood_2}{{12}{9}{}{}{}}
+\newlabel{eq:jointcov_1}{{10}{8}{}{}{}}
+\newlabel{eq:jointcov_2}{{11}{8}{}{}{}}
+\newlabel{eq:likelihood_2}{{12}{8}{}{}{}}
 \newlabel{eq:z}{{13}{9}{}{}{}}
 \newlabel{eq:subG_def}{{14}{9}{}{}{}}
-\newlabel{eq:Sdef}{{15}{10}{}{}{}}
+\newlabel{eq:Sdef}{{15}{9}{}{}{}}
+\newlabel{eq:likelihood_3}{{17}{10}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {C}Maximizing the likelihood}{10}{}}
+\newlabel{sub:maximization_of_the_likelihood}{{III\tmspace  +\thinmuskip {.1667em}C}{10}{}{}{}}
 \citation{Raffenetti1970GEA,Shepard_param_OM}
-\newlabel{eq:likelihood_3}{{17}{11}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {C}Maximizing the likelihood}{11}{}}
-\newlabel{sub:maximization_of_the_likelihood}{{III\tmspace  +\thinmuskip {.1667em}C}{11}{}{}{}}
+\newlabel{eq:gradlikelihood_1}{{18}{11}{}{}{}}
+\newlabel{eq:gradlikelihood_2}{{19}{11}{}{}{}}
 \citation{matrix_cook_book}
-\newlabel{eq:gradlikelihood_1}{{18}{12}{}{}{}}
-\newlabel{eq:gradlikelihood_2}{{19}{12}{}{}{}}
+\citation{NLopt}
 \newlabel{eq:gradlikelihood_3}{{20}{12}{}{}{}}
 \newlabel{eq:grad_eigval}{{21}{12}{}{}{}}
-\citation{NLopt}
-\newlabel{eq:grad_eigvec}{{22}{13}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {IV}Results}{13}{}}
-\newlabel{sec:Results}{{IV}{13}{}{}{}}
+\newlabel{eq:grad_eigvec}{{22}{12}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Results}{12}{}}
+\newlabel{sec:Results}{{IV}{12}{}{}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces  Pearson correlation between empirical /maximum-likelihood covariance matrices and the true covariance matrix. The inset plot represents the ratio between the Pearson correlation for the maximum-likelihood covariance matrix and the one for the empirical covariance matrix. Simulations are performed for a tree of $512$ leaves and system size $L=4$.}}{14}{}}
 \newlabel{fig:pears_L4}{{2}{14}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textbf  {Left:}Relative $l2$-error between empirical or maximum-likelihood covariance matrices and the true covariance matrix. \textbf  {Right:}Relative $l2$-error between empirical /maximum-likelihood coupling matrices and the true coupling matrix. Logarithmic scale is chosen for the $y$-axis because of large values of the error at low $\gamma $. The inset in both panels show the ratio between the two errors.}}{15}{}}
-\newlabel{fig:error_1_L4}{{3}{15}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textbf  {Left:}Relative $l2$-error between empirical or maximum-likelihood covariance matrices and the true covariance matrix. \textbf  {Right:}Relative $l2$-error between empirical /maximum-likelihood coupling matrices and the true coupling matrix. Logarithmic scale is chosen for the $y$-axis because of large values of the error at low $\gamma $. The inset in both panels show the ratio between the two errors.}}{14}{}}
+\newlabel{fig:error_1_L4}{{3}{14}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Quality of prediction of interactions for different values of $\gamma $ and system size $L=4$. Interactions are defined as non-zero elements of the coupling matrix. In the $L=4$ case, there are $6$ possible interactions. Predictions are made by taking the largest elements (in absolute terms) of the inferred coupling matrix. The PPV is the fraction of correctly predicted contacts for a given number of predictions.}}{15}{}}
+\newlabel{fig:PPV_L4}{{4}{15}{}{}{}}
 \bibdata{mainNotes,bib_phylo}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Quality of prediction of interactions for different values of $\gamma $ and system size $L=4$. Interactions are defined as non-zero elements of the coupling matrix. In the $L=4$ case, there are $6$ possible interactions. Predictions are made by taking the largest elements (in absolute terms) of the inferred coupling matrix. The PPV is the fraction of correctly predicted contacts for a given number of predictions.}}{16}{}}
-\newlabel{fig:PPV_L4}{{4}{16}{}{}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {V}Discussion}{16}{}}
 \newlabel{sec:discussion}{{V}{16}{}{}{}}
-\bibcite{Inverse_problem_Berg}{{1}{}{{}}{{}}}
-\bibcite{Inverse_problem_proteins}{{2}{}{{}}{{}}}
-\bibcite{entropy_paper}{{3}{}{{}}{{}}}
-\bibcite{Baldassi}{{4}{}{{}}{{}}}
-\bibcite{gardiner}{{5}{}{{}}{{}}}
-\bibcite{singh2017multiOU}{{6}{}{{}}{{}}}
-\bibcite{Raffenetti1970GEA}{{7}{}{{}}{{}}}
-\bibcite{Shepard_param_OM}{{8}{}{{}}{{}}}
-\bibcite{matrix_cook_book}{{9}{}{{}}{{}}}
-\bibcite{NLopt}{{10}{}{{}}{{}}}
+\bibcite{sayers_genbank_2019}{{1}{}{{}}{{}}}
+\bibcite{uniprotconsortium_uniprot_2018}{{2}{}{{}}{{}}}
+\bibcite{levy_potts_2017}{{3}{}{{}}{{}}}
+\bibcite{cocco_inverse_2018}{{4}{}{{}}{{}}}
+\bibcite{qin_power_2018}{{5}{}{{}}{{}}}
+\bibcite{uhlenbeck_theory_1930}{{6}{}{{}}{{}}}
+\bibcite{felsenstein_phylogenies_1988}{{7}{}{{}}{{}}}
+\bibcite{hansen_stabilizing_1997}{{8}{}{{}}{{}}}
+\bibcite{bartoszek_phylogenetic_2012}{{9}{}{{}}{{}}}
+\bibcite{mitov_fast_2020}{{10}{}{{}}{{}}}
+\bibcite{jones_psicov_2012}{{11}{}{{}}{{}}}
+\bibcite{baldassi_fast_2014}{{12}{}{{}}{{}}}
 \@writefile{toc}{\contentsline {section}{\numberline {}References}{17}{}}
-\newlabel{LastBibItem}{{10}{17}{}{}{}}
+\bibcite{morcos_direct-coupling_2011}{{13}{}{{}}{{}}}
+\bibcite{figliuzzi_coevolutionary_2016}{{14}{}{{}}{{}}}
+\bibcite{russ_evolution-based_2020}{{15}{}{{}}{{}}}
+\bibcite{singh2017multiOU}{{16}{}{{}}{{}}}
+\bibcite{Raffenetti1970GEA}{{17}{}{{}}{{}}}
+\bibcite{Shepard_param_OM}{{18}{}{{}}{{}}}
+\bibcite{matrix_cook_book}{{19}{}{{}}{{}}}
+\bibcite{NLopt}{{20}{}{{}}{{}}}
+\newlabel{LastBibItem}{{20}{18}{}{}{}}
 \@writefile{toc}{\appendix }
-\@writefile{toc}{\contentsline {section}{\numberline {A}Supplementary material}{18}{}}
-\newlabel{sec:supplementary_material}{{A}{18}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1}Generating artificial data}{18}{}}
-\newlabel{sub:generating_artificial_data}{{A\tmspace  +\thinmuskip {.1667em}1}{18}{}{}{}}
-\newlabel{eq:OUsample}{{A1}{18}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2}Initializing parameters}{18}{}}
-\newlabel{sub:initializing_parameters}{{A\tmspace  +\thinmuskip {.1667em}2}{18}{}{}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {a}Eigenvalues and eigenvectors of $\mathbf  {C}^{-1}$}{18}{}}
-\newlabel{ssub:eigenvalues_and_eigenvectors}{{A\tmspace  +\thinmuskip {.1667em}2\tmspace  +\thinmuskip {.1667em}a}{18}{}{}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {b}Time scale parameter $\gamma $}{19}{}}
-\newlabel{eq:scalar_product}{{A2}{19}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3}Parametrizations of eigenvectors }{20}{}}
-\newlabel{sub:parametrizations_of_eigenvectors}{{A\tmspace  +\thinmuskip {.1667em}3}{20}{}{}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {a}Parametrization in term of generalized Eulerian angles}{20}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {b}Parametrization in term of the exponential of a skew-symmetric matrix }{22}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {4} Homogeneous and fully balanced tree }{23}{}}
-\newlabel{eq:G}{{A15}{23}{}{}{}}
-\newlabel{eq:G_a}{{A16}{23}{}{}{}}
-\newlabel{eq:lambda_hyper}{{A17}{23}{}{}{}}
-\newlabel{eq:eigenvec_simpler_case}{{A18}{23}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Supplementary material}{19}{}}
+\newlabel{sec:supplementary_material}{{A}{19}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1}Generating artificial data}{19}{}}
+\newlabel{sub:generating_artificial_data}{{A\tmspace  +\thinmuskip {.1667em}1}{19}{}{}{}}
+\newlabel{eq:OUsample}{{A1}{19}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2}Initializing parameters}{19}{}}
+\newlabel{sub:initializing_parameters}{{A\tmspace  +\thinmuskip {.1667em}2}{19}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {a}Eigenvalues and eigenvectors of $\mathbf  {C}^{-1}$}{19}{}}
+\newlabel{ssub:eigenvalues_and_eigenvectors}{{A\tmspace  +\thinmuskip {.1667em}2\tmspace  +\thinmuskip {.1667em}a}{19}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {b}Time scale parameter $\gamma $}{20}{}}
+\newlabel{eq:scalar_product}{{A2}{20}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3}Parametrizations of eigenvectors }{21}{}}
+\newlabel{sub:parametrizations_of_eigenvectors}{{A\tmspace  +\thinmuskip {.1667em}3}{21}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {a}Parametrization in term of generalized Eulerian angles}{21}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {b}Parametrization in term of the exponential of a skew-symmetric matrix }{23}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4}Homogeneous and fully balanced tree}{24}{}}
+\newlabel{sub:homogeneous_and_fully_balanced_tree}{{A\tmspace  +\thinmuskip {.1667em}4}{24}{}{}{}}
+\newlabel{eq:G}{{A15}{24}{}{}{}}
+\newlabel{eq:G_a}{{A16}{24}{}{}{}}
+\newlabel{eq:lambda_hyper}{{A17}{24}{}{}{}}
+\newlabel{eq:eigenvec_simpler_case}{{A18}{24}{}{}{}}
 \bibstyle{unsrt}
 \providecommand\NAT@force@numbers{}\NAT@force@numbers
-\@writefile{toc}{\contentsline {subsection}{\numberline {5}Optimization scheme}{24}{}}
-\newlabel{sub:optimization_scheme}{{A\tmspace  +\thinmuskip {.1667em}5}{24}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {6}Supplementary figures}{24}{}}
-\newlabel{sub:supplementary_figures}{{A\tmspace  +\thinmuskip {.1667em}6}{24}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Relative $l2$-error between the empirical covariance matrix calculated from an \emph  {i.i.d.} sample and the true covariance matrix, for system sizes $L=4$ and $L=10$. The dashed vertical line corresponds to the number of leaves of the tree used in the simulations.}}{25}{}}
-\newlabel{fig:error_vs_nseqs}{{1}{25}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Inferred $\gamma $ values as a function of real $\gamma $, for system size $L=4$. $\gamma _{emp}$ is the value obtained by the process described in section A\tmspace  +\thinmuskip {.1667em}2{}{}{}\hbox {} of the SM. $\gamma _{max}$ is the value inferred by the maximum-likelihood calculation. The inset represents the ratio of both inferred parameters $\gamma _{emp}$ or $\gamma _{max}$ to the real $\gamma $.}}{25}{}}
-\newlabel{fig:scatter_gamma_L4}{{2}{25}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  Ratio between Pearson correlation of the maximum-likelihood and true covariance matrix to the Pearson correlation of the empirical and true covariances matrices for the two system sizes $L=4$ and $L=10$.}}{26}{}}
-\newlabel{fig:pearson_corr_comp_L4}{{3}{26}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  Pearson correlation between empirical /maximum-likelihood covariance matrices and the true covariance matrix, the inset plot represent the ratio between the person correlation for the maximum-likelihood covariance matrix and the one for the empirical covariance matrix.}}{26}{}}
-\newlabel{fig:pears_L10}{{4}{26}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Inferred $\gamma $ values as a function of real $\gamma $, for system size $L=10$. $\gamma _{emp}$ is the value obtained by the process described in section A\tmspace  +\thinmuskip {.1667em}2{}{}{}\hbox {} of the SM. $\gamma _{max}$ is the value inferred by the maximum-likelihood calculation. The inset represents the ratio of both inferred parameters $\gamma _{emp}$ or $\gamma _{max}$ to the real $\gamma $. }}{27}{}}
-\newlabel{fig:scatter_gamma_L10}{{5}{27}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces \textbf  {Left:} Relative $l2$-error between empirical or maximum-likelihood covariance matrices and the true covariance matrix. \textbf  {Right}: Relative $l2$-error between empirical /maximum-likelihood coupling matrices and the true coupling matrix. Logarithmic scale is chosen for the y-axis because of large values of the error at low $\gamma $. The inset in both panels show the ratio between the two errors. For system size $L=10$.}}{27}{}}
-\newlabel{fig:error_1_L10}{{6}{27}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Quality of prediction of interactions for different values of $\gamma $ and system size $L=4$. Interactions are defined as non-zero elements of the coupling matrix. In the $L=4$ case, there are $6$ possible interactions. Predictions are made by taking the largest elements (in absolute terms) of the inferred coupling matrix. The PPV is the fraction of correctly predicted contacts for a given number of predictions.}}{28}{}}
-\newlabel{fig:PPV_L10}{{7}{28}{}{}{}}
-\newlabel{LastPage}{{}{28}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5}Optimization scheme}{25}{}}
+\newlabel{sub:optimization_scheme}{{A\tmspace  +\thinmuskip {.1667em}5}{25}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {6}Supplementary figures}{25}{}}
+\newlabel{sub:supplementary_figures}{{A\tmspace  +\thinmuskip {.1667em}6}{25}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Relative $l2$-error between the empirical covariance matrix calculated from an \emph  {i.i.d.} sample and the true covariance matrix, for system sizes $L=4$ and $L=10$. The dashed vertical line corresponds to the number of leaves of the tree used in the simulations.}}{26}{}}
+\newlabel{fig:error_vs_nseqs}{{1}{26}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Inferred $\gamma $ values as a function of real $\gamma $, for system size $L=4$. $\gamma _{emp}$ is the value obtained by the process described in section A\tmspace  +\thinmuskip {.1667em}2{}{}{}\hbox {} of the SM. $\gamma _{max}$ is the value inferred by the maximum-likelihood calculation. The inset represents the ratio of both inferred parameters $\gamma _{emp}$ or $\gamma _{max}$ to the real $\gamma $.}}{26}{}}
+\newlabel{fig:scatter_gamma_L4}{{2}{26}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces  Ratio between Pearson correlation of the maximum-likelihood and true covariance matrix to the Pearson correlation of the empirical and true covariances matrices for the two system sizes $L=4$ and $L=10$.}}{27}{}}
+\newlabel{fig:pearson_corr_comp_L4}{{3}{27}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces  Pearson correlation between empirical /maximum-likelihood covariance matrices and the true covariance matrix, the inset plot represent the ratio between the person correlation for the maximum-likelihood covariance matrix and the one for the empirical covariance matrix.}}{27}{}}
+\newlabel{fig:pears_L10}{{4}{27}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Inferred $\gamma $ values as a function of real $\gamma $, for system size $L=10$. $\gamma _{emp}$ is the value obtained by the process described in section A\tmspace  +\thinmuskip {.1667em}2{}{}{}\hbox {} of the SM. $\gamma _{max}$ is the value inferred by the maximum-likelihood calculation. The inset represents the ratio of both inferred parameters $\gamma _{emp}$ or $\gamma _{max}$ to the real $\gamma $. }}{28}{}}
+\newlabel{fig:scatter_gamma_L10}{{5}{28}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces \textbf  {Left:} Relative $l2$-error between empirical or maximum-likelihood covariance matrices and the true covariance matrix. \textbf  {Right}: Relative $l2$-error between empirical /maximum-likelihood coupling matrices and the true coupling matrix. Logarithmic scale is chosen for the y-axis because of large values of the error at low $\gamma $. The inset in both panels show the ratio between the two errors. For system size $L=10$.}}{28}{}}
+\newlabel{fig:error_1_L10}{{6}{28}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Quality of prediction of interactions for different values of $\gamma $ and system size $L=4$. Interactions are defined as non-zero elements of the coupling matrix. In the $L=4$ case, there are $6$ possible interactions. Predictions are made by taking the largest elements (in absolute terms) of the inferred coupling matrix. The PPV is the fraction of correctly predicted contacts for a given number of predictions.}}{29}{}}
+\newlabel{fig:PPV_L10}{{7}{29}{}{}{}}
+\newlabel{LastPage}{{}{29}{}{}{}}

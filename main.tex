@@ -98,7 +98,7 @@
 \begin{document}
 
 \title{Global multivariate model learning from hierarchically correlated data}
-\date{}
+% \date{}
 
 \author{Edwin Rodriguez Horta} 
 \affiliation{Sorbonne Universit\'{e}, CNRS, Institut de Biologie
@@ -106,17 +106,18 @@
   Quantitative -- LCQB, Paris, France}
 \affiliation{Group of Complex Systems and Statistical Physics, Department of Theoretical Physics, University of Havana, Havana, Cuba}
 %
-\author{Pierre Barrat-Charlaix} 
-\affiliation{Biozentrum, Universität Basel, Basel, Switzerland}
-%
 \author{Alejandro Lage} 
 \affiliation{Group of Complex Systems and Statistical Physics, Department of Theoretical Physics, University of Havana, Havana, Cuba}
 %
 \author{Martin Weigt} 
-\email{Correspondence to: Martin Weigt, \bf{martin.weigt@upmc.fr}}
 \affiliation{Sorbonne Universit\'{e}, CNRS, Institut de Biologie
   Paris-Seine, Laboratoire de Biologie Computationnelle et
   Quantitative -- LCQB, Paris, France}
+% 
+
+\author{Pierre Barrat-Charlaix} 
+\email{Correspondence to: Pierre Barrat-Charlaix, \bf{pierre.barrat@unibas.ch}}
+\affiliation{Biozentrum, Universit\"at Basel, Basel, Switzerland}
 
 
 
@@ -133,55 +134,33 @@
 \label{sec:int}
 
 In the last decades, biology has seen impressive progress in experimental techniques which has resulted in a large increase of available data. 
-This is especially visible in the case of biological sequences,  with databases now harboring a vast amount of high-quality DNA or protein sequences. [UNIPROT/GENBANK]
-This has in turn fuelled a development of quantitative methods to model forces guiding the evolution of sequences or other biological traits [REFS?]. 
-A common idea in this context is that it is possible to use characteristics of homologous genes or organisms to construct quantitative models of the selection acting on them. 
-A successful example is the representation of protein sequences by probabilistic models in the so-called DCA method [REF]. 
+This is especially visible in the case of biological sequences,  with databases now harboring a vast amount of high-quality DNA or protein sequences \cite{sayers_genbank_2019,uniprotconsortium_uniprot_2018}. 
+This has in turn fuelled a development of quantitative methods to model forces guiding the evolution of sequences or other biological traits [REFS/EXAMPLES?]. 
+A common idea in this context is that it is possible to use characteristics of homologous genes or organisms to construct models of the selection acting on them. 
+A successful example in this regard is the representation of protein sequences by probabilistic models in the so-called DCA method \cite{levy_potts_2017,cocco_inverse_2018}. 
 
-Models built in this way usually assume that biological characteristics of related sequences or organisms are evolving under the same constraints but are independent from each other in the statistical sense. 
+Models built in this way usually assume that biological characteristics of related organisms are evolving under the same constraints but are independent from each other in the statistical sense. 
 This allows simple formulation for model learning. 
-However, phylogenetic relations between evolving entities imply that these cannot be considered independent from each other, and doing so can result in important biases when learning models. 
-For instance, it has been shown that phylogenetic relations between protein sequences induce non-trivial correlations that are not related to protein function [COLWELL paper]. 
+However, the phylogenetic relations between evolving entities are in direct contradiction with this simplifying hypothesis, and ignoring them can result in biases when learning models. 
+For instance, it has been shown that phylogenetic relations between protein sequences induce non-trivial correlations that are not related to protein function \cite{qin_power_2018}. 
 
-In order to correct for these biases, it is necessary to disentangle the statistical effects due to selection forces and those due to phylogeny. 
-However, this becomes a complex problem when dealing with complex models where traits under study are not independent from each other. 
-Accounting for these biases then requires one to understand how correlated traits evolve along a tree. 
-History of modeling this with BM or OU processes [Felsenstein, Hansen]. Also, field of PCM 
+In order to correct for these biases, it is necessary to disentangle the effects due to selection forces and those due to phylogeny. 
+However, this becomes a hard problem when dealing with complex models where traits under study are not independent from each other. 
+Accounting for these biases then requires one to understand how interdependent traits under selection evolve along a tree. 
+A historically well-known way to represent such processes is to use Ornstein-Uhlenbeck dynamics (OU), which models traits as a Gaussian vector evolving in a quadratic potential that represents selection forces \cite{uhlenbeck_theory_1930, felsenstein_phylogenies_1988, hansen_stabilizing_1997}.
+This method is commonly used in the field of phylogenetic comparative methods (PCM) \cite{bartoszek_phylogenetic_2012,mitov_fast_2020}. 
 
-Increasing data --> new quantitative techniques in biology. 
-One big recent success: pairwise sequence models, blabla
-However, models learned from data with phylogenetic correlations can suffer from biases. To account for these biases in the case of complex models, it's necessary to understand how correlated traits evolve along a tree (or: quantities that are modeled and typically not independent evolve along a tree)
-
-There is a history of looking at multi parameter complex models and their relation with phylogeny. 
-in this context, it is often assumed that quantitative traits that evolve under selection can be modeled using an OU process. 
-This is usually done in the field of PCMs, with most common models being Brownian motion or OU processes. 
-
-Here, we want to understand how to find parameters values of an OU gaussian process from data correlated through a tree. 
-This could be applied to the evolution of any correlated biological traits, but also potentially to protein sequences. 
-
-The MS is divided as follows: >>> 
+This modeling approach is \emph{a priori} limited to continuous traits, but could potentially be used for protein sequences combined with a continuous-variable approximation, that has successfully been used in the past \cite{jones_psicov_2012,baldassi_fast_2014}. 
+In this context, the equilibrium distribution reached by the OU process represents the probability distribution given by the DCA method, which can be used to predict non-trivial structural contacts in the protein fold, effects of amino-acid mutations or even designing novel functional sequences \cite{morcos_direct-coupling_2011, figliuzzi_coevolutionary_2016, russ_evolution-based_2020}. 
 
 
-\paragraph{Old} % (fold)
-\label{par:old}
+In this work, we are interested in constructing an inference method for parameters of an OU process from data correlated through a tree.
+Our approach is purely methodological, and the data can represent any set of continuous phenotypic traits, \emph{e.g.} from different organisms, with the tree indicating the phylogenetic relations between data points. 
+Inferred parameters then represent the selection forces without biasing effects from the phylogeny. 
+The manuscript is divided as follows: we first review in section \ref{sec:ornstein_uhlenbeck_dynamics} the main characteristics of the multivariate OU process. 
+We then describe the setting of the inference problem that we want to solve in section \ref{sub:statement_of_the_problem}, propose a solution in sections \ref{sub:Calculation_of_the_likelihood} and \ref{sub:maximization_of_the_likelihood}.
+Finally, we present results obtained on simulated data in section \ref{sec:Results}, with the context of pairwise models of protein sequences in mind. 
 
-Theory and applications of the inverse problem of statistical physics has had great development in recent years since the availability of large amounts of data on a microscopic scale produced by the continuous technological progress. In this context statistical physics paths: from model parameters to  observables, is reversed, toward find global models which describe the statistics of  a set of observed  configurations \cite{Inverse_problem_Berg}. 
-
-Most of the work has been focus in equilibrium reconstruction , where the aim is to learn max Entropy models, Boltzman distribution, from independent and identically distributed equilibrium configurations. Another kind of methods deal with parameters learning from either time series data or from samples of the non-equilibrium steady state: non-equilibrium reconstruction.
-
-Less effort has been done for data biased by population structured signal, where  samples  are not independent because of presence of relatedness between configurations. These structure could be for instance of  geographical or demogrhapic  nature in a population or  phylogenetic  nature  related to a evolutionary processes shaping trait variation among species.  Here we are going to deal with data given by sequences phylogenetically related  through a tree, which describes the hierarchical correlation between configurations. An important problem is the  distinction   of patterns induced by species traits or by phylogeny. 
-
-Our source of inspiration came from the inverse problem in proteins \cite{Inverse_problem_proteins}, where  covariance signal present in an alignment of homologous proteins is described via Potts model. This covariance signal is assumed a consequence of phenotypics constraints like protein structure and function. However it is known that phylogeny relationships in homologous sequences  contaminate the statistics of  the alignment used to learn the equilibrium model. Therefore a direct inference on this alignments  leads to the existence of Potts parameters that attempt to model the full biased statistics limiting their capacity to predict phenotypic properties.
-
- To define and solve the inverse problem of statistical physics for data samples with hierarchical  relatedness structure is the aim of this work. 
-
-Main difficulties to address  this kind of problem  come from the necessity to use  a proper global evolutionary model which describes the relation between sequences edge connected in a tree and the discrete  characters of data variables which makes certain calculations intractable \cite{entropy_paper}. 
-
-Here we  adopt an approximation where we forget about the discrete nature of variables and model them by continuous variables instead. This transforms the Potts model into a Gaussian distribution \cite{Baldassi}, making the design of a global propagator tractable. We propose a model of evolution described by a multivariate Ornstein-Uhlenbeck process \cite{gardiner}, which is used  to generate evolutionary related data given an arbitrary phylogenetic tree. The corresponding inverse problem became in the inference of the Gaussian potential (Potts parameters) from the knowledge of tree leaves configurations and the dynamics of evolution. 
-
-To this aim, we first review in section \ref{sec:ornstein_uhlenbeck_dynamics}, main characteristics of a multivariate Ornstein-Uhlenbeck process. In section \ref{evolutionary process} we describe the evolutionary process, describing the algorithm used to generate data phylogenetically biased. The statement of the problem in a Bayesian framework is shown in section \ref{statement of the problem}. Section \ref{methods} is dedicated to describe methodology used to solve the inverse problem. Results for evolution of continuos variable sequences and  the application for configuration of discrete variables is presented in section \ref{Results}. Finally the conclusion and outlook in \ref{conc}.
-
-% paragraph old (end)
 
 \section{The multivariate Ornstein-Uhlenbeck process}
 \label{sec:ornstein_uhlenbeck_dynamics}
@@ -194,11 +173,10 @@ At equilibrium, $\vx$ is assumed to be normally distributed,
 \end{equation}
 where $\bm{J}$ is the symmetric, positive definite \emph{coupling matrix} and $Z(\bm{J}) = \sqrt{(2\pi)^L/\det \bm{J}}$ is the normalization constant; the means of all components of $\vx$ are set to zero without loss of generality. 
 We are interested in inferring the coupling matrix from a given amount of observed states $\vx$ of the system.
-If these observations were independent from each other, due to the simple Gaussian form of Eq.~(\ref{eq:eq_distribution}), $\bm{J}$ would simply be equal to the inverse of the empirical \emph{covariance matrix} of the data, written $\bm{C}=\bm{J}^{-1}$. 
+If these observations were independent from each other, due to the simple Gaussian form of Eq.~\eqref{eq:eq_distribution}, $\bm{J}$ would simply be equal to the inverse of the empirical \emph{covariance matrix} of the data, written $\bm{C}=\bm{J}^{-1}$. 
 
-However, here we are concerned with the case where observations are not independent. 
-On the contrary, they result from a dynamical process taking place during a finite amount of time. 
-Different datapoints are therefore correlated even if individually assumed to be at equilibrium. 
+However, we consider the case where observations are not independent. 
+On the contrary, they result from a dynamical process taking place during a finite amount of time, and different data-points are therefore correlated to each other.
 This dynamical process is described below.
 
 We suppose that the considered system evolves according to the following Langevin equation 
@@ -207,16 +185,16 @@ We suppose that the considered system evolves according to the following Langevi
 	\label{eq:langevin}
 \end{equation}
 Here, $\vec{\xi}(t)$ is a vector of uncorrelated white noise, and $\gamma^{-1}$ is the characteristic timescale governing the dynamics. 
-In short, Eq.~(\ref{eq:langevin}) states that the system described by $\vx$ undergoes Brownian motion in a quadratic energy landscape characterized by the coupling matrix $\bm{J}$. 
+In short, Eq.~\eqref{eq:langevin} states that the system described by $\vx$ undergoes Brownian motion in a quadratic energy landscape characterized by the coupling matrix $\bm{J}$. 
 
-We are not interested in $\vx$ directly, but rather in its probability distribution $P(\vx\vert\,\vx_0,\Delta t)$, \ie~in the probability to find the system in state $\vx$ knowing it was in state $\vx_0$ some time $\Delta t$ before. 
-The Fokker-Planck equation corresponding to Eq.~(\ref{eq:langevin}) is straightforward to write, 
+We are not interested in $\vx$ directly, but rather in its probability distribution $P(\vx\vert\,\vx_0,\Delta t)$, \ie~in the probability to find the system in state $\vx$ knowing it was in state $\vx_0$ some time $\Delta t$ in the past. 
+The Fokker-Planck equation corresponding to Eq.~\eqref{eq:langevin} is straightforward to write, 
 \begin{equation}
 	\gamma^{-1} \partial_t P = \left(-\sum_{a,b=1}^L\frac{\partial}{\partial x_a} J_{ab}x_b + \sum_{a=1}^L\frac{\partial^2}{\partial x_a^2}\right) P, 
 	\label{eq:FP}
 \end{equation}
 where the parenthesized expression on the right hand side is understood as an operator acting on $P$. 
-The solution to Eq.~(\ref{eq:FP}) is a multivariate normal distribution~\cite{singh2017multiOU}:
+The solution to Eq.~\eqref{eq:FP} is a multivariate normal distribution~\cite{singh2017multiOU}:
 \begin{equation}
 	P(\vx|\, \vx_0, \Delta t) = \left[(2\pi)^N\det\Sig\right]^{-1/2}
 	\curlynormal{(\vx-\vec{\mu})^T\iSig(\vx- \vec{\mu})},
@@ -227,13 +205,13 @@ where we introduce the matrices $\Sig$ and $\Lam$ as well as the vector $\vec{\m
 	\Lam = e^{-\gamma\bm{J}}, \qquad \vec{\mu} = \Lam^{\Delta t} \vx_0, \qquad \Sig = \bm{J}^{-1}(\mathbb{1} - \Lam^{2 \Delta t}).
 	\label{eq:def_lambda}
 \end{equation}
-Eqs.~(\ref{eq:OUpropagator}) and~(\ref{eq:def_lambda}) define a multivariate \emph{Ornstein-Uhlenbeck} (OU) process. 
+Eqs.~\eqref{eq:OUpropagator} and~\eqref{eq:def_lambda} define a multivariate \emph{Ornstein-Uhlenbeck} (OU) process. 
 
 Note that since matrix $\Lam$ is an exponential of $\bm{J}$, it is symmetric, has strictly positive eigenvalues and commutes with $\bm{J}$. 
 We also underline that $\Sig$ and $\vec{\mu}$ depend on $\Delta t$, although this dependence is not explicitly written in our notation to make it less heavy. 
+By taking $\gamma\Delta t \gg 1$ and using the fact that $\bm{J}$ has strictly positive eigenvalues, one immediately recovers Eq.~\eqref{eq:eq_distribution}, meaning that the OU process converges to the desired equilibrium distribution.
 
-By taking $\gamma\Delta t \gg 1$ and using the fact that $\bm{J}$ has strictly positive eigenvalues, one immediately recovers Eq.~(\ref{eq:eq_distribution}). 
-We can thus compute the joint distribution of two configurations $\vx_1$ and $\vx_2$ separated by time difference $\Delta t$ by multiplying Eqs.~(\ref{eq:eq_distribution}) and~(\ref{eq:OUpropagator}), 
+We can compute the joint distribution of two configurations $\vx_1$ and $\vx_2$ separated by a time $\Delta t$ by multiplying Eqs.~\eqref{eq:eq_distribution} and~\eqref{eq:OUpropagator}, 
 \begin{eqnarray}
     P(\vx_1, \vx_2\vert\,\Delta t) &= & P(\vx_1 |\, \vx_2,\Delta t) \times P_{eq}(\vx_2)
     \nonumber\\
@@ -241,10 +219,10 @@ We can thus compute the joint distribution of two configurations $\vx_1$ and $\v
 	\label{eq:OUjoint}	
 \end{eqnarray}
 This equation illustrates the \emph{time reversibility} of the OU process. 
-Indeed, the distribution does not depend on which configuration $\vx_1$ or $\vx_2$ came first.
+Indeed, the distribution is symmetric in $\vx_1$ or $\vx_2$ and does not depend on which configuration came first.
 
 Equation \eqref{eq:OUjoint} allows for computing the joint covariance of the correlated equilibrium configurations $\vx_1$ and $\vx_2$. 
-The probability distribution in Eq.~(\ref{eq:OUjoint}) is normal with an inverse covariance matrix defined by blocks: $\Sig$ on the diagonal and $-\Lam^{\Delta t}\Sig$ off-diagonal. 
+The probability distribution in Eq.~\eqref{eq:OUjoint} is normal with an inverse covariance matrix defined by blocks: $\Sig$ on the diagonal and $-\Lam^{\Delta t}\Sig$ off-diagonal. 
 By inverting this block matrix, given that $\Lam$ and $\Sig$ commute and are invertible, one obtains the following covariance: 
 \begin{equation}
 	\langle \vx_1\vx_2^T \rangle_{\Delta t} = \Lam^{\Delta t}\bm{J}^{-1} = \Lam^{\Delta t}\bm{C}. 
@@ -252,14 +230,14 @@ By inverting this block matrix, given that $\Lam$ and $\Sig$ commute and are inv
 \end{equation}
 
 
-Eq.~(\ref{eq:pairwisecov}) allows us to readily distinguish two regimes. 
+Eq.~\eqref{eq:pairwisecov} allows us to readily distinguish two regimes. 
 Let us call $\rho_a$ the eigenvalues of $\bm{J}$. 
 The eigenvalues of $\Lam^{\Delta t}\bm{C}$ are then equal to $\rho_a^{-1}e^{-\gamma\rho_a\Delta t}$. 
 Since all $\rho_a$ are positive, the eigenvalues of $\Lam^{\Delta t}\bm{C}$ vanish exponentially over time. The slowest timescale of exponential decay is set by $\tau_c^{-1} = \gamma\rho_{min}$, with $\rho_{min}$ being the smallest eigenvalue of $\bm{J}$. 
 Thus, for $\Delta t / \tau_c \gg 1$, $\vx_1$ and $\vx_2$ are uncorrelated. 
 If this is verified for all pairs of observations $\vx_i$ and $\vx_j$, the regime is that of \emph{uncorrelated} data -- the inference of $\bm{J}$ can simply be performed by inverting the empirical covariance matrix extracted from the data. 
 Inversely, for $\Delta t / \tau_c \ll 1$, $\vx_1$ and $\vx_2$ are highly correlated, defining a \emph{strongly correlated} regime. 
-It should be noted that for $\Delta t = 0$, the joint correlation matrix of $\vx_1$ and $\vx_2$ becomes non invertible, and Eq.~(\ref{eq:pairwisecov}) becomes irrelevant. Actually, $\vx_1$ and $\vx_2$ coincide at that point, \ie~we have $P(\vx_1,\vx_2|\,\Delta t=0) = P_{eq}(\vx_1) \times \delta(\vx_1 - \vx_2)$ using the $L$-dimensional Dirac distribution.
+It should be noted that for $\Delta t = 0$, the joint correlation matrix of $\vx_1$ and $\vx_2$ becomes non invertible, and Eq.~\eqref{eq:pairwisecov} becomes irrelevant. Actually, $\vx_1$ and $\vx_2$ coincide at that point, \ie~we have $P(\vx_1,\vx_2|\,\Delta t=0) = P_{eq}(\vx_1) \times \delta(\vx_1 - \vx_2)$ using the $L$-dimensional Dirac distribution.
 
 
 
@@ -282,7 +260,7 @@ It should be noted that for $\Delta t = 0$, the joint correlation matrix of $\vx
 
 The problem discussed here is the inference of the probability distribution describing samples that are hierarchically correlated by a tree, cf.~Fig.~\ref{fig:sample_tree}. 
 Formally, we assume that the data consists of $N$ real-valued vectors of length $L$, denoted $\{\vx_i\}\in\mathbb{R}^L$ with $i=1,...,N$. 
-Taken individually, the $\vx_i$ are distributed according to Eq.~\ref{eq:eq_distribution}, \ie~according to a multivariate Gaussian of zero mean and covariance $\bm C$.
+Taken individually, we assume that the $\vx_i$ are distributed according to Eq.~\eqref{eq:eq_distribution}, \ie~according to a multivariate Gaussian of zero mean and covariance $\bm C$.
 By construction, the equilibrium covariance between any pair of elements of a given vector $\vx=(x^1,...,x^L)$ is given by the inverse of the coupling matrix: $\langle x^a x^b\rangle-\langle x^a\rangle\langle x^b\rangle = \bm C_{ab} = (\bm J^{-1})_{ab}$ for all $a,b=1,...,L$. 
 This implies that inferring the coupling matrix defining the probability distribution amounts to finding the \emph{equilibrium} covariance matrix $\mathbf{C}$.  
 
@@ -290,11 +268,11 @@ However, this covariance cannot be directly measured as we consider observations
 Instead, the set of measured configurations $\{\vx_i\}_{i=1,...,N}$ is the result of an Ornstein-Uhlenbeck (OU) process taking place on a tree $\mathcal{T}$, as is illustrated in Fig.~\ref{fig:sample_tree}:
 \begin{itemize}
     \item The process starts at the root node $r$ with a state vector $\vx_r$ drawn from the equilibrium distribution $P_{eq}$.
-    \item On each branch $(n,a(n))$ of length $\Delta t_{n,a(n)}$ connecting node $n$ with its ancestral node $a(n)$, the dynamics follow Eq.~(\ref{eq:langevin}), starting from initial condition $\vx_{a(n)}$, and running for time $\Delta t_{n,a(n)}$. In other words, given the state $\vx_{a(n)}$ of the ancestral node, $\vx_n$ is sampled from $P(\vx_n |\, \vx_{a(n)}, \Delta t_{n,a(n)})$, see Eq.~(\ref{eq:OUpropagator})
+    \item On each branch $(n,a(n))$ of length $\Delta t_{n,a(n)}$ connecting node $n$ with its ancestral node $a(n)$, the dynamics follow Eq.~\eqref{eq:langevin}, starting from initial condition $\vx_{a(n)}$, and running for time $\Delta t_{n,a(n)}$. In other words, given the state $\vx_{a(n)}$ of the ancestral node, $\vx_n$ is sampled from $P(\vx_n |\, \vx_{a(n)}, \Delta t_{n,a(n)})$, see Eq.~\eqref{eq:OUpropagator}
     \item As a consequence, OU processes on branches stemming from common ancestral node evolve independently, but from an identical initial condition.
     \item Observed data vectors correspond to the states of the leaves of the tree at the end of this process. The states of the internal nodes are not part of the observed data and remain unknown. 
 \end{itemize}
-This process is thought to represent the evolution of biologic traits along a phylogenetic tree, with the leave nodes corresponding to traits observed in today's species. Note that due to the reversible nature of our OU process, the joint probability of any pair of leaf configurations $\vx_i$ and $\vx_j$, with $i,j\in\{1,...,N\}$, is given by  $P(\vx_i,\vx_2|\,\Delta t_{ij})$ (Eq.~(\ref{eq:OUjoint}), with $\Delta t_{ij}$ denoting the total branch length of the path connecting $i$ and $j$ in the tree.
+This process is thought to represent the evolution of biologic traits along a phylogenetic tree, with the leave nodes corresponding to traits observed in today's species. Note that due to the reversible nature of our OU process, the joint probability of any pair of leaf configurations $\vx_i$ and $\vx_j$, with $i,j\in\{1,...,N\}$, is given by  $P(\vx_i,\vx_j|\,\Delta t_{ij})$ (Eq.~\eqref{eq:OUjoint}), with $\Delta t_{ij}$ denoting the total branch length of the path connecting $i$ and $j$ in the tree.
 
 The OU process is characterized by the quadratic potential $\bm J = \bm C^{-1}$ and the rate $\gamma$. 
 Hence, the joint statistics of the leaf configurations $\{\vx_i\}_{i=1,...,N}$ (\ie~the data) is fully determined by $\bm C$, $\gamma$, and the tree $\mathcal{T}$. 
@@ -314,14 +292,14 @@ We adopt a Bayesian inference approach by writing the probability of a given set
 	P(\bm C, \gamma\vert\mathcal{D},\mathcal{T}) \propto P(\mathcal{D}\vert\bm C, \gamma,\mathcal{T})\cdot P(\bm C, \gamma),
 	\label{eq:bayesian_likelihood}
 \end{equation}
-with the proportionality constant not depending on the parameters $\{\bm C, \gamma\}$. Here, $P(\bm C, \gamma)$ can be any arbitrarily chosen prior distribution. The difficulty in Eq.~(\ref{eq:bayesian_likelihood}) lies in the estimation of the likelihood $P(\mathcal{D}\vert\bm C, \gamma, \mathcal{T})$,
+with the proportionality constant not depending on the parameters $\{\bm C, \gamma\}$. Here, $P(\bm C, \gamma)$ can be any arbitrarily chosen prior distribution. The difficulty in Eq.~\eqref{eq:bayesian_likelihood} lies in the estimation of the likelihood $P(\mathcal{D}\vert\bm C, \gamma, \mathcal{T})$,
 \ie~of the joint probability of the datapoints $\mathcal{D}=\{\vx_i\}_{i=1,...,N}$ for an OU process given by its parameters $\{\bm C, \gamma\}$ and the tree $\mathcal{T}$.  We detail the computation of this probability in the following section. 
 
 \subsection{Calculation of the likelihood} % (fold)
 \label{sub:Calculation_of_the_likelihood}
  
-The joint distribution of two configurations $\vx_1$ and $\vx_2$ separated by time $\Delta t$ is given by Eq.~(\ref{eq:OUjoint}) and corresponds to a joint normal distribution. 
-This means that the vector $\vec{X}=[\vx_1, \vx_2]$, \emph{i.e.} the concatenation of vectors $\vx_1$ and $\vx_2$, follows a normal distribution with zero mean and variance described above in Eqs.~(\ref{eq:def_lambda}).
+The joint distribution of two configurations $\vx_1$ and $\vx_2$ separated by time $\Delta t$ is given by Eq.~\eqref{eq:OUjoint} and corresponds to a joint normal distribution. 
+This means that the vector $\vec{X}=[\vx_1, \vx_2]$, \emph{i.e.} the concatenation of vectors $\vx_1$ and $\vx_2$, follows a normal distribution with zero mean and variance described above in Eqs.~\eqref{eq:def_lambda}.
 Of importance here is that this property of the OU process can be extended to the joint distribution of any subset of nodes in a tree. 
 In other words, if we now define $\vec{X}=[\vx_1,\ldots,\vx_N]$ to be the concatenation of all configurations in our dataset $\mathcal D$, we can write the distribution of $\vec{X}$ as
 \begin{equation}
@@ -336,7 +314,7 @@ The joint covariance matrix is a matrix of dimension $(L\cdot N)\times(L\cdot N)
 	\label{eq:jointcov_1}
 \end{equation}
 where the (zero) marginals $\av{x_i^a}$ and $\av{x_j^b}$ are explicitly written for clarity.
-Each block $\mathbb{G}_{ij}$ is describing the connected correlations between two data vectors $\vx_i$ and $\vx_j$, which are separated by time $\Delta t_{ij}$, resulting as the sum of all branch lengths of the path connecting $i$ and $j$ on tree $\mathcal{T}$. Because the OU process is time reversible, we can directly apply Eq.~(\ref{eq:pairwisecov}) and give all blocks of $\mathbb{G}$ in closed form, 
+Each block $\mathbb{G}_{ij}$ is describing the connected correlations between two data vectors $\vx_i$ and $\vx_j$, which are separated by time $\Delta t_{ij}$, resulting as the sum of all branch lengths of the path connecting $i$ and $j$ on tree $\mathcal{T}$. Because the OU process is time reversible, we can directly apply Eq.~\eqref{eq:pairwisecov} and give all blocks of $\mathbb{G}$ in closed form, 
 \begin{equation}
 	\mathbb{G}_{ij} =
 	\begin{cases}
@@ -347,13 +325,13 @@ Each block $\mathbb{G}_{ij}$ is describing the connected correlations between tw
 \end{equation}
 using the (currently unknown) covariance matrix $\bm C$ of a single equilibrium vector $\vx$. We remind here that $\Lam = e^{-\gamma\iC}$ depends only on $\gamma$ and $\bm C$, and commutes with $\bm C$. As a direct consequence, all blocks $\mathbb{G}_{ij}$ commute with each other and with $\bm C$.
 
-Eq.~(\ref{eq:multiOU_jointall}) allows us to compute the log-likelihood of the data $\vec{X}$ as a function of $\vec{X}$ itself and of the joint covariance matrix. Indeed, taking its logarithm immediately gives
+Eq.~\eqref{eq:multiOU_jointall} allows us to compute the log-likelihood of the data $\vec{X}$ as a function of $\vec{X}$ itself and of the joint covariance matrix. Indeed, taking its logarithm immediately gives
 \begin{equation}
 	\mathcal{L}_{\mathcal{D}}(\mathbb{G}) = -\frac 1 2 \log \det  \mathbb{G}  -\frac 1 2 \vec{X}^T\mathbb{G}^{-1} \vec{X} + \text{const}\ ,
 	\label{eq:likelihood_2}
 \end{equation}
-but this expression is impractical for any numerical evaluation due to the large dimension of $\mathbb{G}$. However, the particular block structure of $\mathbb{G}$ described in Eq.~(\ref{eq:jointcov_2}) allows us to simplify the expression. To do so, we first introduce the eigenvalues and eigenvectors 
-$\left\{\rho_a, \vsa\right\}$ of $\iC$, where the index $a$ runs from $1$ to $L$ and vectors $\vsa$ are of dimension $L$. By definition, we have $\rho_a>0$ for all $a$.  Using now Eq.~(\ref{eq:jointcov_2}), we immediately see that the vectors $\vsa$ are also eigenvectors of the individual blocks $\mathbb{G}_{ij}$ with eigenvalues $z(\rho_a, \Delta t_{ij})$ where we introduced
+but this expression is impractical for any numerical evaluation due to the large dimension of $\mathbb{G}$. However, the particular block structure of $\mathbb{G}$ described in Eq.~\eqref{eq:jointcov_2} allows us to simplify the expression. To do so, we first introduce the eigenvalues and eigenvectors 
+$\left\{\rho_a, \vsa\right\}$ of $\iC$, where the index $a$ runs from $1$ to $L$ and vectors $\vsa$ are of dimension $L$. By definition, we have $\rho_a>0$ for all $a$.  Using now Eq.~\eqref{eq:jointcov_2}, we immediately see that the vectors $\vsa$ are also eigenvectors of the individual blocks $\mathbb{G}_{ij}$ with eigenvalues $z(\rho_a, \Delta t_{ij})$ where we introduced
 \begin{equation}
 	z(\rho_a, \Delta t_{ij}) = \rho_a^{-1}e^{-\gamma\rho_a\Delta t_{ij}} \ .
 	\label{eq:z}
@@ -393,9 +371,9 @@ We have first used the fact that $\vsa$ is an eigenvector of $\mathbb{G}_{ij}$, 
 This demonstrates that the eigenmodes of $\mathbb{G}$ are $\left\{ \lambda_{ka}, \vec{S}_{ka} \right\}$ with $1\leq k\leq N$ and $1\leq a \leq L$. 
 Since $\mathbb{G}$ is the covariance matrix of a Gaussian distribution, we conclude the $\lambda_{ka}$ to be strictly positive.
 
-Note that this decomposition of the eigenvectors leads to a drastic decrease in computational complexity for diagonalizing $\mathbb{G}$ (at given $\bm C$, $\gamma$ and $\cal T$), and in consequence also for calculating the likelihood according to Eq.~(\ref{eq:likelihood_2}), which depends on the inverse covariance matrix $\mathbb{G}^{-1}$. Matrix $\mathbb{G}$ has linear dimension $LN$, so the numerical diagonalization or inversion takes time ${\cal O}( (L N)^3)$. This is hardly achievable for systems of realistic length $L$ of the state vector, and sufficient number $N$ of data points for model learning. Following the above description, we need to first diagonlize $\bm C^{-1}$ (or equivalently $\bm C$), which requires time of ${\cal O}(L^3)$, followed by inversion of the $L$ matrices ${\bm G}^a$, each one having linear dimension $N$. The total time complexity therefore results in ${\cal O}(L^3) + {\cal O}(L\cdot N^3)$, and the calculation can be easily achieved even on a standard PC. This observation is essential for inference, since we need to redo this calculation for many realizations of $\bm C$ and $\gamma$, in order to find the ones maximizing the likelihood given the data $\cal D$ and the tree $\cal T$. \martin{As is shown in App. XXX, this calculation simplifies even more when considering a fully balanced and homogeneous tree. In this case, the matrices $\bm G^a$ commute and can be diagonalized simultaneously and analytically for any value of $\rho^a$.
+Note that this decomposition of the eigenvectors leads to a drastic decrease in computational complexity for diagonalizing $\mathbb{G}$ (at given $\bm C$, $\gamma$ and $\cal T$), and in consequence also for calculating the likelihood according to Eq.~\eqref{eq:likelihood_2}, which depends on the inverse covariance matrix $\mathbb{G}^{-1}$. Matrix $\mathbb{G}$ has linear dimension $LN$, so the numerical diagonalization or inversion takes time ${\cal O}( (L N)^3)$. This is hardly achievable for systems of realistic length $L$ of the state vector, and sufficient number $N$ of data points for model learning. Following the above description, we need to first diagonlize $\bm C^{-1}$ (or equivalently $\bm C$), which requires time of ${\cal O}(L^3)$, followed by inversion of the $L$ matrices ${\bm G}^a$, each one having linear dimension $N$. The total time complexity therefore results in ${\cal O}(L^3) + {\cal O}(L\cdot N^3)$, and the calculation can be easily achieved even on a standard PC. This observation is essential for inference, since we need to redo this calculation for many realizations of $\bm C$ and $\gamma$, in order to find the ones maximizing the likelihood given the data $\cal D$ and the tree $\cal T$. As is shown in section \sref{sub:homogeneous_and_fully_balanced_tree}, this calculation simplifies even more when considering a fully balanced and homogeneous tree. In this case, the matrices $\bm G^a$ commute and can be diagonalized simultaneously and analytically for any value of $\rho^a$.
 
-For the case of arbitrary trees, }Eq.~(\ref{eq:likelihood_2}) can now be rewritten using the eigendecomposition of $\mathbb{G}$: 
+For the case of arbitrary trees, Eq.~\eqref{eq:likelihood_2} can now be rewritten using the eigen-decomposition of $\mathbb{G}$: 
 \begin{equation}
 	\begin{split}
 		\mathcal{L}_{\mathcal{D}}(\mathbb{G}) &= -\frac 1 2 \sum_{k=1}^N\sum_{a=1}^L \log\lambda_{ka} - \frac 1 2 \sum_{k=1}^N\sum_{a=1}^L \lambda_{ka}^{-1}(\vec{X}\cdot \vec{S}_{ka})^2\\
@@ -403,9 +381,9 @@ For the case of arbitrary trees, }Eq.~(\ref{eq:likelihood_2}) can now be rewritt
 	\end{split}
 	\label{eq:likelihood_3}
 \end{equation}
-Eq.~(\ref{eq:likelihood_3}) expresses the likelihood as a function of $\vuka$, $\lambda_{ka}$ (resulting from the tree $\cal T$ and given $\rho^a$) and $\vsa$ (resulting from $\bm C$). 
-However, the definition of $\bm G^a$ Eq.~(\ref{eq:subG_def}) makes clear that its eigenmodes $\{\lambda_{ka}, \vuka \}$ depend only of the eigenvalues $\rho_a$ of $\iC$, on $\gamma$, as well as of the structure of the tree through the quantities $\Delta t_{ij}$, although this dependence cannot be analytically expressed in a simple manner. 
-This means that the likelihood in equation~\ref{eq:likelihood_3} is in fact a function of $\{\rho_a, \vsa\}$, \emph{i.e.} the eigenmodes of $\iC$ and of the time scale parameter $\gamma$.
+Eq.~\eqref{eq:likelihood_3} expresses the likelihood as a function of $\vuka$, $\lambda_{ka}$ (resulting from the tree $\cal T$ and given $\rho^a$) and $\vsa$ (resulting from $\bm C$). 
+However, the definition of $\bm G^a$ in Eq.~\eqref{eq:subG_def} makes clear that its eigenmodes $\{\lambda_{ka}, \vuka \}$ depend only of the eigenvalues $\rho_a$ of $\iC$, on $\gamma$, as well as of the structure of the tree through the quantities $\Delta t_{ij}$, although this dependence cannot be analytically expressed in a simple manner. 
+This means that the likelihood in equation~\eqref{eq:likelihood_3} is in fact a function of $\{\rho_a, \vsa\}$, \emph{i.e.} the eigenmodes of $\iC$, of the time scale parameter $\gamma$ and of the pairwise distances on the tree $\Delta t_{ij}$.
 
 
 
@@ -416,7 +394,7 @@ This means that the likelihood in equation~\ref{eq:likelihood_3} is in fact a fu
 
 As stated at the beginning of this section, our main task is to find the equilibrium covariance matrix $\bm C$ that maximizes the likelihood of the data. 
 We also need to find the optimal time scale $\gamma$. 
-In Eq.~(\ref{eq:likelihood_3}), the likelihood is expressed as a function of $\gamma$ and $\{\rho_a, \vsa\}$, \ie~the eigenvalues and eigenvectors of $\iC$, either directly or through the quantities $\{\lambda_{ka}, \vuka \}$. 
+In Eq.~(\eqref{eq:likelihood_3}), the likelihood is expressed as a function of $\gamma$ and $\{\rho_a, \vsa\}$, \ie~the eigenvalues and eigenvectors of $\iC$, either directly or through the quantities $\{\lambda_{ka}, \vuka \}$. 
 We know attempt to maximize the likelihood with respect to the eigenmodes $\{\rho_a, \vsa\}$ and to the time scale $\gamma$. 
 
 In order to perform this optimization, we need to compute the gradient of the likelihood with repsect to the eigenvectors $\{\vsa\}$. 
@@ -429,10 +407,10 @@ For this reason, we use the Eulerian angles below to express the gradient of the
 
 As a first step, we need to compute the gradient of the likelihood $\mathcal{L}_{\mathcal{D}}(\mathbb{G})$ with respect to all parameters $\{\rho_a, \theta_{\alpha\beta}\}$ and $\gamma$. 
 To make explicit the dependences of eigenvalues and eigenvectors of the matrices $\bm G^a$ on these parameters, we introduce the notation $\vec{u}_k(\rho_a,\gamma) = \vuka$ and $\lambda_k(\rho_a,\gamma) = \lambda_{ka}$. 
-Note that from the definition of $\bm G^a$ in Eq.~(\ref{eq:subG_def}), its eigenvalues and vectors depend only on the eigenvalues of $\iC$ and not on its eigenvectors. 
+Note that from the definition of $\bm G^a$ in Eq.~\eqref{eq:subG_def}, its eigenvalues and vectors depend only on the eigenvalues of $\iC$ and not on its eigenvectors. 
 In the same way, we will now write $\bm G(\rho_a,\gamma)$ instead of $\bm G^a$. 
 
-The gradient of the likelihood is obtained by differentiating Eq.~(\ref{eq:likelihood_3}) with respect to the parameters of interest. 
+The gradient of the likelihood is obtained by differentiating Eq.~\eqref{eq:likelihood_3} with respect to the parameters of interest. 
 This gives us  three equations: 
 % dL / d rho
 \begin{equation}
@@ -470,8 +448,8 @@ Equivalent equations can be written for their derivatives with respect to $\gamm
 
 The computation of the gradient of $\mathcal{L}$ for a given set of parameters $\{\rho_a, \theta_{\alpha\beta}\}$ then goes as follows. 
 For each eigenvalue $\rho_a$, we compute and diagonalize matrix $\bm{G}(\rho_a)$ to obtain its eigenmodes $\vec{u}_k(\rho_a)$ and $\lambda_k(\rho_a)$. 
-Using equations~\ref{eq:grad_eigval} and ~\ref{eq:grad_eigvec} and their equivalent form for $\gamma$, we also numerically compute their derivatives with respect to $\rho_a$ and $\gamma$. 
-This gives us all the quantities to estimate the gradient of $\mathcal{L}$ with respect to $\rho_a$ using equation~\ref{eq:gradlikelihood_1}.
+Using equations~\eqref{eq:grad_eigval} and ~\eqref{eq:grad_eigvec} and their equivalent form for $\gamma$, we also numerically compute their derivatives with respect to $\rho_a$ and $\gamma$. 
+This gives us all the quantities to estimate the gradient of $\mathcal{L}$ with respect to $\rho_a$ using equation~\eqref{eq:gradlikelihood_1}.
 
  The optimization is performed by a quasi-Newton method \cite{NLopt}. Details are presented in section \ref{sub:optimization_scheme} of the SM. 
 
@@ -487,7 +465,9 @@ In order to evaluate our inference procedure, we generate artificial data corres
 We first build a  balanced binary tree $\mathcal{T}$ with $2^9=512$ leaves. 
 The length of each branch of $\mathcal{T}$ is chosen from a uniform distribution in the interval $[0,1]$. 
 We also sample positive semi-definite coupling matrix $\bm{J}$ of size $L\times L$ with $L=4$ or $L=10$, with entries normally distributed with mean $\mu_J=0.8$ and $\sigma_J=0.2$. 
-In order to perform interaction prediction, we randomly set to $0$ off-diagonal elements of $J$ with probability $0.7$, resulting in a coupling matrix with approximative density $0.3$.  
+
+In the case of statistical models of protein sequence, a major achievement is the ability of pairwise models to predict contacts in the three-dimensional structure of the protein from an inferred coupling matrix.
+In order to replicate this setting and to perform interaction prediction, we randomly set to $0$ off-diagonal elements of $J$ with probability $0.7$, resulting in a coupling matrix with approximative density $0.3$.  
 Null elements of $J$ correspond to variables that do not interact, or to non-contacts in the case of an application to protein sequences.  
 
 
@@ -503,7 +483,7 @@ To avoid statistical noise when assessing the quality of our inference, we repea
 
 For each repetition of the sampling process, we perform our maximum likelihood procedure and obtain an inferred covariance matrix $\bm{C}_{max}$. 
 As a means of comparison, we also compute the empirical covariance matrix $\bm{C}_{emp}$ as if leaf configurations were independent. 
-Figure \ref{fig:pears_L4} shows the Pearson correlation between the real covariance matrix $\bm{C}=\bm{J}^{-1}$ and the empirical or inferred ones in the $L=4$ case (similar figures for $L=10$ are in section \ref{sub:supplementary_figures}). 
+Figure \ref{fig:pears_L4} shows the Pearson correlation between the real covariance matrix $\bm{C}=\bm{J}^{-1}$ and the empirical or inferred ones in the $L=4$ case (similar figures for $L=10$ are in section \ref{sub:supplementary_figures} of the smallest). 
 As expected, both methods perform well in the large $\gamma$ limit with a correlation close to $1$, and worse in the low $\gamma$ limit. 
 In this latter case, correlations due to phylogeny are too strong for our maximum likelihood method to pick up signal, and both methods perform as poorly. 
 However, there exists an intermediate regime where $\bm{C}_{max}$ is much closer to the actual correlation than  $\bm{C}_{emp}$. 
@@ -534,9 +514,9 @@ However, the relative error still reaches high values in the low $\gamma$ regime
 
 An interesting way to illustrate the benefits of reconstructing the covariance matrix using knowledge of the tree is to evaluate the effective number of samples that is gained by doing so. 
 Figure \sref{fig:error_vs_nseqs} shows the $l2$-error between the true covariances and the empirical covariances computed from an \emph{i.i.d.} sample of size $N$. 
-The error is as expected increasing for decreasing values of $N$. 
+As expected the error is increasing for decreasing values of $N$. 
 We can use this as a calibration to express values of the $l2$-error in terms of an effective sample size.   
-For example, the error reached by $\bm{C}_{emp}$ at for $\gamma/\gamma_d\in[0.5, 1]$ and $L=4$ corresponds to the one obtained for an \emph{i.i.d.} sample of size $\sim 16$, whereas it corresponds to a sample of size $\sim 32-64$ for $\bm{C}_{max}$.
+For example, the error reached by $\bm{C}_{emp}$ for $\gamma/\gamma_d\in[0.5, 1]$ and $L=4$ corresponds to the one obtained for an \emph{i.i.d.} sample of size $\sim 16$, whereas it corresponds to a sample of size $\sim 32-64$ for $\bm{C}_{max}$.
 Thus, our correction is equivalent to doubling the number of effective samples.
 
 Finally, we assess the performance of our method in improving the prediction of interactions between gaussian variables $\{x_a\}$. 
@@ -602,20 +582,20 @@ What is this useful for?
 	We are interested in the case where the described Ornstein-Uhlenbeck process takes place on a tree. 
 	For example, if configurations $\vec{x}$ represent quantitative traits of some organisms, the tree can represent the genealogy or phylogeny of these organisms. 
 	Therefore, we have to be able to simulate the OU process on a tree. 
-	In practice, given a rooted tree such as the one shown in figure~\ref{fig:sample_tree} of the main text, we want to sample a configuration $\vec{x}$ for every node in such a way that equation~\ref{eq:OUjoint} holds for every pair of nodes, the time $\Delta t$ then being the branch length connecting them. \\
+	In practice, given a rooted tree such as the one shown in figure~\ref{fig:sample_tree} of the main text, we want to sample a configuration $\vec{x}$ for every node in such a way that equation~\eqref{eq:OUjoint} holds for every pair of nodes, the time $\Delta t$ then being the branch length connecting them. \\
 	We use a simple methodology to achieve this. 
-	First, note that given an arbitrary configuration $\vec{x}_0$ and a time $\Delta t$, we can generate a new configuration $\vec{x}$ distributed according to the propagator in equation~\ref{eq:OUpropagator} by the transformation
+	First, note that given an arbitrary configuration $\vec{x}_0$ and a time $\Delta t$, we can generate a new configuration $\vec{x}$ distributed according to the propagator in equation~\eqref{eq:OUpropagator} by the transformation
 	\begin{equation}
 		\vx = \Lam^{\Delta t}\vx_0 + \Sig^{1/2}\vec{\eta}
 		\label{eq:OUsample}
 	\end{equation}
-	where $\Lam$ and $\Sig$ are defined in equation~\ref{eq:def_lambda}, and $\vec{\eta}$ is a vector of uncorrelated variables with distributions $\mathcal{N}(0,1)$. 
-	Moreover, if $\vec{x_0}$ is distributed according to equation~\ref{eq:eq_distribution}, then $\vx$ and $\vx_0$ are distributed according to equation~\ref{eq:OUjoint}. 
-	Note that equation \ref{eq:OUsample} is quite different from the Langevin equation~\ref{eq:langevin}, even though they have similar forms. 
-	Whereas the Langevin equation describes the motion of $\vx$ in the potential $\bm{J}$, eq.~\ref{eq:OUsample} directly samples from the OU process. \\
-	Given an already sampled internal node in the tree, equation~\ref{eq:OUsample} allows to sample a configuration for each of its children. 
-	To sample the whole tree, we first sample the root note $\vx_0$ from the equilibrium distribution~\ref{eq:eq_distribution}. 
-	By recursive applications of~\ref{eq:OUsample}, we then simply work our way down the tree until all leaves are sampled.  
+	where $\Lam$ and $\Sig$ are defined in equation~\eqref{eq:def_lambda}, and $\vec{\eta}$ is a vector of uncorrelated variables with distributions $\mathcal{N}(0,1)$. 
+	Moreover, if $\vec{x_0}$ is distributed according to equation~\eqref{eq:eq_distribution}, then $\vx$ and $\vx_0$ are distributed according to equation~\eqref{eq:OUjoint}. 
+	Note that equation \eqref{eq:OUsample} is quite different from the Langevin equation~\eqref{eq:langevin}, even though they have similar forms. 
+	While the Langevin equation describes the motion of $\vx$ in the potential $\bm{J}$, eq.~\eqref{eq:OUsample} directly samples from the OU process. \\
+	Given an already sampled internal node in the tree, equation~\eqref{eq:OUsample} allows to sample a configuration for each of its children. 
+	To sample the whole tree, we first sample the root note $\vx_0$ from the equilibrium distribution~\eqref{eq:eq_distribution}. 
+	By recursive applications of~\eqref{eq:OUsample}, we then simply work our way down the tree until all leaves are sampled.  
 
 
  % subsection generating_artificial_data (end)
@@ -655,13 +635,13 @@ What is this useful for?
 	The optimization also requires that we initialize the time scale $\gamma$. 
 	For this, we try to find the optimal $\gamma$ given the data $\mathbf{X}$, the tree, and the OU process defined by the empirical covariance matrix. 
 
-	The probability distribution $P$ for the configurations of two leaves $\vx_i$ and  $\vx_j$  separated by time $\Delta t_{ij}$ is given by equation~\ref{eq:OUjoint} of the main text. 
+	The probability distribution $P$ for the configurations of two leaves $\vx_i$ and  $\vx_j$  separated by time $\Delta t_{ij}$ is given by equation~\eqref{eq:OUjoint} of the main text. 
 	With this distribution we can calculate analytically the average of the scalar product $\vx_i^{\,T}\vx_j$:
 	\begin{align*}
 		\langle \vx_i^{\,T}\vx_j \rangle_P &= \int \ddroit \vx_i \ddroit \vx_j P(\vx_i,\vx_j|\Delta t_{ij}) \sum_{a=1}^L   x_i^{a}x_j^{a}  \\
 		&=\sum_{i=a}^L \langle  x_i^{a} x_j^a \rangle_{P}.\\
 	\end{align*}
-	The covariance $\langle  x_i^{a} x_j^a \rangle_{P}$ between observations separated by a time $\Delta t_{ij}$ is given by equation~\ref{eq:pairwisecov} of the main text.
+	The covariance $\langle  x_i^{a} x_j^a \rangle_{P}$ between observations separated by a time $\Delta t_{ij}$ is given by equation~\eqref{eq:pairwisecov} of the main text.
 	Using this, we now have
 	\begin{align}
 		\nonumber\langle \vx_i^{\,T}\vx_j \rangle_P &= \sum_{a=1}^L \left( \Lam^{\Delta t_{ij}} \mathbf{C} \right)_{aa}\\
@@ -669,8 +649,8 @@ What is this useful for?
 		&= \sum_{a=1}^L \rho_a^{-1}e^{-\gamma\rho_a\Delta t_{ij}}.
 		\label{eq:scalar_product}
 	\end{align}
-	Having initialized the covariance matrix $\mathbf{C}$ at its empirical value, we know the values of all members of the r.h.s. of equation~\ref{eq:scalar_product} except that of $\gamma$. 
-	On the other hand, equivalent versions of equation~\ref{eq:scalar_product} can be written for all pairs of configurations $i$ and $j$. 
+	Having initialized the covariance matrix $\mathbf{C}$ at its empirical value, we know the values of all members of the r.h.s. of equation~\eqref{eq:scalar_product} except that of $\gamma$. 
+	On the other hand, equivalent versions of equation~\eqref{eq:scalar_product} can be written for all pairs of configurations $i$ and $j$. 
 	To find an initial value of $\gamma$ which is consistent with the data and the empirical covariance matrix, we search for one that best explains the observed scalar products between configurations. 
 	We thus define $\gamma^0$ to be the argument minimizing the functional $F(\gamma)$: 
 	\begin{equation}
@@ -789,9 +769,11 @@ To obtain   a skew-symmetric matrix    $\bm X$ from an orthogonal matrix $\bm Q$
  Furthermore, as the eigenvectors were parameterized by an algebraic function, the complete likelihood  is described in terms of arithmetics operation and elementary functions. This allow to compute  the gradient via  automatic differentiation (AD), making computations in our optimization process faster. 
  The idea  is to represent a function as a computational graph, also called a Wengert list , where each node  in this list will represent an intermediate result of the computation. The intermediate results can then be assembled using the chain rule to get the final derivative we’re looking for. There is two    main algorithms  to traverses the chain rule in AD: forward mode and reverse mode, here we used reverse mode  algorithm  which is the of choice for back-propagation in deep learning . In particular we implemented  it using the Julia package Zygote.jl . 
  
- \subsection{ Homogeneous and fully balanced tree }
+ \subsection{Homogeneous and fully balanced tree}
+ \label{sub:homogeneous_and_fully_balanced_tree}
 
-Let assume that the tree is binary and completely homogeneous, all branches have the same length $\Delta t$. For instance the sequences covariance matrix for a binary tree with $K=2$ branching events and four leaves is
+Let's assume that the tree is binary, symmetric and completely homogeneous with all branches having the same length $\Delta t$. 
+As an example, the covariance matrix for such a tree with $K=2$ branching events and four leaves is
 \begin{equation} 
 \mathbb{G} =  \left(
 \begin{array}{cccc}
@@ -800,10 +782,10 @@ Let assume that the tree is binary and completely homogeneous, all branches have
 {\bm C} \Lambda ^{4\Delta t} & {\bm C} \Lambda ^{4\Delta t} & {\bm C} & {\bm C} \Lambda ^{2\Delta t} \\
 {\bm C} \Lambda ^{4\Delta t} & {\bm C} \Lambda ^{4\Delta t} & {\bm C} \Lambda ^{2\Delta t} & {\bm C} \\
 \end{array}\label{eq:G}
-\right)
+\right).
 \end{equation}
 
-The associatted matrix $\bm G^a=z(\rho_a,\gamma,\Delta t)$ defined by (14) became
+The associated matrix $\bm G^a=z(\rho_a,\gamma,\Delta t)$  defined in Eq.~\eqref{eq:G} becomes
 
 \begin{equation} 
 \bm G^a =  \left(
@@ -813,10 +795,10 @@ The associatted matrix $\bm G^a=z(\rho_a,\gamma,\Delta t)$ defined by (14) becam
 {\rho^{-1}_a } e ^{-4\gamma\rho_a\Delta t} & {\rho^{-1}_a} e ^{-4\gamma\rho_a\Delta t}& {\rho^{-1}_a } & {\rho^{-1}_a } e ^{-2\gamma\rho_a\Delta t}\\
 {\rho^{-1}_a } e ^{-4\gamma\rho_a\Delta t} & {\rho^{-1}_a } e ^{-4\gamma\rho_a\Delta t} & {\rho^{-1}_a } e ^{-2\gamma\rho_a\Delta t} & {\rho^{-1}_a } \\
 \end{array}\label{eq:G_a}
-\right)
+\right).
 \end{equation}
 
-For hypergeometric matrices as \ref{eq:G_a} there is $K+1$ different eigenvalues  given by: 
+For hyper-geometric matrices as \eqref{eq:G_a} of dimension $2^K$, there are $K+1$ different eigenvalues  given by: 
 
 \begin{equation}
 \label{eq:lambda_hyper}
@@ -827,9 +809,9 @@ For hypergeometric matrices as \ref{eq:G_a} there is $K+1$ different eigenvalues
 \end{cases}
 \end{equation}
 
-where $\lambda_{K+1}\ge\lambda_{K}\cdots\ge\lambda_{1}$. For $k<K+1$ degenerancy of eigenvalues $\lambda_k$ is given by : $d_k=2^{K-k}$.  
-
-The associated eigenvectors are independent of the parameter $\rho_a$ and reflects the events in the phylogenetic tree  where each eigenvector  $k$ captures the duplication events in the $(K+1 -k) 	st$ generation. Summarizing :
+where $\lambda_{K+1}\ge\lambda_{K}\cdots\ge\lambda_{1}$. For $k<K+1$, the degeneracy of eigenvalue $\lambda_k$ is $d_k=2^{K-k}$.  
+The associated eigenvectors are independent of the parameter $\rho_a$and reflect the events in the phylogenetic tree.
+Each eigenvector $\vec{u}_k$ captures the duplication events in the $(K+1 -k) st$ generation:
 
 \begin{equation} 
 \nonumber
@@ -841,9 +823,9 @@ The associated eigenvectors are independent of the parameter $\rho_a$ and reflec
 \end{cases}	
 \end{equation}
 
-where $\Gamma(\vec{u}_k )$ represent $d_k$ combinations resulting of shift the block of length $Q$ without overlapping, generating all eigenvectors with the same corresponding eigenvalue $\lambda_k$.  The eigenvectors are orthogonal to eachother, and can be  normalized and arranged horizontally into a matrix $U$. 
+where $\Gamma(\vec{u}_k )$ represents the $d_k$ combinations obtained by shifting the block of length $Q$, generating all eigenvectors corresponding to the eigenvalue $\lambda_k$.  The eigenvectors are orthogonal to each other, and can be  normalized and arranged horizontally into a matrix $U$. 
 
-Then to compute the gradient of the likelihood we only need  derivatives of $\lambda_k(\rho_a,\gamma)$  respect to $\rho_a$ and $\gamma$, which can be obtained from direct derivation of expression \ref{eq:lambda_hyper}.
+To compute the gradient of the likelihood, we need  derivatives of $\lambda_k(\rho_a,\gamma)$ with respect to $\rho_a$ and $\gamma$, which can be directly obtained from expression \eqref{eq:lambda_hyper}.
 
 
 \subsection{Optimization scheme}
@@ -858,7 +840,7 @@ for $n-dimensions$ $\hat{H}$ is undetermined, the various QNMs differ in their c
 
 $$\hat{H}_{k+1}=\hat{H}_{k}+\frac{y_k y^{T}_k}{y_k\Delta x_k} - \frac{\hat{H}_k\Delta x_k(\hat{H}_k\Delta x_k)^T}{\Delta x^T_k\hat{H}_k\Delta x_k} \;\;\;\text{and}\;\;\; y_k=\nabla L(\vec{x}_k+1)-\nabla L(\vec{x}_k)$$
 
-The method implementation was done using   NLopt package (see reference).
+The method implementation was done using   NLopt package (see reference) \pierre{Add reference?}.
  
 \subsection{Supplementary figures}
 \label{sub:supplementary_figures}
