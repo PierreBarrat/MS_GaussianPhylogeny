@@ -150,7 +150,7 @@ Accounting for these biases then requires one to understand how interdependent t
 A historically well-known way to represent such processes is to use Ornstein-Uhlenbeck dynamics (OU), which models traits as a Gaussian vector evolving in a quadratic potential that represents selection forces \cite{uhlenbeck_theory_1930, felsenstein_phylogenies_1988, hansen_stabilizing_1997}.
 This method is commonly used in the field of phylogenetic comparative methods (PCM) \cite{bartoszek_phylogenetic_2012,mitov_fast_2020}. 
 
-This modeling approach is \emph{a priori} limited to continuous traits, but could potentially be used for protein sequences combined with a continuous-variable approximation, that has successfully been used in the past \cite{jones_psicov_2012,baldassi_fast_2014}. 
+This modeling approach is \emph{a priori} limited to continuous traits, but could potentially be used for protein sequences combined with a continuous-variable approximation, that has successfully been used in the past \cite{jones_psicov_2012,barton_large_2014,baldassi_fast_2014}. 
 In this context, the equilibrium distribution reached by the OU process represents the probability distribution given by the DCA method, which can be used to predict non-trivial structural contacts in the protein fold, effects of amino-acid mutations or even designing novel functional sequences \cite{morcos_direct-coupling_2011, figliuzzi_coevolutionary_2016, russ_evolution-based_2020}. 
 
 
@@ -549,9 +549,46 @@ It is however much larger in the intermediate regime, with a significantly impro
 \section{Discussion}
 \label{sec:discussion}
 
-What is this useful for? 
-- 
+In this work, we proposed a method for inferring parameters of an Ornstein-Uhlenbeck process using data that is correlated through an evolutionary tree. 
+We kept a very general setting in which data can in principle represent any set of continuous phenotypic traits or potentially discrete sequences if a continuous approximation is made. 
+As such, our approach is only methodological, and does not directly investigate any particular application. 
 
+We showed that due to the Gaussian and time reversible nature of the OU process, it is possible to write the joint covariance matrix of all data vectors in a simple way. 
+The resulting matrix $\mathbb{G}$ consists of block entries that represent covariances between pairs of leaves.
+The dependence of these blocks on the coupling matrix $\bm{J}$ characterizing the OU process and on the tree structure can be written explicitly. 
+Interestingly, $\mathbb{G}$ only depends on the tree structure through the pairwise branch length $\Delta t_{ij}$ separating leaves.
+
+We then proposed a way to compute the likelihood of the data given the tree and the parameters of the OU process, namely the coupling matrix $\mathbf{J}$ and timescale $\gamma$.
+This method relies on computing the eigenvalues and vectors of the joint covariance matrix in an efficient manner. 
+Indeed, it is possible to separate this calculation in two steps: the first in which we perform the eigen-decomposition of the matrix $\mathbf{J}$, and the second in which we compute eigenvalues and vectors of matrices $\mathbf{G}^a$ that embed the tree structure. 
+This reduces the computational complexity from $\mathcal{O}(L^3N^3)$ for a naive inversion of $\mathbb{G}$ to $\mathcal{O}(L^3) + \mathcal{O}(LN^3)$. 
+We also show that this method can be used to compute the gradient of the likelihood with respect to parameters with the same complexity.
+This makes the problem of inferring $\mathbf{J}$ amenable to maximum likelihood methods using a gradient ascent approach. 
+
+Finally, we showed that this process gives expected results on simulated data, with a more accurate reconstruction of parameters than if empirical estimation was performed. 
+These simulations highlight the fact that this method is only useful in the intermediate regime of phylogenetic correlations. 
+If $\gamma$ is too high, correlation of data points through the tree is weak and an empirical estimation performs well. 
+On the other hand, a very low $\gamma$ results in strong phylogenetic biases that make recovering $\mathbf{J}$ impossible.
+However, in the intermediate regime, our re-construction of $\mathbf{J}$ that takes the tree into account results in clear benefits over an empirical estimation. 
+
+A limitation of our approach remains the long computational time. 
+Even with the efficient computation of the gradient, it was necessary to use small system sizes, $L=10$ at most, to repeat our inference process many times with simulated data in a reasonable time. 
+For this reason, the framework proposed here is limited to a small number of variables. 
+In this respect, it is interesting to note that a different manner of computing the likelihood developed in \cite{mitov_fast_2020} and based on Gaussian integrations on every branch of the tree results in an asymptotic complexity of $\mathcal{O}(NL^3)$. 
+
+Although our method can in principle be used for any set of traits, a major motivation in developing it is its potential application to model of proteins sequences. 
+Several results in the last years have shown that selection forces shaping the evolution of protein sequences are well described by a pairwise potential. 
+The estimation of this potential is performed using homologous sequences, and is therefore biased by the phylogenetic relations between these sequences.  
+Results presented here are a first step in disentangling effects due to phylogeny from effects due to selection in a principled way. 
+
+However, there remain several challenges in using this framework for protein sequences. 
+First, the computational power required to process actual sequences is much larger than what was needed for the small simulated systems presented here. 
+As an example, a protein of length $L=100$ will be represented by $q\times 100=2000$ Gaussian variables, where $q=20$ is the number of amino acids. 
+This is of course much larger than the $L=10$ system used as an example to test our approach. 
+
+A second question is the capacity of a continuous variable approximation, necessary when using Ornstein-Uhlenbeck dynamics, to represent dynamical properties of the landscape protein sequences evolve in. 
+This type of approximation has been successfully used before, but in quite different contexts \cite{jones_psicov_2012,barton_large_2014,baldassi_fast_2014}. 
+Its use in the context of modelling the evolutionary dynamics of protein sequences remains an open question. 
 
 
 \textbf{Acknowledgments:} 
