@@ -123,7 +123,7 @@
 
 
 \begin{abstract}
-	The Inverse problem of Statistical Physics infers maximum-entropy  models  compatibles with a corresponding set of empirical averages extracted from a high-dimensional dataset of equilibrium configurations. Practical interest extended these methods to non-equilibrium data  like  time series, where detailed balance does not hold. However, in several applications, data samples  result from evolutionary processes and the relation between configurations is conditioned by a hierarchical structure of the population. This makes sample statistics a superposition of  signals coming from both: internal configuration correlations and relatedness correlations produced by common evolutionary  history, typically represented by a tree. How to disentangle both sources of correlation for a better parameter inference is an open question to explore. Here we propose an approach  where the  evolutive process through a phylogenetic tree is described by  a  multivariate Ornstein-Uhlenbeck dynamics characterized by  gaussian propagator and stationary distributions. Inference of these distributions from  phylogenetic non-independent samples is solved in a Bayesian framework. This procedure can be  extended to discrete variables by using a binary representation of data and approximating  binary sates by continuous variables. Our method proposes a possible way for  a better estimation of both, equilibrium and dynamic parameters, making  applications more accurate. 
+The inverse statistical physics infers maximum-entropy models compatible with a set of empirical averages estimated from a high-dimensional dataset of independently distributed equilibrium configurations. However, in several applications, data result from stochastic evolutionary processes, and the relation between configurations is characterized by a hierarchical correlation structure, typically represented by a tree. In turn, empirical averages of observables superpose intrinsic signals related to the equilibrium distribution of the studied system, and spurious historical (or phylogenetic) signals characterizing the specific correlated data-generating process. The naive application of maximum-entropy techniques therefore leads to systematic biases and an effective reduction of the sample size. To advance on the currently open task of extracting intrinsic signals from correlated data, we study a system described by a multivariate Ornstein-Uhlenbeck process defined on a finite tree. Using a Bayesian framework, we can disentangle covariances in the data, which are result of their multivariate Gaussian equilibrium distribution, from those resulting from the historical correlations. Our approach leads to a clear gain in accuracy in the inferred equilibrium distribution, which corresponds to an effective two- to fourfold increase in sample size.
 \end{abstract}
 
 
@@ -132,6 +132,22 @@
 
 \section{Introduction}
 \label{sec:int}
+
+With the emergence of large, high-dimensional datasets for complex systems across disciplines, methods of {\it inverse statistical physics} have seen rapidly growing interest during the last years. In the most standard setting , the data provide observational samples of the "microscopic" degrees of freedom of the system under study -- this can be biological sequences, firing patterns of neurons, individuals in animal or human groups, stock prices etc. Within a static modeling approach, frequently based on the maximum-entropy approach, data $\vec x$ are assumed to be generated independently from some unknown probability distribution $P(\vec x)$. This distribution describes the underlying interaction patterns between the observed degrees of freedom, and has to be learned from data to unveil the rules governing the system. In some, more rare cases, data correspond to observed time series , but the theoretical and algorithmic development is much less advanced than in the case of independent static data, assuming, e.g., that measurements are taken at the microscopic time scale.
+
+One of the biggest application areas of inverse statistical mechanics is the modeling of biological sequences, and we will use them to motivate our otherwise theoretical-methodological study. Typical datasets are so called homologous protein families, collecting ensembles of proteins of common evolutionary ancestry. Despite their strong divergence in amino-acid sequences, the proteins in such families have highly similar biological functions and three-dimensional fold structures. The different sequences can thereby, in a statistical-physics perspective, be seen as microscopically distinct solutions for the same macroscopic behavior.
+
+In such protein families, which are typically represented by large multiple-sequence alignments, at least two complementary types of biological information are contained:
+\begin{itemize}
+    \item {\it Phylogenetic information:} the distances between sequences carry information about the evolutionary time since the common ancestor. Using phylogenetic methods we may reconstruct the evolutionary history of a protein family (and of the species carrying the proteins), and also the sequences of the ancestral proteins. 
+    \item {\it Coevolutionary information} considers the correlated evolution of positions in proteins, frequently related to contacts in the folded protein, even for positions distant along the sequence. This information has been massively used in protein-structure prediction, most recently in combination with structurally supervised deep learning, but also to infer mutational landscapes or networks of interacting proteins.
+\end{itemize}
+
+These two types of information are contained in two complementary features of the data set: phylogenetic inference is based on the comparative analysis of the rows of the best, i.e., of entire proteins; and coevolutionary inference is based on the comparative analysis of MSA columns, which describe the amino-acid usage of the individual positions across proteins.
+
+For methodological reasons, each type of inference assumes the absence of the other information: phylogenetic inference assumes independent evolution of all positions; coevolutionary inference assumes that proteins form an independently and identically distributed sample of the model to be inferred.
+
+It has turned out to be hard to combine the two types of information in a single approach, even if the existence of, e.g, phylogenetic correlations between sequences influences the results of coevolutionary analysis. Here we propose to advance on the question of phylogeny-aware coevolutionary inference using the simplest nontrivial model setting: correlated multivariate Ornstein-Uhlenbeck (OU) processes.
 
 In the last decades, biology has seen impressive progress in experimental techniques which has resulted in a large increase of available data. 
 This is especially visible in the case of biological sequences,  with databases now harboring a vast amount of high-quality DNA or protein sequences \cite{sayers_genbank_2019,uniprotconsortium_uniprot_2018}. 
@@ -402,7 +418,7 @@ Since $\iC$ is a symmetric matrix, its eigenvectors form an orthogonal basis of 
 One possible parametrization for the $\{\vsa\}$ consists in using $L(L-1)/2$ scalar \emph{Eulerian angles} $\{\theta_{\alpha\beta}\}$ with $1\leq \alpha < \beta \leq L$~\cite{Raffenetti1970GEA, Shepard_param_OM}. 
 With the $L$ eigenvalues $\rho_a$, this results in $L(L+1)/2$ independent values that fully parametrize the $L(L+1)/2$ values of $\iC$. 
 A second possibility, that we have found faster in practice, is to express the matrix of the $\{\vsa\}$ as the exponential of a skew-symetric matrix, see section \ref{sub:parametrizations_of_eigenvectors} of the SM. 
-However, this parametrization does not allow a simple analytical expression of the gradient of the likelihood, and we use it along with automatic differentiation. \pierre{Edwin, can you add a reference to the package you used in the .bib and here?}
+However, this parametrization does not allow a simple analytical expression of the gradient of the likelihood, and we use it along with automatic differentiation \cite{Zygote.jl-2018}. 
 For this reason, we use the Eulerian angles below to express the gradient of the likelihood. 
 
 As a first step, we need to compute the gradient of the likelihood $\mathcal{L}_{\mathcal{D}}(\mathbb{G})$ with respect to all parameters $\{\rho_a, \theta_{\alpha\beta}\}$ and $\gamma$. 
@@ -467,8 +483,8 @@ The length of each branch of $\mathcal{T}$ is chosen from a uniform distribution
 We also sample positive semi-definite coupling matrix $\bm{J}$ of size $L\times L$ with $L=4$ or $L=10$, with entries normally distributed with mean $\mu_J=0.8$ and $\sigma_J=0.2$. 
 
 In the case of statistical models of protein sequence, a major achievement is the ability of pairwise models to predict contacts in the three-dimensional structure of the protein from an inferred coupling matrix.
-In order to replicate this setting and to perform interaction prediction, we randomly set to $0$ off-diagonal elements of $J$ with probability $0.7$, resulting in a coupling matrix with approximative density $0.3$.  
-Null elements of $J$ correspond to variables that do not interact, or to non-contacts in the case of an application to protein sequences.  
+In order to replicate this setting and to perform interaction prediction, we randomly set to $0$ off-diagonal elements of $J$ with probability $0.7$, resulting in a sparsified coupling matrix of approximate density $0.3$.  
+Zero elements of $J$ correspond to variables that do not interact, in analogy to non-contacts in the case of an application to protein sequences.  
 
 
 In order to investigate the different regimes of tree-induced correlation, we vary the parameter $\gamma$ around a reference timescale $\gamma_d$ defined as follows: 
@@ -483,17 +499,17 @@ To avoid statistical noise when assessing the quality of our inference, we repea
 
 For each repetition of the sampling process, we perform our maximum likelihood procedure and obtain an inferred covariance matrix $\bm{C}_{max}$. 
 As a means of comparison, we also compute the empirical covariance matrix $\bm{C}_{emp}$ as if leaf configurations were independent. 
-Figure \ref{fig:pears_L4} shows the Pearson correlation between the real covariance matrix $\bm{C}=\bm{J}^{-1}$ and the empirical or inferred ones in the $L=4$ case (similar figures for $L=10$ are in section \ref{sub:supplementary_figures} of the smallest). 
+Fig.~\ref{fig:pears_L4} shows the Pearson correlation between the real covariance matrix $\bm{C}=\bm{J}^{-1}$ and the empirical or inferred ones in the $L=4$ case (similar figures for $L=10$ are in Appendix \ref{sub:supplementary_figures}). 
 As expected, both methods perform well in the large $\gamma$ limit with a correlation close to $1$, and worse in the low $\gamma$ limit. 
-In this latter case, correlations due to phylogeny are too strong for our maximum likelihood method to pick up signal, and both methods perform as poorly. 
+In this latter case, correlations due to phylogeny are too strong for our maximum likelihood method to pick up signal, and both methods perform equally poorly. 
 However, there exists an intermediate regime where $\bm{C}_{max}$ is much closer to the actual correlation than  $\bm{C}_{emp}$. 
-In figure \ref{fig:error_1_L4}, we plot the relative $l2$-error between either covariance matrices in the left panel or coupling matrices in the right panel. 
+In Fig.~\ref{fig:error_1_L4}, we plot the relative $l2$-error between either covariance matrices in the left panel or coupling matrices in the right panel. 
 In both cases, our maximum-likelihood method results in a consistent improvement over the empirical estimator. 
 However, the relative error still reaches high values in the low $\gamma$ regime, which is likely due to $\bm{C}_{max}$ and $\bm{C}_{emp}$ being close to singular in this case. 
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/corr_C_L4_balanced_tree_100_rep.pdf}
+	\includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/corr_C_L4_balanced_tree_100_rep.pdf}
 	\caption{ Pearson correlation between empirical /maximum-likelihood   covariance matrices and the true covariance matrix. The inset plot represents the ratio between the Pearson correlation for the  maximum-likelihood covariance matrix and the one for the empirical covariance matrix. Simulations are performed for a tree of $512$ leaves  and  system size $L=4$.}
 	\label{fig:pears_L4}
 \end{figure}
@@ -501,42 +517,38 @@ However, the relative error still reaches high values in the low $\gamma$ regime
 
 
 \begin{figure*}[!htb]
-		\begin{subfigure}{}
-			\centering\includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/epsilon_error_C_L4_balanced_tree_100.pdf}
-		\end{subfigure}
+	%	\begin{subfigure}{}
+			\centering\includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/epsilon_error_L4_balanced_tree_100.pdf}
+	%	\end{subfigure}
 		\hspace{1mm}
-		\begin{subfigure}{}
-			\centering\includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/epsilon_error_J_L4_balanced_tree_100.pdf}
-		\end{subfigure}
+	%	\begin{subfigure}{}
+	%		\centering\includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/epsilon_error_J_L4_balanced_tree_100.pdf}
+	%	\end{subfigure}
 	\caption{\textbf{Left:}Relative $l2$-error between empirical or maximum-likelihood  covariance matrices and the true covariance matrix.  \textbf{Right:}Relative $l2$-error between empirical /maximum-likelihood  coupling matrices and the true coupling matrix. Logarithmic scale is chosen for the $y$-axis because of large values of the error at low $\gamma$. The inset in both panels show the ratio between the two errors.}
 	\label{fig:error_1_L4}
 \end{figure*}
 
-An interesting way to illustrate the benefits of reconstructing the covariance matrix using knowledge of the tree is to evaluate the effective number of samples that is gained by doing so. 
-Figure \sref{fig:error_vs_nseqs} shows the $l2$-error between the true covariances and the empirical covariances computed from an \emph{i.i.d.} sample of size $N$. 
-As expected the error is increasing for decreasing values of $N$. 
-We can use this as a calibration to express values of the $l2$-error in terms of an effective sample size.   
+An interesting way to illustrate the benefits of reconstructing the covariance matrix using knowledge of the tree is to evaluate the gain in {\em effective sample size}. Intuitively, the use of correlated samples reduces the information contained in the data, as compared to an equally large dataset of \emph{i.i.d.} configurations. It is therefore interesting to compare the accuracy of our inferences with the accuracy obtained on smaller but \emph{i.i.d.} samples. To do so, we report in Fig.~\sref{fig:error_vs_nseqs} the $l2$-error between true and empirical covariances computed from a \emph{i.i.d.} samples of variable sizes $N$. As expected,  the error increases with decreasing values of $N$. 
+We can use this in turn to express values of the $l2$-error in correlated samples in terms of effective \emph{i.i.d.} sample sizes.   
 For example, the error reached by $\bm{C}_{emp}$ for $\gamma/\gamma_d\in[0.5, 1]$ and $L=4$ corresponds to the one obtained for an \emph{i.i.d.} sample of size $\sim 16$, whereas it corresponds to a sample of size $\sim 32-64$ for $\bm{C}_{max}$.
-Thus, our correction is equivalent to doubling the number of effective samples.
+Thus, our correction is equivalent to increasing by a factor 2-4 the number of effective samples.
 
-Finally, we assess the performance of our method in improving the prediction of interactions between gaussian variables $\{x_a\}$. 
+Finally, we assess the performance of our method in improving the prediction of the network of interactions between the Gaussian variables $\{x_a\}$. 
 We consider that two variables $x_a$ and $x_b$ interact if the corresponding entry in the coupling matrix is non-zero, that is $J_{ab}\neq 0$. 
-We predict these interactions by taking the largest $n$ elements (in absolute value) of the inferred coupling matrix, resulting in $n$ predictions. 
-The fraction of these $n$ predictions that correspond to non-zero entries in the true matrix defines the positive predictive value (PPV). 
+Using the data, we predict these interactions by taking the largest $n$ elements (in absolute value) of the inferred coupling matrix, resulting in $n$ predictions. 
+The fraction TP$/n$ of these $n$ predictions that correspond to non-zero entries in the true matrix (TP = true positives) defines the positive predictive value (PPV). 
 This problem is equivalent to the one of predicting contacts in a protein structure 
 
-Figure $\ref{fig:PPV_L4}$ shows the PPV as a function of the number of predictions for different values of $\gamma$ and $L=4$ (see Fig. \sref{fig:PPV_L10} for the $L=10$ case). 
+Fig.~$\ref{fig:PPV_L4}$ shows the PPV as a function of the number of predictions for different values of $\gamma$ and $L=4$ (see Fig. \sref{fig:PPV_L10} for the $L=10$ case). 
 In this case, the coupling matrix only has $6$ independent non-diagonal elements, and only 6 predictions can be made. 
 Our correction systematically outperforms the predictions from the empirical coupling matrix, with an always larger PPV. 
 This gain is negligible in the extreme regimes of very high $\gamma$, where the prediction is close to identical to the one obtained with an \emph{i.i.d.} sample, or very low $\gamma$, where it is essentially random. 
 It is however much larger in the intermediate regime, with a significantly improved prediction in the region $\gamma/\gamma_d\in[0.5,1]$.
 
 
-
-
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/PPVs_L4.png}
+	\includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/PPVs_L4.pdf}
 	\caption{Quality of prediction of interactions for  different values of $\gamma$ and system size $L=4$. Interactions are defined as non-zero elements of the coupling matrix. In the $L=4$ case, there are $6$ possible interactions. Predictions are made by taking the largest elements (in absolute terms) of the inferred coupling matrix. The PPV is the fraction of correctly predicted contacts for a given number of predictions.}
 	\label{fig:PPV_L4}
 \end{figure}
@@ -551,12 +563,12 @@ It is however much larger in the intermediate regime, with a significantly impro
 
 In this work, we proposed a method for inferring parameters of an Ornstein-Uhlenbeck process using data that is correlated through an evolutionary tree. 
 We kept a very general setting in which data can in principle represent any set of continuous phenotypic traits or potentially discrete sequences if a continuous approximation is made. 
-As such, our approach is only methodological, and does not directly investigate any particular application. 
+As such, our approach is purely methodological, and does not directly investigate any particular application. 
 
 We showed that due to the Gaussian and time reversible nature of the OU process, it is possible to write the joint covariance matrix of all data vectors in a simple way. 
 The resulting matrix $\mathbb{G}$ consists of block entries that represent covariances between pairs of leaves.
 The dependence of these blocks on the coupling matrix $\bm{J}$ characterizing the OU process and on the tree structure can be written explicitly. 
-Interestingly, $\mathbb{G}$ only depends on the tree structure through the pairwise branch length $\Delta t_{ij}$ separating leaves.
+Interestingly, $\mathbb{G}$ only depends on the tree structure through the pairwise path length $\Delta t_{ij}$ separating leaves along the tree.
 
 We then proposed a way to compute the likelihood of the data given the tree and the parameters of the OU process, namely the coupling matrix $\mathbf{J}$ and timescale $\gamma$.
 This method relies on computing the eigenvalues and vectors of the joint covariance matrix in an efficient manner. 
@@ -565,11 +577,10 @@ This reduces the computational complexity from $\mathcal{O}(L^3N^3)$ for a naive
 We also show that this method can be used to compute the gradient of the likelihood with respect to parameters with the same complexity.
 This makes the problem of inferring $\mathbf{J}$ amenable to maximum likelihood methods using a gradient ascent approach. 
 
-Finally, we showed that this process gives expected results on simulated data, with a more accurate reconstruction of parameters than if empirical estimation was performed. 
+Finally, we showed that this process gives encouraging results on simulated data, with a more accurate reconstruction of parameters than if empirical estimation was performed. 
 These simulations highlight the fact that this method is only useful in the intermediate regime of phylogenetic correlations. 
-If $\gamma$ is too high, correlation of data points through the tree is weak and an empirical estimation performs well. 
-On the other hand, a very low $\gamma$ results in strong phylogenetic biases that make recovering $\mathbf{J}$ impossible.
-However, in the intermediate regime, our re-construction of $\mathbf{J}$ that takes the tree into account results in clear benefits over an empirical estimation. 
+If the timescale $\gamma$ characterizing the branch lengths of the tree is too large, correlation of data points through the tree is weak and an empirical estimation performs well. 
+On the other hand, a very low $\gamma$ results in strong phylogenetic biases that make recovering $\mathbf{J}$ impossible, basically due to a strong reduction of the information in a too redundant dataset. However, in an intermediate regime where intrinsic and historical correlations in the dataset coexist, our tree-aware re-construction of $\mathbf{J}$ results in clear benefits over a tree-unaware empirical estimation. 
 
 A limitation of our approach remains the long computational time. 
 Even with the efficient computation of the gradient, it was necessary to use small system sizes, $L=10$ at most, to repeat our inference process many times with simulated data in a reasonable time. 
@@ -591,10 +602,8 @@ This type of approximation has been successfully used before, but in quite diffe
 Its use in the context of modelling the evolutionary dynamics of protein sequences remains an open question. 
 
 
-\textbf{Acknowledgments:} 
-
-
-
+\textbf{Acknowledgments:} We acknowledge interesting discussions with Roberto Mulet. PBC and MW acknowlege the hospitality of the Department of  Theoretical  Physics of University  of  Havana, where part of this work was done. Our work was partially funded by the EU H2020 Research and Innovation Programme MSCA-RISE-2016 under Grant
+Agreement No. 734439 InferNet.
 
 
 \clearpage
@@ -877,21 +886,21 @@ for $n-dimensions$ $\hat{H}$ is undetermined, the various QNMs differ in their c
 
 $$\hat{H}_{k+1}=\hat{H}_{k}+\frac{y_k y^{T}_k}{y_k\Delta x_k} - \frac{\hat{H}_k\Delta x_k(\hat{H}_k\Delta x_k)^T}{\Delta x^T_k\hat{H}_k\Delta x_k} \;\;\;\text{and}\;\;\; y_k=\nabla L(\vec{x}_k+1)-\nabla L(\vec{x}_k)$$
 
-The method implementation was done using   NLopt package (see reference) \pierre{Add reference?}.
+The method implementation was done using   NLopt package \cite{NLopt} .
  
 \subsection{Supplementary figures}
 \label{sub:supplementary_figures}
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/error_Ciid_vs_numb_of_seq.pdf}
+	\includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/error_Ciid_vs_numb_of_seq.pdf}
 	\caption{Relative $l2$-error between the empirical covariance matrix calculated from an \emph{i.i.d.} sample and the true covariance matrix, for system sizes $L=4$ and $L=10$. The dashed vertical line corresponds to the number of leaves of the tree used in the simulations.}
 	\label{fig:error_vs_nseqs}
 \end{figure}
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/scatter_gamma_L4_100.pdf}
+	\includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/scatter_gamma_L4_100.pdf}
 	\caption{Inferred $\gamma$ values as a function of real $\gamma$, for system size $L=4$. $\gamma_{emp}$ is the value obtained by the process described in section \ref{sub:initializing_parameters} of the SM. $\gamma_{max}$ is the value inferred by the maximum-likelihood calculation. 
 	The inset represents the ratio of both inferred parameters $\gamma_{emp}$ or $\gamma_{max}$ to the real $\gamma$.}
 	\label{fig:scatter_gamma_L4}
@@ -900,14 +909,14 @@ The method implementation was done using   NLopt package (see reference) \pierre
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[keepaspectratio=true,width=0.55\textwidth]{Figures/Pearson_correlation_rate_full_range.pdf}
+	\includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/Pearson_correlation_rate_full_range.pdf}
 	\caption{  Ratio between Pearson correlation of the  maximum-likelihood  and true covariance  matrix to the Pearson correlation of the  empirical and true covariances matrices for the two system sizes $L=4$ and $L=10$.}
 	\label{fig:pearson_corr_comp_L4}
 \end{figure}
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[keepaspectratio=true,width=0.65\textwidth]{Figures/corr_C_L10_balanced_tree_100_rep.pdf}
+	\includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/corr_C_L10_balanced_tree_100_rep.pdf}
 	\caption{ Pearson correlation between empirical /maximum-likelihood   covariance matrices and the true covariance matrix, the inset plot represent the ratio between the person correlation for the  maximum-likelihood covariance matrix and the one for the empirical covariance matrix.}
 	\label{fig:pears_L10}
 \end{figure}
@@ -915,7 +924,7 @@ The method implementation was done using   NLopt package (see reference) \pierre
 
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[keepaspectratio=true,width=0.65\textwidth]{Figures/scatter_gamma_L10_100.pdf}
+	\includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/scatter_gamma_L10_100.pdf}
 	\caption{Inferred $\gamma$ values as a function of real $\gamma$, for system size $L=10$. $\gamma_{emp}$ is the value obtained by the process described in section \ref{sub:initializing_parameters} of the SM. $\gamma_{max}$ is the value inferred by the maximum-likelihood calculation. 
 	The inset represents the ratio of both inferred parameters $\gamma_{emp}$ or $\gamma_{max}$ to the real $\gamma$. }
 	\label{fig:scatter_gamma_L10}
@@ -923,13 +932,13 @@ The method implementation was done using   NLopt package (see reference) \pierre
 
 
  \begin{figure*}[!htb]
- 		\begin{subfigure}{}
- 			\centering\includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/epsilon_error_C_L10_balanced_tree_100.pdf}
- 		\end{subfigure}
+ 	%	\begin{subfigure}{}
+ 			\centering\includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/epsilon_error_L10_balanced_tree_100.pdf}
+ %		\end{subfigure}
  		\hspace{1mm}
- 		\begin{subfigure}{}
- 			\centering\includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/epsilon_error_J_L10_balanced_tree_100.pdf}
- 		\end{subfigure}
+ %		\begin{subfigure}{}
+ %			\centering\includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/epsilon_error_J_L10_balanced_tree_100.pdf}
+ %		\end{subfigure}
  	\caption{\textbf{Left:} Relative $l2$-error between empirical or maximum-likelihood covariance matrices and the true covariance matrix. \textbf{Right}: Relative $l2$-error between empirical /maximum-likelihood coupling matrices and the true coupling matrix. Logarithmic scale is chosen for the y-axis because of large values of the error at low $\gamma$. The inset in both panels show the ratio between the two errors. For system size $L=10$.}
  	\label{fig:error_1_L10}
  \end{figure*}
@@ -939,7 +948,7 @@ The method implementation was done using   NLopt package (see reference) \pierre
   
 \begin{figure}[!htb]
 	\centering
-	\includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/PPVs_L10.png}
+	\includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/PPVs_L10.pdf}
 	\caption{Quality of prediction of interactions for  different values of $\gamma$ and system size $L=4$. Interactions are defined as non-zero elements of the coupling matrix. In the $L=4$ case, there are $6$ possible interactions. Predictions are made by taking the largest elements (in absolute terms) of the inferred coupling matrix. The PPV is the fraction of correctly predicted contacts for a given number of predictions.}
 	\label{fig:PPV_L10}
 \end{figure}
