@@ -133,38 +133,21 @@ Inverse statistical physics aims at inferring models compatible with a set of em
 \section{Introduction}
 \label{sec:int}
 
-With the emergence of large, high-dimensional datasets for complex systems across disciplines, methods of {\it inverse statistical physics} have seen rapidly growing interest during the last years. 
-In the most standard setting, the data provide observational samples of the ``microscopic''degrees of freedom of the system under study -- this can be biological sequences, firing patterns of neurons, individuals in animal or human groups, stock prices etc... 
-Within a static modeling approach, frequently based on the maximum-entropy principle, data $\vec x$ are assumed to be generated independently from some unknown probability distribution $P(\vec x)$. 
-This distribution describes the underlying interaction patterns between the observed degrees of freedom, and has to be learned from data to unveil the rules governing the system. 
-In more rare cases where data correspond to observed time series, theoretical and algorithmic development is much less advanced than in the case of independent static data. %, assuming, e.g., that measurements are taken at the microscopic time scale.
+With the emergence of large, high-dimensional datasets for complex systems across disciplines, methods of {\it inverse statistical physics} have seen rapidly growing interest during the last years \cite{Inverse_problem_Berg}. In the most standard setting, the data provide observational samples of the ``microscopic''degrees of freedom of the system under study -- this can be biological sequences \cite{levy_potts_2017,cocco_inverse_2018}, firing patterns of neurons \cite{schneidman2006weak,roudi2009ising}, individuals in animal groups \cite{bialek2012statistical,cavagna2018physics}, stock markets \cite{bury2013market,borysov2015us} etc.
+Within a static modeling approach, frequently based on the maximum-entropy principle \cite{jaynes1957information}, data $\vec x$ are assumed to be generated independently from some unknown probability distribution $P(\vec x)$. This distribution describes the underlying interaction patterns between the observed degrees of freedom, and has to be learned from data to unveil the rules governing the system. 
+In more rare cases where data correspond to observed time series, theoretical and algorithmic development is much less advanced than in the case of independent static data \cite{Inverse_problem_Berg}.
 
-One of the biggest application areas of inverse statistical mechanics is the modeling of biological processes.
-These applications are fuelled by the large amount of available data resulting from the impressive progress in experimental techniques in biology. 
-This is especially visible in the case of biological sequences,  with databases now harboring a vast amount of high-quality DNA or protein sequences \cite{sayers_genbank_2019,uniprotconsortium_uniprot_2018}.
-A common idea in this context is that it is possible to use characteristics of genes or organisms related by a common ancestry -- called \emph{homologous} -- to construct models of the selection acting on them. 
-A successful example in this regard is the representation of protein sequences by probabilistic models in the so-called DCA method \cite{levy_potts_2017,cocco_inverse_2018}. 
-We will use this type of application to motivate our otherwise purely methodological study. 
-
-When modeling homologous genes or organisms, one has to distinguish between two complementary types of information: 
+Here we address a different case, the inverse problem for high-dimensional data, which show hierarchical correlations due to a data-generating process defined via a branching process. The motivation for this purely methodological study comes from the modeling of biological sequence data, which is one of the major fields of application of inverse statistical mechanics \cite{levy_potts_2017,cocco_inverse_2018}, but even more of other bioinformatic inference approaches, cf.~\cite{durbin1998biological,felsenstein2004inferring}. Sequence data are the result of natural evolution, {\em i.e.}~a branching process initiating in some unknown common ancestor of extant and thus observable sequences \cite{sayers_genbank_2019,uniprotconsortium_uniprot_2018,el2019pfam}. The prototypical datasets in this case are multiple-sequence alignments (MSA), with lines being a so-called homologous, {\em i.e.} evolutionarily related sequences, and columns specific positions deriving from some common ancestral position. Such MSA contain at least two kinds of information:
 \begin{itemize}
-    \item {\it Phylogenetic information:} the distances between gene sequences or traits in organisms carry information about the evolutionary time since their common ancestor. 
-    Using phylogenetic methods we may reconstruct the evolutionary history of a set of genes or species, and also the sequences or traits of their ancestors. 
-    \item {\it Co-evolutionary information:} positions in a sequence or traits in organisms typically do not evolve independently, but rather in a correlated way. 
-    This co-evolution carries important information about the selection forces acting on evolving entities.  
-    This fact has been extensively studied in the case of protein sequences, and used to predict structure, mutational landscapes or networks of interacting proteins.  
+    \item {\it Phylogenetic information:} the distances between sequences carry information about the evolutionary time since their common ancestor. Using phylogenetic methods \cite{felsenstein_phylogenies_1988,felsenstein2004inferring} we may reconstruct the evolutionary history of our dataset, represented by a phylogenetic tree.  
+    \item {\it Co-evolutionary information:} positions in a sequence typically do not evolve independently, but rather in a correlated way. This co-evolution carries important information about the selection forces acting on evolving entities. This fact has been extensively studied in the case of protein sequences, and used to predict structure, mutational landscapes or networks of interacting proteins \cite{levy_potts_2017,cocco_inverse_2018}.  
 \end{itemize}
+These two types of information are contained in two complementary features of the data: phylogenetic inference is based on the comparative analysis of different sequences, while co-evolutionary information is contained in the correlation of different columns of the MSA. Approaches aiming at one type of information typically neglect the other one: inference of phylogenies generally assumes that all positions in a sequence evolve independently, while co-evolutionary models of proteins assume that sequences in the MSA are independently distributed. This choice is motivated by the fact that taking the two types of correlations into account, \emph{i.e.} through time with phylogeny and accross trait values for co-evolution, results in very hard inference procedures, cf.~\cite{obermayer2014inverse,rodriguez2019toward}. 
+However, this can lead to biases in the model parameters: it has for instance been shown that phylogenetic relations between protein sequences induce non-trivial correlations that are not related to protein function \cite{qin_power_2018,horta2020phylogenetic}. 
 
-These two types of information are contained in two complementary features of the data: phylogenetic inference is based on the comparative analysis of different species or genes, while co-evolutionary information is contained in the correlation of different trait values in the same gene or organism.
+We have used phylogeny and co-evolution of biological sequences to explain our motivation, but the underlying problem is much more general. Instead of sequences of discrete characters, like amino acids or nucleotides, we may consider continuous phenotypic traits. The branching process is not necessarily the phylogeny of species, but it may be the genealogy of populations of the same species, or other branching processes like epidemics spreading or geographic migration.
 
-Models built using biological data usually ignore one of the two types of information. 
-For instance, inference of phylogenies typically assumes that all positions in a sequence evolve independently, while co-evolutionary models of proteins assume that their sequences are independently distributed. 
-This choice is motivated by the fact that taking the two types of correlations into account, \emph{i.e.} through time with phylogeny and accross trait values for co-evolution, results in very hard inference procedures. 
-However, this can lead to biases in the model parameters: it has for instance been shown that phylogenetic relations between protein sequences induce non-trivial correlations that are not related to protein function \cite{qin_power_2018}. 
-
-
-Accounting for both co-evolution and phylogeny in models requires one to understand how interdependent traits under selection evolve along a tree. 
-A historically well-known way to represent such processes is to use Ornstein-Uhlenbeck dynamics (OU), which models traits as a Gaussian vector evolving in a quadratic potential that represents selection forces \cite{uhlenbeck_theory_1930, felsenstein_phylogenies_1988, hansen_stabilizing_1997}.
+Here we use a simple and very general model for the temporal evolution of correlated variables: a historically well-known way to represent such processes is to use Ornstein-Uhlenbeck dynamics (OU), which models configurations as Gaussian vectors evolving in a quadratic potential that represents selection forces \cite{uhlenbeck_theory_1930, felsenstein_phylogenies_1988, hansen_stabilizing_1997}.
 OU processes are commonly used in the field of phylogenetic comparative methods (PCM) \cite{bartoszek_phylogenetic_2012,mitov_fast_2020}. 
 This modeling approach is \emph{a priori} limited to continuous traits, but could potentially be used for protein sequences combined with a continuous-variable approximation, that has successfully been used in the past \cite{jones_psicov_2012,barton_large_2014,baldassi_fast_2014}. 
 In this context, the equilibrium distribution reached by the OU process represents the probability distribution given by the DCA method, which can be used to predict non-trivial structural contacts in the protein fold, effects of amino-acid mutations or even designing novel functional sequences \cite{morcos_direct-coupling_2011, figliuzzi_coevolutionary_2016, russ_evolution-based_2020}. 
@@ -608,40 +591,32 @@ Agreement No. 734439 InferNet.
 
 \clearpage
 \bibliography{bib_phylo}
-
 \bibliographystyle{unsrt}
 
 \newpage
 \appendix
-\setcounter{figure}{0}
-\renewcommand{\figurename}{Figure S}
-\setcounter{table}{0}
-\renewcommand{\tablename}{Table S}
+%\setcounter{figure}{0}
+%\renewcommand{\figurename}{Figure S}
+%\setcounter{table}{0}
+%\renewcommand{\tablename}{Table S}
 
-\section{Supplementary material} % (fold)
+\section{Description of technical details} % (fold)
 \label{sec:supplementary_material}
 
 
 \subsection{Generating artificial data} % (fold)
 \label{sub:generating_artificial_data}
 
-	We are interested in the case where the described Ornstein-Uhlenbeck process takes place on a tree. 
-	For example, if configurations $\vec{x}$ represent quantitative traits of some organisms, the tree can represent the genealogy or phylogeny of these organisms. 
-	Therefore, we have to be able to simulate the OU process on a tree. 
-	In practice, given a rooted tree such as the one shown in figure~\ref{fig:sample_tree} of the main text, we want to sample a configuration $\vec{x}$ for every node in such a way that equation~\eqref{eq:OUjoint} holds for every pair of nodes, the time $\Delta t$ then being the branch length connecting them. \\
-	We use a simple methodology to achieve this. 
-	First, note that given an arbitrary configuration $\vec{x}_0$ and a time $\Delta t$, we can generate a new configuration $\vec{x}$ distributed according to the propagator in equation~\eqref{eq:OUpropagator} by the transformation
-	\begin{equation}
-		\vx = \Lam^{\Delta t}\vx_0 + \Sig^{1/2}\vec{\eta}
-		\label{eq:OUsample}
-	\end{equation}
-	where $\Lam$ and $\Sig$ are defined in equation~\eqref{eq:def_lambda}, and $\vec{\eta}$ is a vector of uncorrelated variables with distributions $\mathcal{N}(0,1)$. 
-	Moreover, if $\vec{x_0}$ is distributed according to equation~\eqref{eq:eq_distribution}, then $\vx$ and $\vx_0$ are distributed according to equation~\eqref{eq:OUjoint}. 
-	Note that equation \eqref{eq:OUsample} is quite different from the Langevin equation~\eqref{eq:langevin}, even though they have similar forms. 
-	While the Langevin equation describes the motion of $\vx$ in the potential $\bm{J}$, eq.~\eqref{eq:OUsample} directly samples from the OU process. \\
-	Given an already sampled internal node in the tree, equation~\eqref{eq:OUsample} allows to sample a configuration for each of its children. 
-	To sample the whole tree, we first sample the root note $\vx_0$ from the equilibrium distribution~\eqref{eq:eq_distribution}. 
-	By recursive applications of~\eqref{eq:OUsample}, we then simply work our way down the tree until all leaves are sampled.  
+We are interested in the case where the dynamics of the $L$-dimensional Ornstein-Uhlenbeck process takes place on a tree. For example, if configurations $\vec{x}$ represent quantitative traits of some organisms, the tree can represent the genealogy or phylogeny of these organisms. Therefore, to generate our datasets, we have to be able to simulate the OU process on a tree. In practice, given a rooted tree such as the one shown in Fig.~\ref{fig:sample_tree} above, we want to sample a configuration $\vec{x}$ for every node in such a way that Eq.~\eqref{eq:OUjoint} holds for every pair of nodes, the time $\Delta t$ being the path length connecting the nodes along the tree. 
+	
+We use a simple methodology to achieve this. First, note that given an arbitrary configuration $\vec{x}_0$ and a time $\Delta t$, we can generate a new configuration $\vec{x}$ distributed according to the propagator Eq.~\eqref{eq:OUpropagator} by exploiting the transformation
+\begin{equation}
+	\vx = \Lam^{\Delta t}\vx_0 + \Sig^{1/2}\vec{\eta}\ ,
+	\label{eq:OUsample}
+\end{equation}
+where $\Lam$ and $\Sig$ are defined in Eq.~\eqref{eq:def_lambda}, and $\vec{\eta}$ is a vector of uncorrelated variables drawn individually from the normal distribution $\mathcal{N}(0,1)$. Moreover, if $\vec{x_0}$ is distributed according to the equilibrium distribution Eq.~\eqref{eq:eq_distribution}, then $\vx$ and $\vx_0$ are distributed according to the joint distribution Eq.~\eqref{eq:OUjoint} describing two equilibrium configurations at finite time difference. Note that Eq.~\eqref{eq:OUsample} is quite different from the Langevin Eq.~\eqref{eq:langevin}, which describes the instantaneous dynamics of  $\vx$ in the potential given by $\bm{J}$, and which could also be simulated in more complicated situation where no analytical expression for the propagator can be derived. 
+	
+Given any already sampled internal node in the tree, Eq.~\eqref{eq:OUsample} allows to emit a configuration for each of its child nodes. To sample the whole tree, we first draw the root configuration $\vx_0$ from the equilibrium distribution Eq.~\eqref{eq:eq_distribution}. By recursive applications of Eq.~\eqref{eq:OUsample}, we then simply work our way down the tree until all leaves are sampled. Only the configurations in the leaves form the data set, the internal configuration remain hidden to our model-learning task.  
 
 
  % subsection generating_artificial_data (end)
@@ -649,16 +624,14 @@ Agreement No. 734439 InferNet.
 \subsection{Initializing parameters} % (fold)
 \label{sub:initializing_parameters}
 
-	\subsubsection{Eigenvalues and eigenvectors of $\mathbf{C}^{-1}$} % (fold)
-	\label{ssub:eigenvalues_and_eigenvectors}
+\subsubsection{Eigenvalues and eigenvectors of $\mathbf{C}^{-1}$}
+\label{ssub:eigenvalues_and_eigenvectors}
 
-	The initial value that we take for the covariance matrix is the empirical one
-	\begin{equation*}
-		\mathbf{C}^{emp} = \frac{1}{N}\sum_{i=1}^{N}\vx_i \cdot\vx_i^{\,T}.
-	\end{equation*}
-	Its eigenmodes $\{\rho^0_a, \vsa^{\,0}\}$ determine the starting point of the optimization. 
-
-	[Insert here how we go from $\vsa^{\,0}$ to the corresponding set of Eulerian angles or to the corresponding skew symmetric matrix.]
+We initialize the covariance matrix using the empirical one:
+\begin{equation*}
+	\mathbf{C}^{emp} = \frac{1}{N}\sum_{i=1}^{N}\vx_i \cdot\vx_i^{\,T}\ .
+\end{equation*}
+Its eigenmodes $\{\rho^0_a, \vsa^{\,0}\}$ determine the starting point of the optimization. A suitable parametrization of $\vsa^{\,0}$ in terms of generalized Eulerian angles or a skew symmetric matrix is described below in Sec.~\ref{sub:parametrizations_of_eigenvectors}.
 	
 	% From empirical covariance matrix $c^*=\frac{1}{N}\sum_{n=1}^{N}\mathbf{x}_n \mathbf{x}_n^T$ we could extract information  to  initialize the parameters in the optimization process. 
 
@@ -676,46 +649,34 @@ Agreement No. 734439 InferNet.
 
 	% subsubsection eigenvalues_and_eigenvectors (end)
 
-	\subsubsection{Time scale parameter $\gamma$}
+\subsubsection{Time scale parameter $\gamma$}
 
-	The optimization also requires that we initialize the time scale $\gamma$. 
-	For this, we try to find the optimal $\gamma$ given the data $\mathbf{X}$, the tree, and the OU process defined by the empirical covariance matrix. 
+The optimization also requires that we initialize the time scale $\gamma$. For coherence with the last section, we need to find the optimal $\gamma$ given the data $\mathbf{X}$, the tree, and the OU process defined by the empirical covariance matrix. 
 
-	The probability distribution $P$ for the configurations of two leaves $\vx_i$ and  $\vx_j$  separated by time $\Delta t_{ij}$ is given by equation~\eqref{eq:OUjoint} of the main text. 
-	With this distribution we can calculate analytically the average of the scalar product $\vx_i^{\,T}\vx_j$:
-	\begin{align*}
-		\langle \vx_i^{\,T}\vx_j \rangle_P &= \int \ddroit \vx_i \ddroit \vx_j P(\vx_i,\vx_j|\Delta t_{ij}) \sum_{a=1}^L   x_i^{a}x_j^{a}  \\
-		&=\sum_{i=a}^L \langle  x_i^{a} x_j^a \rangle_{P}.\\
-	\end{align*}
-	The covariance $\langle  x_i^{a} x_j^a \rangle_{P}$ between observations separated by a time $\Delta t_{ij}$ is given by equation~\eqref{eq:pairwisecov} of the main text.
-	Using this, we now have
-	\begin{align}
-		\nonumber\langle \vx_i^{\,T}\vx_j \rangle_P &= \sum_{a=1}^L \left( \Lam^{\Delta t_{ij}} \mathbf{C} \right)_{aa}\\
+The probability distribution $P$ for the configurations of two leaves $\vx_i$ and  $\vx_j$  separated by time $\Delta t_{ij}$ is given by Eq.~\eqref{eq:OUjoint} of the main text. With this distribution we can analytically calculate the average of the scalar product $\vx_i^{\,T}\cdot\vx_j$ of two equilibrium configurations at given time separation:
+\begin{align}
+\langle \vx_i^{\,T}\cdot\vx_j \rangle_P &= \int \ddroit \vx_i \ddroit \vx_j P(\vx_i,\vx_j|\Delta t_{ij}) \sum_{a=1}^L   x_i^{a}x_j^{a}  \nonumber \\
+	&=\sum_{a=1}^L \langle  x_i^{a} x_j^a \rangle_{P}.
+\end{align}
+The covariance $\langle  x_i^{a} x_j^a \rangle_{P}$ of two observations separated by time $\Delta t_{ij}$ is given by Eq.~\eqref{eq:pairwisecov}. Using this, we find
+\begin{align}
+		\nonumber\langle \vx_i^{\,T}\cdot\vx_j \rangle_P &= \sum_{a=1}^L \left( \Lam^{\Delta t_{ij}} \mathbf{C} \right)_{aa}\\
 		\nonumber&= \Tr\left( \Lam^{\Delta t_{ij}} \mathbf{C} \right)\\
 		&= \sum_{a=1}^L \rho_a^{-1}e^{-\gamma\rho_a\Delta t_{ij}}.
 		\label{eq:scalar_product}
-	\end{align}
-	Having initialized the covariance matrix $\mathbf{C}$ at its empirical value, we know the values of all members of the r.h.s. of equation~\eqref{eq:scalar_product} except that of $\gamma$. 
-	On the other hand, equivalent versions of equation~\eqref{eq:scalar_product} can be written for all pairs of configurations $i$ and $j$. 
-	To find an initial value of $\gamma$ which is consistent with the data and the empirical covariance matrix, we search for one that best explains the observed scalar products between configurations. 
-	We thus define $\gamma^0$ to be the argument minimizing the functional $F(\gamma)$: 
-	\begin{equation}
-	 	F(\gamma) = \sum_{1\leq i<j\leq N}\left[ \vx_i^{\,T}\vx_j - \sum_{a=1}^L \rho_a^{-1}e^{-\gamma\rho_a\Delta t_{ij}} \right].
-	\end{equation} 
-	As $F$ depends on one scalar parameter, it is straightforward to minimize it, allowing us to initialize $\gamma$ to a reasonable value.
-
-% subsection initializing_parameters (end)
-
-
-% section supplementary_material (end)
+\end{align}
+Having initialized the covariance matrix $\mathbf{C}$ with its empirical value, we know the values of all members of the r.h.s. of Eq.~\eqref{eq:scalar_product} except the one of $\gamma$. To find an initial value of $\gamma$ which is consistent with the data and the empirical covariance matrix for all pairs of data configurations $i<j$, we search for one that best explains the observed scalar products between configurations. We thus define $\gamma^0$ to be the argument minimizing the functional $F(\gamma)$: 
+\begin{equation}
+    F(\gamma) = \sum_{1\leq i<j\leq N}\left[ \vx_i^{\,T}\cdot\vx_j - \sum_{a=1}^L \rho_a^{-1}e^{-\gamma\rho_a\Delta t_{ij}} \right].
+\end{equation} 
+Since $F$ depends on a single scalar parameter, it is straightforward to minimize it and thereby to initialize $\gamma$ to an empirically reasonable value.
 
 \subsection{Parametrizations of  eigenvectors } % (fold)
 \label{sub:parametrizations_of_eigenvectors}
-\subsubsection{Parametrization in term of generalized Eulerian angles}
-The aim is to  parameterize each base vector $\vec{s}_a$ according to the $a-th$ column of an arbitrary orthogonal matrix $\bm S$ parameterized   in terms of $L(L-1)/2$ independent variables  $\theta_ {pq}, p =1,2, ..., L; q =1,2, ..., L; p <q $, named Generalized Eulerian angles (Eulerian angles is for L=3).
+\subsubsection{Parametrization using generalized Eulerian angles}
+The idea is to write the base vectors $\vec{s}_a$ as columns of an orthogonal matrix $\bm S$, and to parameterize this matrix in terms of $L(L-1)/2$ independent variables  $\theta_ {pq}$ with $1 \leq p <q \leq L $. These parameters are called generalized Eulerian angles, since they generalize Eulerian angles to $L>3$. 
 
-To construct this matrix we start from a  transformation in a two-dimensional subspace of an $L-dimensional$ space which is given by an L-dimensional matrix of the  form:
-
+To construct this matrix we start from a rotational transformation in a two-dimensional subspace of an $L$-dimensional space. It is given by an $L$-dimensional matrix of the form
 \begin{equation} 
 \bm T_{pq} =  \left(
 \begin{array}{cccccc}
@@ -726,94 +687,80 @@ To construct this matrix we start from a  transformation in a two-dimensional su
 & &  -\sin\theta_{pq}& & \cos\theta_{pq} &\\
 & &  & &  & 1\\
 \end{array}
-\right)
+\right) \ ,
 \end{equation}
-where all diagonal elements are unity except the diagonal elements in the $pth$ column and the $qth$ column, which are $\cos\theta_{pq}$ and all off-diagonal elements are zero except the one corresponding to the intersection of the $pth$ row and the $qth$ column, which is $\sin\theta_{pq}$, and that on the intersection of the $qth$ row and the $pth$ column, which is $-\sin\theta_{pq}$. There are $L(L - 1)/2$  matrices of the form indicated in Equation (1), corresponding to all choices of $p$ and $q$ with $p <q$.
+where all diagonal elements are unity except for the diagonal elements in the $p$th and the $q$th column, which equal $\cos\theta_{pq}$. All off-diagonal elements are zero except for the one corresponding to the intersection of the $p$th row and the $q$th column, which is $\sin\theta_{pq}$, and that on the intersection of the $q$th row and the $p$th column, which equals $-\sin\theta_{pq}$. There are $L(L - 1)/2$  matrices of this form, corresponding to all choices of $p$ and $q$ with $1\leq p <q\leq L$. 
 
-An arbitrary  $L-dimensional$ orthogonal matrix $\bm S$ can be represented as a product of these $L(L-1)/2$ orthogonal matrices with appropriate values of the $L(L-1)/2$ independent parameters $\theta_{pq}$.
-
+An arbitrary $L$-dimensional orthogonal matrix $\bm S$ can be represented as a product of these $L(L-1)/2$ orthogonal matrices with appropriate values of the $L(L-1)/2$ independent parameters $\theta_{pq}$:
 \begin{equation}
-\bm S (\bm \theta)=\prod_{\left\lbrace pq\right\rbrace }T_{pq}(\theta_{pq})
+\label{eq:eulerprod}
+\bm S (\bm \theta)=\prod_{\left\lbrace pq\right\rbrace }T_{pq}(\theta_{pq}) \ .
 \end{equation}
- 
- This matrix is in charge of rotations of vectors in $L-dimensional$ space. For $L=3$ we get the classical Eulerian matrix. 
+The basic idea is to express a general rotation in $L$ dimensions as the result of $L(L-1)/2$ successive rotations by angles $\theta_ {pq}$ in the two-dimensional subspaces given by the components $p, q$. For $L=3$ we get the classical Eulerian matrix. 
 
- In reference [7] is explained an recursive algorithm to efficiently perform this multiplication,  as well as the   construction of the matrix   derivatives respect to parameters $\theta_{pq}$. 
-
-For the first, equation  (2) is transformed in  the recurrence equations:
-
+Ref.~{\color{red} [7] CHECK, is it [18]? use ref} exposes a recursive algorithm to efficiently perform this multiplication, as well as the   construction of the matrix derivatives respect to parameters $\theta_{pq}$. To start, Eq.~\eqref{eq:eulerprod} is transformed into a set of recursive equations, with $\bm S$ being equal to the final step
 \begin{equation}
-\bm S(\vec{\theta} )=\bm T^{(L)}
+\bm S(\bm \theta)=\bm T^{(L)} \ .
 \end{equation}
-
-with $\theta_ {pq}, p =1,2, ..., L; q =1,2, ..., L; p <q$ and 
-
-
+For all $1\leq k < l\leq L$ we iterate over $n$: {\color{red} [7] What is the initialization? Please check carefully, also the correct ranges of the $kl$ which seem to go to $n$ only. It would also be better to avoid $s$, which we use for the eigenvectors.}
 \begin{equation}
-T^{(n)}_{kl}=\cos\theta_{kn} * t^{(n)}_{kl}-\sin\theta_{kn}* s^{(n)}_{kl}
+    T^{(n)}_{kl}=\cos\theta_{kn} * t^{(n)}_{kl}-\sin\theta_{kn}* s^{(n)}_{kl}
 \end{equation}
 with
 \begin{equation}
-\begin{split}
-&s^{(n)}_{k+1,l}=\sin\theta_{kn} * t^{(n)}_{kl}+\cos\theta_{kn}*s^{(n)}_{kl}\\
-&s^{(n)}_{k+1,n}=\cos\theta_{kn}*s^{(n)}_{kn}\\
-&s^{(n)}_{1,l}=-\delta_{ln}\\
-&\theta_{nn}=\pi/2\\
-&\end{split}
+    \begin{split}
+        s^{(n)}_{k+1,l}&=\sin\theta_{kn} * t^{(n)}_{kl}+\cos\theta_{kn}*s^{(n)}_{kl}\\
+        s^{(n)}_{k+1,n}&=\cos\theta_{kn}*s^{(n)}_{kn}\\
+        s^{(n)}_{1,l}&=-\delta_{ln}\\
+        \theta_{nn}&=\pi/2
+    \end{split}
 \end{equation}
 and
 \begin{equation} 
 \bm t^{(n)} =  \left(
 \begin{array}{cc}
 \bm T^{(n-1)} & \bm 0  \\
-\bm 0 &  \bm I\\
-
+\bm 0 &  \bm I
 \end{array}
 \right)
 \end{equation}
 
-This mean that the eigenvectors $\vec{s}_a$ of the matrix $\bm C$ with dimensions $L\times L$ can be written as:
+As a consequence, the eigenvectors $\vec{s}_a$ of the matrix $\bm C$ with dimensions $L\times L$ can be written as:
 \begin{equation}
-s^{k}_a=T^{(L)}_{.,a}=\cos\theta_{kL} * t^{(L)}_{ka}-\sin\theta_{kL}* s^{(L)}_{ka} \;\;\; \text{for} \;k=1,..,L
+s^{k}_a=T^{(L)}_{.,a}=\cos\theta_{kL} * t^{(L)}_{ka}-\sin\theta_{kL}* {\color{red} s}^{(L)}_{ka} \;\;\; \text{for} \;k=1,..,L \ .
 \end{equation}
-
-
-
-Then there is another  important problem : how to determine parameters $\bm \theta$  given an orthogonal matrix $\bm Q$ such that all equations 
-
-$$S_{ij}(\bm \theta)=Q_{ij}$$
-
-are satisfied. This system of nonlinear transcendental equations  can't be algebraically solved, however it's possible overcome  this issue finding the set of $\bm \theta$ which minimize the function:   
+To use this expression, we still need to determine parameters $\bm \theta$  given an orthogonal matrix $\bm S$, such that all equations
 \begin{equation}
-f(\bm \theta)=\sum_{i,j}\left[ Q_{ij}-S_{ij}(\bm \theta)\right] ^2
+    S_{ij}(\bm \theta)=S_{ij}
 \end{equation}
-This is useful when we initialize parameters $\bm \theta$  from the matrix formed by eigenvectors of the empirical covariance matrix.
+are satisfied. This system of nonlinear transcendental equations  cannot be solved algebraically. However, it is possible to overcome this issue finding the set of $\bm \theta$ which minimize the square distance between the target and the parametrized matrices: 
+\begin{equation}
+ {\bm{\hat \theta}} = \text{argmin}_{\bm \theta} \sum_{i<j}\left[ S_{ij}-S_{ij}(\bm \theta)\right] ^2 \ .
+\end{equation}
+This is useful when we initialize parameters $\bm \theta$ for the matrix formed by the eigenvectors of the empirical covariance matrix.
+
 \subsubsection{Parametrization in term of the exponential of a skew-symmetric matrix }
-The exponential of a skew-symmetric matrix $\bm X=-\bm X^T$  : 
- \begin{equation}
- \bm S=\exp (\bm X)
- \end{equation}
+
+Any orthogonal matrix can be written as the exponential of a skew-symmetric matrix $\bm X=-\bm X^T$: 
+\begin{equation}
+    \bm S=\exp (\bm X)\ ,
+\end{equation}
+since $\exp(\bm X)^T=\exp(\bm X^T)=\exp(-\bm X)=\exp(\bm X)^{-1}$. 
  
- is  an  orthogonal  matrix : $\exp(X)^T=\exp(X^T)=\exp(-X)=\exp(X)^{-1}$. 
- 
- The derivatives on $L(L-1)/2$ independent variables of $\bm X$  is formally defined by
- 
- \begin{equation}
+The derivatives with respect to the $L(L-1)/2$ independent variables of $\bm X$ is formally defined by
+\begin{equation}
  \frac{\partial \bm S}{\partial X_{jk}}=\lim_{h\rightarrow 0} \frac{1}{h} \left( \exp(\bm X+ h \bm E^{jk}) - \exp(\bm X)\right) 
- \end{equation}
+\end{equation}
+where $\bm E^{jk}$ for $j > k$ is defined as a skew-symmetric matrix that has only two nonzero entries in positions $(j,k)$ and $(k,j)$:
+\begin{equation}
+    E^{pq}_{jk}=\delta_{pj}\delta_{qk}-\delta_{pk}\delta_{qj}
+\end{equation}
  
- where $\bm E^{jk}$ for $j > k$ is defined as a skew-symmetric matrix that has only two nonzero elements:
- \begin{equation}
- E^{pq}_{jk}=\delta_{pj}\delta_{qk}-\delta_{pk}\delta_{qj}
- \end{equation}
+To obtain a skew-symmetric matrix $\bm X$ from an orthogonal matrix $\bm Q$, it is sufficient to invert the exponential relation,
+$\bm X=\log \bm Q$. If we write eigenvectors of the covariance matrix as the columns of the exponential of the skew-symmetric matrix $\bm X$, we are able to perform the optimization over its $L(L-1)/2$ independent entries.
  
-To obtain   a skew-symmetric matrix    $\bm X$ from an orthogonal matrix $\bm Q$    is enough invert the exponential relation :
- $$\bm X=\log \bm Q$$
- 
-  If we write eigenvectors of the likelihood function as the columns of the exponential of the skew-symmetric matrix $\bm X$, then we are able to perform the optimization over it's $L(L-1)$ independent variables of $\bm X$.
- 
- Furthermore, as the eigenvectors were parameterized by an algebraic function, the complete likelihood  is described in terms of arithmetics operation and elementary functions. This allow to compute  the gradient via  automatic differentiation (AD), making computations in our optimization process faster. 
- The idea  is to represent a function as a computational graph, also called a Wengert list , where each node  in this list will represent an intermediate result of the computation. The intermediate results can then be assembled using the chain rule to get the final derivative we’re looking for. There is two    main algorithms  to traverses the chain rule in AD: forward mode and reverse mode, here we used reverse mode  algorithm  which is the of choice for back-propagation in deep learning . In particular we implemented  it using the Julia package Zygote.jl . 
+Furthermore, as the eigenvectors are parametrized by an algebraic function, the complete likelihood is described in terms of arithmetic operations and elementary functions. This allow to compute the gradient via automatic differentiation (AD) 
+{\color{red} CITE}, making computations in our optimization process faster. The idea  is to represent a function as a computational graph, also called Wengert list {\color{red} CITE}, where each node in the list represents an intermediate result of the computation. The intermediate results can be assembled using the chain rule to get the final derivative we are looking for. There are two main algorithms to traverse the chain rule in AD: a forward mode and a reverse mode. Here, we used the reverse-mode algorithm, which is also the one of choice for back-propagation in deep learning. In particular we implemented it using the Julia package Zygote.jl. 
  
  \subsection{Homogeneous and fully balanced tree}
  \label{sub:homogeneous_and_fully_balanced_tree}
@@ -888,7 +835,7 @@ $$\hat{H}_{k+1}=\hat{H}_{k}+\frac{y_k y^{T}_k}{y_k\Delta x_k} - \frac{\hat{H}_k\
 
 The method implementation was done using   NLopt package \cite{NLopt} .
  
-\subsection{Supplementary figures}
+\subsection{Supporting figures}
 \label{sub:supplementary_figures}
 
 \begin{figure}[!htb]
