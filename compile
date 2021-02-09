@@ -1,5 +1,5 @@
-pdflatex main.tex
-bibtex main.aux
-pdflatex main.tex
-pdflatex main.tex
-rm main.bbl main.log main.blg 
+pdflatex $1.tex
+bibtex $1.aux
+pdflatex $1.tex
+pdflatex $1.tex
+rm $1.bbl $1.log $1.blg 

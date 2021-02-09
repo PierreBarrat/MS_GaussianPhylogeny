@@ -1,7 +1,7 @@
 %\documentclass[reprint,amsmath,amssymb,superscriptaddress,prl,showpacs,onecolumn]{revtex4-1}
 %DIF LATEXDIFF DIFFERENCE FILE
-%DIF DEL main_old.tex   Fri Feb  5 11:02:29 2021
-%DIF ADD main.tex       Fri Feb  5 11:04:20 2021
+%DIF DEL /dev/fd/63   Tue Feb  9 10:16:16 2021
+%DIF ADD main.tex     Tue Feb  9 09:08:52 2021
 \documentclass[preprint,amsmath,amssymb,superscriptaddress,showpacs,pre]{revtex4-1}
 
 \usepackage{graphicx}% Include figure files
@@ -185,8 +185,8 @@
 
 
 \begin{abstract}
-The \DIFdelbegin \DIFdel{Inverse problem of Statistical Physics }\DIFdelend \DIFaddbegin \DIFadd{inverse statistical physics }\DIFaddend infers maximum-entropy models \DIFdelbegin \DIFdel{compatibles with a corresponding }\DIFdelend \DIFaddbegin \DIFadd{compatible with a }\DIFaddend set of empirical averages \DIFdelbegin \DIFdel{extracted }\DIFdelend \DIFaddbegin \DIFadd{estimated }\DIFaddend from a high-dimensional dataset of \DIFaddbegin \DIFadd{independently distributed }\DIFaddend equilibrium configurations. \DIFdelbegin \DIFdel{Practical interest extended these methods to non-equilibrium data  like  time series, where detailed balance does not hold. }\DIFdelend However, in several applications, data \DIFdelbegin \DIFdel{samples  result from evolutionary processes }\DIFdelend \DIFaddbegin \DIFadd{result from stochastic evolutionary processes, }\DIFaddend and the relation between configurations is \DIFdelbegin \DIFdel{conditioned }\DIFdelend \DIFaddbegin \DIFadd{characterized }\DIFaddend by a hierarchical \DIFdelbegin \DIFdel{structure of the population. This makes sample statistics a superposition of  signals coming from both: internal configuration correlations and relatedness correlations produced by common evolutionary  history}\DIFdelend \DIFaddbegin \DIFadd{correlation structure}\DIFaddend , typically represented by a tree. \DIFdelbegin \DIFdel{How to disentangle both sources of correlation for a better parameter inference is an open question to explore. Here we propose an approach  where the evolutive process through a phylogenetic tree is }\DIFdelend \DIFaddbegin \DIFadd{In turn, empirical averages of observables superpose intrinsic signals related to the equilibrium distribution of the studied system, and spurious historical (or phylogenetic) signals characterizing the specific correlated data-generating process. The naive application of maximum-entropy techniques therefore leads to systematic biases and an effective reduction of the sample size. To advance on the currently open task of extracting intrinsic signals from correlated data, we study a system }\DIFaddend described by a multivariate Ornstein-Uhlenbeck \DIFdelbegin \DIFdel{dynamics characterized by  gaussian propagator and stationary distributions. Inference of these distributions from phylogenetic non-independent samples is solved in a Bayesian framework. This procedure can be extended to discrete variables by using a binary representation of data and approximating  binary sates by continuous variables. Our method proposes a possible way for a better estimation of both, equilibrium and dynamic parameters, making  applications more accurate. }\DIFdelend \DIFaddbegin \DIFadd{process defined on a finite tree. Using a Bayesian framework, we can disentangle covariances in the data, which are result of their multivariate Gaussian equilibrium distribution, from those resulting from the historical correlations. Our approach leads to a clear gain in accuracy in the inferred equilibrium distribution, which corresponds to an effective two- to fourfold increase in sample size.
-}\DIFaddend \end{abstract}
+Inverse statistical physics aims at inferring models compatible with a set of empirical averages estimated from a high-dimensional dataset of independently distributed equilibrium configurations. However, in several applications such as biology, data result from stochastic evolutionary processes, and the relation between configurations is characterized by a hierarchical correlation structure, typically represented by a tree. In turn, empirical averages of observables superpose intrinsic signals related to the equilibrium distribution of the studied system, and spurious historical (or phylogenetic) signals characterizing the specific correlated data-generating process. The naive application of inverse statistical physics techniques therefore leads to systematic biases and an effective reduction of the sample size. To advance on the currently open task of extracting intrinsic signals from correlated data, we study a system described by a multivariate Ornstein-Uhlenbeck process defined on a finite tree. Using a Bayesian framework, we can disentangle covariances in the data, which are a result of their multivariate Gaussian equilibrium distribution, from those resulting from the historical correlations. Our approach leads to a clear gain in accuracy in the inferred equilibrium distribution, which corresponds to an effective two- to fourfold increase in sample size.
+\end{abstract}
 
 
 \maketitle
@@ -195,44 +195,74 @@ The \DIFdelbegin \DIFdel{Inverse problem of Statistical Physics }\DIFdelend \DIF
 \section{Introduction}
 \label{sec:int}
 
-\DIFaddbegin \DIFadd{With the emergence of large, high-dimensional datasets for complex systems across disciplines, methods of }{\it \DIFadd{inverse statistical physics}} \DIFadd{have seen rapidly growing interest during the last years. In the most standard setting , the data provide observational samples of the "microscopic" degrees of freedom of the system under study -- this can be biological sequences, firing patterns of neurons, individuals in animal or human groups, stock prices etc. Within a static modeling approach, frequently based on the maximum-entropy approach, data $\vec x$ are assumed to be generated independently from some unknown probability distribution $P(\vec x)$. This distribution describes the underlying interaction patterns between the observed degrees of freedom, and has to be learned from data to unveil the rules governing the system. In some, more rare cases, data correspond to observed time series , but the theoretical and algorithmic development is much less advanced than in the case of independent static data, assuming, e.g., that measurements are taken at the microscopic time scale.
+With the emergence of large, high-dimensional datasets for complex systems across disciplines, methods of {\it inverse statistical physics} have seen rapidly growing interest during the last years \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\cite{Inverse_problem_Berg}}\hspace{0pt}%DIFAUXCMD
+}\DIFaddend . In the most standard setting, the data provide observational samples of the ``microscopic''degrees of freedom of the system under study -- this can be biological sequences \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\cite{levy_potts_2017,cocco_inverse_2018}}\hspace{0pt}%DIFAUXCMD
+}\DIFaddend , firing patterns of neurons \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\cite{schneidman2006weak,roudi2009ising}}\hspace{0pt}%DIFAUXCMD
+}\DIFaddend , individuals in animal \DIFdelbegin \DIFdel{or human groups , stock prices etc.
+.. 
+}\DIFdelend \DIFaddbegin \DIFadd{groups \mbox{%DIFAUXCMD
+\cite{bialek2012statistical,cavagna2018physics}}\hspace{0pt}%DIFAUXCMD
+, stock markets \mbox{%DIFAUXCMD
+\cite{bury2013market,borysov2015us} }\hspace{0pt}%DIFAUXCMD
+etc.
+}\DIFaddend Within a static modeling approach, frequently based on the maximum-entropy principle \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\cite{jaynes1957information}}\hspace{0pt}%DIFAUXCMD
+}\DIFaddend , data $\vec x$ are assumed to be generated independently from some unknown probability distribution $P(\vec x)$. This distribution describes the underlying interaction patterns between the observed degrees of freedom, and has to be learned from data to unveil the rules governing the system. 
+In more rare cases where data correspond to observed time series, theoretical and algorithmic development is much less advanced than in the case of independent static data \DIFdelbegin \DIFdel{. %DIF < , assuming, e.g., that measurements are taken at the microscopic time scale.
+}\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\cite{Inverse_problem_Berg}}\hspace{0pt}%DIFAUXCMD
+.
+}\DIFaddend 
+
+\DIFdelbegin \DIFdel{One of the biggest application areas of inverse statistical mechanics is }\DIFdelend \DIFaddbegin \DIFadd{Here we address a different case, the inverse problem for high-dimensional data, which show hierarchical correlations due to a data-generating process defined via a branching process. The motivation for this purely methodological study comes from }\DIFaddend the modeling of biological \DIFdelbegin \DIFdel{processes.
+These applications are fuelled by the large amount of available dataresulting from the impressive progress in experimental techniques in biology. 
+This is especially visible in the case of biological sequences, with databases now harboring a vast amount of high-quality DNA or protein sequences \mbox{%DIFAUXCMD
+\cite{sayers_genbank_2019,uniprotconsortium_uniprot_2018}}\hspace{0pt}%DIFAUXCMD
+.A common idea in this context is that it is possible to use characteristics of genes or organisms related by a common ancestry -- called }\emph{\DIFdel{homologous}} %DIFAUXCMD
+\DIFdel{-- to construct models of the selection acting on them. A successful example in this regard is the representation of protein sequences by probabilistic models in the }\DIFdelend \DIFaddbegin \DIFadd{sequence data, which is one of the major fields of application of inverse statistical mechanics \mbox{%DIFAUXCMD
+\cite{levy_potts_2017,cocco_inverse_2018}}\hspace{0pt}%DIFAUXCMD
+, but even more of other bioinformatic inference approaches, cf.~\mbox{%DIFAUXCMD
+\cite{durbin1998biological,felsenstein2004inferring}}\hspace{0pt}%DIFAUXCMD
+. Sequence data are the result of natural evolution, }{\em \DIFadd{i.e.}}\DIFadd{~a branching process initiating in some unknown common ancestor of extant and thus observable sequences \mbox{%DIFAUXCMD
+\cite{sayers_genbank_2019,uniprotconsortium_uniprot_2018,el2019pfam}}\hspace{0pt}%DIFAUXCMD
+. The prototypical datasets in this case are multiple-sequence alignments (MSA), with lines being a }\DIFaddend so-called \DIFdelbegin \DIFdel{DCA method \mbox{%DIFAUXCMD
+\cite{levy_potts_2017,cocco_inverse_2018}}\hspace{0pt}%DIFAUXCMD
+.We will use this type of application to motivate our otherwise purely methodological study.}%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdel{When modeling homologous genes or organisms, one has to distinguish between two complementary types }\DIFdelend \DIFaddbegin \DIFadd{homologous, }{\em \DIFadd{i.e.}} \DIFadd{evolutionarily related sequences, and columns specific positions deriving from some common ancestral position. Such MSA contain at least two kinds }\DIFaddend of information:
+\begin{itemize}
+    \item {\it Phylogenetic information:} the distances between \DIFdelbegin \DIFdel{gene sequences or traits in organisms }\DIFdelend \DIFaddbegin \DIFadd{sequences }\DIFaddend carry information about the evolutionary time since their common ancestor. Using phylogenetic methods \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\cite{felsenstein_phylogenies_1988,felsenstein2004inferring} }\hspace{0pt}%DIFAUXCMD
+}\DIFaddend we may reconstruct the evolutionary history of \DIFdelbegin \DIFdel{a set of genes or species, and also the sequences or traits of their ancestors}\DIFdelend \DIFaddbegin \DIFadd{our dataset, represented by a phylogenetic tree}\DIFaddend .  
+    \item {\it Co-evolutionary information:} positions in a sequence \DIFdelbegin \DIFdel{or traits in organisms }\DIFdelend typically do not evolve independently, but rather in a correlated way. This co-evolution carries important information about the selection forces acting on evolving entities. This fact has been extensively studied in the case of protein sequences, and used to predict structure, mutational landscapes or networks of interacting proteins \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\cite{levy_potts_2017,cocco_inverse_2018}}\hspace{0pt}%DIFAUXCMD
+}\DIFaddend .  
+\end{itemize}
+\DIFdelbegin %DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdelend These two types of information are contained in two complementary features of the data: phylogenetic inference is based on the comparative analysis of different \DIFdelbegin \DIFdel{species or genes}\DIFdelend \DIFaddbegin \DIFadd{sequences}\DIFaddend , while co-evolutionary information is contained in the correlation of different \DIFdelbegin \DIFdel{trait values in the same gene or organism. }%DIFDELCMD < 
+
+%DIFDELCMD < %%%
+\DIFdel{Models built using biological data usually ignore one of the two types of information . 
+For instance, }\DIFdelend \DIFaddbegin \DIFadd{columns of the MSA. Approaches aiming at one type of information typically neglect the other one: }\DIFaddend inference of phylogenies \DIFdelbegin \DIFdel{typically }\DIFdelend \DIFaddbegin \DIFadd{generally }\DIFaddend assumes that all positions in a sequence evolve independently, while co-evolutionary models of proteins assume that \DIFdelbegin \DIFdel{their sequences }\DIFdelend \DIFaddbegin \DIFadd{sequences in the MSA }\DIFaddend are independently distributed. This choice is motivated by the fact that taking the two types of correlations into account, \emph{i.e.} through time with phylogeny and accross trait values for co-evolution, results in very hard inference procedures\DIFaddbegin \DIFadd{, cf.~\mbox{%DIFAUXCMD
+\cite{obermayer2014inverse,rodriguez2019toward}}\hspace{0pt}%DIFAUXCMD
+}\DIFaddend . 
+However, this can lead to biases in the model parameters: it has for instance been shown that phylogenetic relations between protein sequences induce non-trivial correlations that are not related to protein function \DIFdelbegin \DIFdel{\mbox{%DIFAUXCMD
+\cite{qin_power_2018}}\hspace{0pt}%DIFAUXCMD
+}\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
+\cite{qin_power_2018,horta2020phylogenetic}}\hspace{0pt}%DIFAUXCMD
+}\DIFaddend . 
+
+\DIFdelbegin \DIFdel{Accounting for both }\DIFdelend \DIFaddbegin \DIFadd{We have used phylogeny and }\DIFaddend co-evolution \DIFdelbegin \DIFdel{and phylogeny in models requires one to understand how interdependent traitsunder selection evolve along a tree. A }\DIFdelend \DIFaddbegin \DIFadd{of biological sequences to explain our motivation, but the underlying problem is much more general. Instead of sequences of discrete characters, like amino acids or nucleotides, we may consider continuous phenotypic traits. The branching process is not necessarily the phylogeny of species, but it may be the genealogy of populations of the same species, or other branching processes like epidemics spreading or geographic migration.
 }
 
-\DIFadd{One of the biggest application areas of inverse statistical mechanics is the modeling of biological sequences, and we will use them to motivate our otherwise theoretical-methodological study. Typical datasets are so called homologous protein families, collecting ensembles of proteins of common evolutionary ancestry. Despite their strong divergence in amino-acid sequences, the proteins in such families have highly similar biological functions and three-dimensional fold structures. The different sequences can thereby, in a statistical-physics perspective, be seen as microscopically distinct solutions for the same macroscopic behavior.
-}
-
-\DIFadd{In such protein families, which are typically represented by large multiple-sequence alignments, at least two complementary types of biological information are contained:
-}\begin{itemize}
-    \item {\it \DIFadd{Phylogenetic information:}} \DIFadd{the distances between sequences carry information about the evolutionary time since the common ancestor. Using phylogenetic methods we may reconstruct the evolutionary history of a protein family (and of the species carrying the proteins), and also the sequences of the ancestral proteins. 
-    }\item {\it \DIFadd{Coevolutionary information}} \DIFadd{considers the correlated evolution of positions in proteins, frequently related to contacts in the folded protein, even for positions distant along the sequence. This information has been massively used in protein-structure prediction, most recently in combination with structurally supervised deep learning, but also to infer mutational landscapes or networks of interacting proteins.
-}\end{itemize}
-
-\DIFadd{These two types of information are contained in two complementary features of the data set: phylogenetic inference is based on the comparative analysis of the rows of the best, i.e., of entire proteins; and coevolutionary inference is based on the comparative analysis of MSA columns, which describe the amino-acid usage of the individual positions across proteins.
-}
-
-\DIFadd{For methodological reasons, each type of inference assumes the absence of the other information: phylogenetic inference assumes independent evolution of all positions; coevolutionary inference assumes that proteins form an independently and identically distributed sample of the model to be inferred.
-}
-
-\DIFadd{It has turned out to be hard to combine the two types of information in a single approach, even if the existence of, e.g, phylogenetic correlations between sequences influences the results of coevolutionary analysis. Here we propose to advance on the question of phylogeny-aware coevolutionary inference using the simplest nontrivial model setting: correlated multivariate Ornstein-Uhlenbeck (OU) processes.
-}
-
-\DIFaddend In the last decades, biology has seen impressive progress in experimental techniques which has resulted in a large increase of available data. 
-This is especially visible in the case of biological sequences,  with databases now harboring a vast amount of high-quality DNA or protein sequences \cite{sayers_genbank_2019,uniprotconsortium_uniprot_2018}. 
-This has in turn fuelled a development of quantitative methods to model forces guiding the evolution of sequences or other biological traits [REFS/EXAMPLES?]. 
-A common idea in this context is that it is possible to use characteristics of homologous genes or organisms to construct models of the selection acting on them. 
-A successful example in this regard is the representation of protein sequences by probabilistic models in the so-called DCA method \cite{levy_potts_2017,cocco_inverse_2018}. 
-
-Models built in this way usually assume that biological characteristics of related organisms are evolving under the same constraints but are independent from each other in the statistical sense. 
-This allows simple formulation for model learning. 
-However, the phylogenetic relations between evolving entities are in direct contradiction with this simplifying hypothesis, and ignoring them can result in biases when learning models. 
-For instance, it has been shown that phylogenetic relations between protein sequences induce non-trivial correlations that are not related to protein function \cite{qin_power_2018}. 
-
-In order to correct for these biases, it is necessary to disentangle the effects due to selection forces and those due to phylogeny. 
-However, this becomes a hard problem when dealing with complex models where traits under study are not independent from each other. 
-Accounting for these biases then requires one to understand how interdependent traits under selection evolve along a tree. 
-A historically well-known way to represent such processes is to use Ornstein-Uhlenbeck dynamics (OU), which models traits as a Gaussian vector evolving in a quadratic potential that represents selection forces \cite{uhlenbeck_theory_1930, felsenstein_phylogenies_1988, hansen_stabilizing_1997}.
-This method is commonly used in the field of phylogenetic comparative methods (PCM) \cite{bartoszek_phylogenetic_2012,mitov_fast_2020}. 
-
+\DIFadd{Here we use a simple and very general model for the temporal evolution of correlated variables: a }\DIFaddend historically well-known way to represent such processes is to use Ornstein-Uhlenbeck dynamics (OU), which models \DIFdelbegin \DIFdel{traits as a Gaussian vector }\DIFdelend \DIFaddbegin \DIFadd{configurations as Gaussian vectors }\DIFaddend evolving in a quadratic potential that represents selection forces \cite{uhlenbeck_theory_1930, felsenstein_phylogenies_1988, hansen_stabilizing_1997}.
+OU processes are commonly used in the field of phylogenetic comparative methods (PCM) \cite{bartoszek_phylogenetic_2012,mitov_fast_2020}. 
 This modeling approach is \emph{a priori} limited to continuous traits, but could potentially be used for protein sequences combined with a continuous-variable approximation, that has successfully been used in the past \cite{jones_psicov_2012,barton_large_2014,baldassi_fast_2014}. 
 In this context, the equilibrium distribution reached by the OU process represents the probability distribution given by the DCA method, which can be used to predict non-trivial structural contacts in the protein fold, effects of amino-acid mutations or even designing novel functional sequences \cite{morcos_direct-coupling_2011, figliuzzi_coevolutionary_2016, russ_evolution-based_2020}. 
 
@@ -485,12 +515,8 @@ Since $\iC$ is a symmetric matrix, its eigenvectors form an orthogonal basis of 
 One possible parametrization for the $\{\vsa\}$ consists in using $L(L-1)/2$ scalar \emph{Eulerian angles} $\{\theta_{\alpha\beta}\}$ with $1\leq \alpha < \beta \leq L$~\cite{Raffenetti1970GEA, Shepard_param_OM}. 
 With the $L$ eigenvalues $\rho_a$, this results in $L(L+1)/2$ independent values that fully parametrize the $L(L+1)/2$ values of $\iC$. 
 A second possibility, that we have found faster in practice, is to express the matrix of the $\{\vsa\}$ as the exponential of a skew-symetric matrix, see section \ref{sub:parametrizations_of_eigenvectors} of the SM. 
-However, this parametrization does not allow a simple analytical expression of the gradient of the likelihood, and we use it along with automatic differentiation \DIFdelbegin \DIFdel{. }%DIFDELCMD < \pierre{Edwin, can you add a reference to the package you used in the .bib and here?}
-%DIFDELCMD < %%%
-\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
-\cite{Zygote.jl-2018}}\hspace{0pt}%DIFAUXCMD
-. 
-}\DIFaddend For this reason, we use the Eulerian angles below to express the gradient of the likelihood. 
+However, this parametrization does not allow a simple analytical expression of the gradient of the likelihood, and we use it along with automatic differentiation \cite{Zygote.jl-2018}. 
+For this reason, we use the Eulerian angles below to express the gradient of the likelihood. 
 
 As a first step, we need to compute the gradient of the likelihood $\mathcal{L}_{\mathcal{D}}(\mathbb{G})$ with respect to all parameters $\{\rho_a, \theta_{\alpha\beta}\}$ and $\gamma$. 
 To make explicit the dependences of eigenvalues and eigenvectors of the matrices $\bm G^a$ on these parameters, we introduce the notation $\vec{u}_k(\rho_a,\gamma) = \vuka$ and $\lambda_k(\rho_a,\gamma) = \lambda_{ka}$. 
@@ -554,8 +580,8 @@ The length of each branch of $\mathcal{T}$ is chosen from a uniform distribution
 We also sample positive semi-definite coupling matrix $\bm{J}$ of size $L\times L$ with $L=4$ or $L=10$, with entries normally distributed with mean $\mu_J=0.8$ and $\sigma_J=0.2$. 
 
 In the case of statistical models of protein sequence, a major achievement is the ability of pairwise models to predict contacts in the three-dimensional structure of the protein from an inferred coupling matrix.
-In order to replicate this setting and to perform interaction prediction, we randomly set to $0$ off-diagonal elements of $J$ with probability $0.7$, resulting in a \DIFdelbegin \DIFdel{coupling matrix with approximative }\DIFdelend \DIFaddbegin \DIFadd{sparsified coupling matrix of approximate }\DIFaddend density $0.3$.  
-\DIFdelbegin \DIFdel{Null }\DIFdelend \DIFaddbegin \DIFadd{Zero }\DIFaddend elements of $J$ correspond to variables that do not interact, \DIFdelbegin \DIFdel{or }\DIFdelend \DIFaddbegin \DIFadd{in analogy }\DIFaddend to non-contacts in the case of an application to protein sequences.  
+In order to replicate this setting and to perform interaction prediction, we randomly set to $0$ off-diagonal elements of $J$ with probability $0.7$, resulting in a sparsified coupling matrix of approximate density $0.3$.  
+Zero elements of $J$ correspond to variables that do not interact, in analogy to non-contacts in the case of an application to protein sequences.  
 
 
 In order to investigate the different regimes of tree-induced correlation, we vary the parameter $\gamma$ around a reference timescale $\gamma_d$ defined as follows: 
@@ -570,60 +596,47 @@ To avoid statistical noise when assessing the quality of our inference, we repea
 
 For each repetition of the sampling process, we perform our maximum likelihood procedure and obtain an inferred covariance matrix $\bm{C}_{max}$. 
 As a means of comparison, we also compute the empirical covariance matrix $\bm{C}_{emp}$ as if leaf configurations were independent. 
-\DIFdelbegin \DIFdel{Figure }\DIFdelend \DIFaddbegin \DIFadd{Fig.~}\DIFaddend \ref{fig:pears_L4} shows the Pearson correlation between the real covariance matrix $\bm{C}=\bm{J}^{-1}$ and the empirical or inferred ones in the $L=4$ case (similar figures for $L=10$ are in \DIFdelbegin \DIFdel{section \ref{sub:supplementary_figures}of the smallest}\DIFdelend \DIFaddbegin \DIFadd{Appendix \ref{sub:supplementary_figures}}\DIFaddend ). 
+Fig.~\ref{fig:pears_L4} shows the Pearson correlation between the real covariance matrix $\bm{C}=\bm{J}^{-1}$ and the empirical or inferred ones in the $L=4$ case (similar figures for $L=10$ are in Appendix \ref{sub:supplementary_figures}). 
 As expected, both methods perform well in the large $\gamma$ limit with a correlation close to $1$, and worse in the low $\gamma$ limit. 
-In this latter case, correlations due to phylogeny are too strong for our maximum likelihood method to pick up signal, and both methods perform \DIFdelbegin \DIFdel{as }\DIFdelend \DIFaddbegin \DIFadd{equally }\DIFaddend poorly. 
+In this latter case, correlations due to phylogeny are too strong for our maximum likelihood method to pick up signal, and both methods perform equally poorly. 
 However, there exists an intermediate regime where $\bm{C}_{max}$ is much closer to the actual correlation than  $\bm{C}_{emp}$. 
-In \DIFdelbegin \DIFdel{figure }\DIFdelend \DIFaddbegin \DIFadd{Fig.~}\DIFaddend \ref{fig:error_1_L4}, we plot the relative $l2$-error between either covariance matrices in the left panel or coupling matrices in the right panel. 
+In Fig.~\ref{fig:error_1_L4}, we plot the relative $l2$-error between either covariance matrices in the left panel or coupling matrices in the right panel. 
 In both cases, our maximum-likelihood method results in a consistent improvement over the empirical estimator. 
 However, the relative error still reaches high values in the low $\gamma$ regime, which is likely due to $\bm{C}_{max}$ and $\bm{C}_{emp}$ being close to singular in this case. 
 
 \begin{figure}[!htb]
 	\centering
-	\DIFdelbeginFL %DIFDELCMD < \includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/corr_C_L4_balanced_tree_100_rep.pdf}
-%DIFDELCMD < 	%%%
-\DIFdelendFL \DIFaddbeginFL \includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/corr_C_L4_balanced_tree_100_rep.pdf}
-	\DIFaddendFL \caption{ Pearson correlation between empirical /maximum-likelihood   covariance matrices and the true covariance matrix. The inset plot represents the ratio between the Pearson correlation for the  maximum-likelihood covariance matrix and the one for the empirical covariance matrix. Simulations are performed for a tree of $512$ leaves  and  system size $L=4$.}
+	\includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/corr_C_L4_balanced_tree_100_rep.pdf}
+	\caption{ Pearson correlation between empirical /maximum-likelihood   covariance matrices and the true covariance matrix. The inset plot represents the ratio between the Pearson correlation for the  maximum-likelihood covariance matrix and the one for the empirical covariance matrix. Simulations are performed for a tree of $512$ leaves  and  system size $L=4$.}
 	\label{fig:pears_L4}
 \end{figure}
 
 
 
 \begin{figure*}[!htb]
-	\DIFdelbeginFL %DIFDELCMD < \begin{subfigure}{}
-%DIFDELCMD < 			\centering\includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/epsilon_error_C_L4_balanced_tree_100.pdf}
-%DIFDELCMD < 		\end{subfigure}
-%DIFDELCMD < 		%%%
-\DIFdelFL{\hspace{1mm}
-	}%DIFDELCMD < \begin{subfigure}{}
-%DIFDELCMD < 			%%%
-\DIFdelendFL %DIF > 	\begin{subfigure}{}
-			\centering\DIFdelbeginFL %DIFDELCMD < \includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/epsilon_error_J_L4_balanced_tree_100.pdf}
-%DIFDELCMD < 		\end{subfigure}
-%DIFDELCMD < 	%%%
-\DIFdelendFL \DIFaddbeginFL \includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/epsilon_error_L4_balanced_tree_100.pdf}
-	%DIF > 	\end{subfigure}
-		\DIFaddFL{\hspace{1mm}
-	%DIF > 	\begin{subfigure}{}
-	%DIF > 		\centering\includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/epsilon_error_J_L4_balanced_tree_100.pdf}
-	%DIF > 	\end{subfigure}
-	}\DIFaddendFL \caption{\textbf{Left:}Relative $l2$-error between empirical or maximum-likelihood  covariance matrices and the true covariance matrix.  \textbf{Right:}Relative $l2$-error between empirical /maximum-likelihood  coupling matrices and the true coupling matrix. Logarithmic scale is chosen for the $y$-axis because of large values of the error at low $\gamma$. The inset in both panels show the ratio between the two errors.}
+	%	\begin{subfigure}{}
+			\centering\includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/epsilon_error_L4_balanced_tree_100.pdf}
+	%	\end{subfigure}
+		\hspace{1mm}
+	%	\begin{subfigure}{}
+	%		\centering\includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/epsilon_error_J_L4_balanced_tree_100.pdf}
+	%	\end{subfigure}
+	\caption{\textbf{Left:}Relative $l2$-error between empirical or maximum-likelihood  covariance matrices and the true covariance matrix.  \textbf{Right:}Relative $l2$-error between empirical /maximum-likelihood  coupling matrices and the true coupling matrix. Logarithmic scale is chosen for the $y$-axis because of large values of the error at low $\gamma$. The inset in both panels show the ratio between the two errors.}
 	\label{fig:error_1_L4}
 \end{figure*}
 
-An interesting way to illustrate the benefits of reconstructing the covariance matrix using knowledge of the tree is to evaluate the \DIFdelbegin \DIFdel{effective number of samples that is gained by doing so. 
-Figure \sref{fig:error_vs_nseqs} shows }\DIFdelend \DIFaddbegin \DIFadd{gain in }{\em \DIFadd{effective sample size}}\DIFadd{. Intuitively, the use of correlated samples reduces the information contained in the data, as compared to an equally large dataset of }\emph{\DIFadd{i.i.d.}} \DIFadd{configurations. It is therefore interesting to compare the accuracy of our inferences with the accuracy obtained on smaller but }\emph{\DIFadd{i.i.d.}} \DIFadd{samples. To do so, we report in Fig.~\sref{fig:error_vs_nseqs} }\DIFaddend the $l2$-error between \DIFdelbegin \DIFdel{the true covariances and the }\DIFdelend \DIFaddbegin \DIFadd{true and }\DIFaddend empirical covariances computed from \DIFdelbegin \DIFdel{an }\DIFdelend \DIFaddbegin \DIFadd{a }\DIFaddend \emph{i.i.d.} \DIFdelbegin \DIFdel{sample of size }\DIFdelend \DIFaddbegin \DIFadd{samples of variable sizes }\DIFaddend $N$. As expected\DIFdelbegin \DIFdel{the error is increasing for }\DIFdelend \DIFaddbegin \DIFadd{,  the error increases with }\DIFaddend decreasing values of $N$. 
-We can use this \DIFdelbegin \DIFdel{as a calibration }\DIFdelend \DIFaddbegin \DIFadd{in turn }\DIFaddend to express values of the $l2$-error in \DIFdelbegin \DIFdel{terms of an effective sample size}\DIFdelend \DIFaddbegin \DIFadd{correlated samples in terms of effective }\emph{\DIFadd{i.i.d.}} \DIFadd{sample sizes}\DIFaddend .   
+An interesting way to illustrate the benefits of reconstructing the covariance matrix using knowledge of the tree is to evaluate the gain in {\em effective sample size}. Intuitively, the use of correlated samples reduces the information contained in the data, as compared to an equally large dataset of \emph{i.i.d.} configurations. It is therefore interesting to compare the accuracy of our inferences with the accuracy obtained on smaller but \emph{i.i.d.} samples. To do so, we report in Fig.~\sref{fig:error_vs_nseqs} the $l2$-error between true and empirical covariances computed from a \emph{i.i.d.} samples of variable sizes $N$. As expected,  the error increases with decreasing values of $N$. 
+We can use this in turn to express values of the $l2$-error in correlated samples in terms of effective \emph{i.i.d.} sample sizes.   
 For example, the error reached by $\bm{C}_{emp}$ for $\gamma/\gamma_d\in[0.5, 1]$ and $L=4$ corresponds to the one obtained for an \emph{i.i.d.} sample of size $\sim 16$, whereas it corresponds to a sample of size $\sim 32-64$ for $\bm{C}_{max}$.
-Thus, our correction is equivalent to \DIFdelbegin \DIFdel{doubling }\DIFdelend \DIFaddbegin \DIFadd{increasing by a factor 2-4 }\DIFaddend the number of effective samples.
+Thus, our correction is equivalent to increasing by a factor 2-4 the number of effective samples.
 
-Finally, we assess the performance of our method in improving the prediction of \DIFdelbegin \DIFdel{interactions between gaussian }\DIFdelend \DIFaddbegin \DIFadd{the network of interactions between the Gaussian }\DIFaddend variables $\{x_a\}$. 
+Finally, we assess the performance of our method in improving the prediction of the network of interactions between the Gaussian variables $\{x_a\}$. 
 We consider that two variables $x_a$ and $x_b$ interact if the corresponding entry in the coupling matrix is non-zero, that is $J_{ab}\neq 0$. 
-\DIFdelbegin \DIFdel{We }\DIFdelend \DIFaddbegin \DIFadd{Using the data, we }\DIFaddend predict these interactions by taking the largest $n$ elements (in absolute value) of the inferred coupling matrix, resulting in $n$ predictions. 
-The fraction \DIFaddbegin \DIFadd{TP$/n$ }\DIFaddend of these $n$ predictions that correspond to non-zero entries in the true matrix \DIFaddbegin \DIFadd{(TP = true positives) }\DIFaddend defines the positive predictive value (PPV). 
+Using the data, we predict these interactions by taking the largest $n$ elements (in absolute value) of the inferred coupling matrix, resulting in $n$ predictions. 
+The fraction TP$/n$ of these $n$ predictions that correspond to non-zero entries in the true matrix (TP = true positives) defines the positive predictive value (PPV). 
 This problem is equivalent to the one of predicting contacts in a protein structure 
 
-\DIFdelbegin \DIFdel{Figure }\DIFdelend \DIFaddbegin \DIFadd{Fig.~}\DIFaddend $\ref{fig:PPV_L4}$ shows the PPV as a function of the number of predictions for different values of $\gamma$ and $L=4$ (see Fig. \sref{fig:PPV_L10} for the $L=10$ case). 
+Fig.~$\ref{fig:PPV_L4}$ shows the PPV as a function of the number of predictions for different values of $\gamma$ and $L=4$ (see Fig. \sref{fig:PPV_L10} for the $L=10$ case). 
 In this case, the coupling matrix only has $6$ independent non-diagonal elements, and only 6 predictions can be made. 
 Our correction systematically outperforms the predictions from the empirical coupling matrix, with an always larger PPV. 
 This gain is negligible in the extreme regimes of very high $\gamma$, where the prediction is close to identical to the one obtained with an \emph{i.i.d.} sample, or very low $\gamma$, where it is essentially random. 
@@ -632,10 +645,8 @@ It is however much larger in the intermediate regime, with a significantly impro
 
 \begin{figure}[!htb]
 	\centering
-	\DIFdelbeginFL %DIFDELCMD < \includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/PPVs_L4.png}
-%DIFDELCMD < 	%%%
-\DIFdelendFL \DIFaddbeginFL \includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/PPVs_L4.pdf}
-	\DIFaddendFL \caption{Quality of prediction of interactions for  different values of $\gamma$ and system size $L=4$. Interactions are defined as non-zero elements of the coupling matrix. In the $L=4$ case, there are $6$ possible interactions. Predictions are made by taking the largest elements (in absolute terms) of the inferred coupling matrix. The PPV is the fraction of correctly predicted contacts for a given number of predictions.}
+	\includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/PPVs_L4.pdf}
+	\caption{Quality of prediction of interactions for  different values of $\gamma$ and system size $L=4$. Interactions are defined as non-zero elements of the coupling matrix. In the $L=4$ case, there are $6$ possible interactions. Predictions are made by taking the largest elements (in absolute terms) of the inferred coupling matrix. The PPV is the fraction of correctly predicted contacts for a given number of predictions.}
 	\label{fig:PPV_L4}
 \end{figure}
 
@@ -649,12 +660,12 @@ It is however much larger in the intermediate regime, with a significantly impro
 
 In this work, we proposed a method for inferring parameters of an Ornstein-Uhlenbeck process using data that is correlated through an evolutionary tree. 
 We kept a very general setting in which data can in principle represent any set of continuous phenotypic traits or potentially discrete sequences if a continuous approximation is made. 
-As such, our approach is \DIFdelbegin \DIFdel{only }\DIFdelend \DIFaddbegin \DIFadd{purely }\DIFaddend methodological, and does not directly investigate any particular application. 
+As such, our approach is purely methodological, and does not directly investigate any particular application. 
 
 We showed that due to the Gaussian and time reversible nature of the OU process, it is possible to write the joint covariance matrix of all data vectors in a simple way. 
 The resulting matrix $\mathbb{G}$ consists of block entries that represent covariances between pairs of leaves.
 The dependence of these blocks on the coupling matrix $\bm{J}$ characterizing the OU process and on the tree structure can be written explicitly. 
-Interestingly, $\mathbb{G}$ only depends on the tree structure through the pairwise \DIFdelbegin \DIFdel{branch }\DIFdelend \DIFaddbegin \DIFadd{path }\DIFaddend length $\Delta t_{ij}$ separating leaves \DIFaddbegin \DIFadd{along the tree}\DIFaddend .
+Interestingly, $\mathbb{G}$ only depends on the tree structure through the pairwise path length $\Delta t_{ij}$ separating leaves along the tree.
 
 We then proposed a way to compute the likelihood of the data given the tree and the parameters of the OU process, namely the coupling matrix $\mathbf{J}$ and timescale $\gamma$.
 This method relies on computing the eigenvalues and vectors of the joint covariance matrix in an efficient manner. 
@@ -663,10 +674,10 @@ This reduces the computational complexity from $\mathcal{O}(L^3N^3)$ for a naive
 We also show that this method can be used to compute the gradient of the likelihood with respect to parameters with the same complexity.
 This makes the problem of inferring $\mathbf{J}$ amenable to maximum likelihood methods using a gradient ascent approach. 
 
-Finally, we showed that this process gives \DIFdelbegin \DIFdel{expected }\DIFdelend \DIFaddbegin \DIFadd{encouraging }\DIFaddend results on simulated data, with a more accurate reconstruction of parameters than if empirical estimation was performed. 
+Finally, we showed that this process gives encouraging results on simulated data, with a more accurate reconstruction of parameters than if empirical estimation was performed. 
 These simulations highlight the fact that this method is only useful in the intermediate regime of phylogenetic correlations. 
-If \DIFaddbegin \DIFadd{the timescale }\DIFaddend $\gamma$ \DIFdelbegin \DIFdel{is too high}\DIFdelend \DIFaddbegin \DIFadd{characterizing the branch lengths of the tree is too large}\DIFaddend , correlation of data points through the tree is weak and an empirical estimation performs well. 
-On the other hand, a very low $\gamma$ results in strong phylogenetic biases that make recovering $\mathbf{J}$ impossible\DIFaddbegin \DIFadd{, basically due to a strong reduction of the information in a too redundant dataset}\DIFaddend . However, in \DIFdelbegin \DIFdel{the intermediate regime , our }\DIFdelend \DIFaddbegin \DIFadd{an intermediate regime where intrinsic and historical correlations in the dataset coexist, our tree-aware }\DIFaddend re-construction of $\mathbf{J}$ \DIFdelbegin \DIFdel{that takes the tree into account }\DIFdelend results in clear benefits over \DIFdelbegin \DIFdel{an }\DIFdelend \DIFaddbegin \DIFadd{a tree-unaware }\DIFaddend empirical estimation. 
+If the timescale $\gamma$ characterizing the branch lengths of the tree is too large, correlation of data points through the tree is weak and an empirical estimation performs well. 
+On the other hand, a very low $\gamma$ results in strong phylogenetic biases that make recovering $\mathbf{J}$ impossible, basically due to a strong reduction of the information in a too redundant dataset. However, in an intermediate regime where intrinsic and historical correlations in the dataset coexist, our tree-aware re-construction of $\mathbf{J}$ results in clear benefits over a tree-unaware empirical estimation. 
 
 A limitation of our approach remains the long computational time. 
 Even with the efficient computation of the gradient, it was necessary to use small system sizes, $L=10$ at most, to repeat our inference process many times with simulated data in a reasonable time. 
@@ -688,47 +699,58 @@ This type of approximation has been successfully used before, but in quite diffe
 Its use in the context of modelling the evolutionary dynamics of protein sequences remains an open question. 
 
 
-\textbf{Acknowledgments:} \DIFaddbegin \DIFadd{We acknowledge interesting discussions with Roberto Mulet. PBC and MW acknowlege the hospitality of the Department of  Theoretical  Physics of University  of  Havana, where part of this work was done. Our work was partially funded by the EU H2020 Research and Innovation Programme MSCA-RISE-2016 under Grant
+\textbf{Acknowledgments:} We acknowledge interesting discussions with Roberto Mulet. PBC and MW acknowlege the hospitality of the Department of  Theoretical  Physics of University  of  Havana, where part of this work was done. Our work was partially funded by the EU H2020 Research and Innovation Programme MSCA-RISE-2016 under Grant
 Agreement No. 734439 InferNet.
-}\DIFaddend 
 
 
 \clearpage
 \bibliography{bib_phylo}
+\DIFdelbegin %DIFDELCMD < 
 
-\bibliographystyle{unsrt}
+%DIFDELCMD < %%%
+\DIFdelend \bibliographystyle{unsrt}
 
 \newpage
 \appendix
-\setcounter{figure}{0}
-\renewcommand{\figurename}{Figure S}
-\setcounter{table}{0}
-\renewcommand{\tablename}{Table S}
+\DIFdelbegin %DIFDELCMD < \setcounter{figure}{0}
+%DIFDELCMD < \renewcommand{\figurename}{Figure S}
+%DIFDELCMD < \setcounter{table}{0}
+%DIFDELCMD < \renewcommand{\tablename}{Table S}
+%DIFDELCMD < %%%
+\DIFdelend %DIF > \setcounter{figure}{0}
+%DIF > \renewcommand{\figurename}{Figure S}
+%DIF > \setcounter{table}{0}
+%DIF > \renewcommand{\tablename}{Table S}
 
-\section{Supplementary material} % (fold)
+\section{\DIFdelbegin \DIFdel{Supplementary material}\DIFdelend \DIFaddbegin \DIFadd{Description of technical details}\DIFaddend } % (fold)
 \label{sec:supplementary_material}
 
 
 \subsection{Generating artificial data} % (fold)
 \label{sub:generating_artificial_data}
 
-	We are interested in the case where the described Ornstein-Uhlenbeck process takes place on a tree. 
-	For example, if configurations $\vec{x}$ represent quantitative traits of some organisms, the tree can represent the genealogy or phylogeny of these organisms. 
-	Therefore, we have to be able to simulate the OU process on a tree. 
-	In practice, given a rooted tree such as the one shown in figure~\ref{fig:sample_tree} of the main text, we want to sample a configuration $\vec{x}$ for every node in such a way that equation~\eqref{eq:OUjoint} holds for every pair of nodes, the time $\Delta t$ then being the branch length connecting them. \\
-	We use a simple methodology to achieve this. 
-	First, note that given an arbitrary configuration $\vec{x}_0$ and a time $\Delta t$, we can generate a new configuration $\vec{x}$ distributed according to the propagator in equation~\eqref{eq:OUpropagator} by the transformation
-	\begin{equation}
-		\vx = \Lam^{\Delta t}\vx_0 + \Sig^{1/2}\vec{\eta}
-		\label{eq:OUsample}
-	\end{equation}
-	where $\Lam$ and $\Sig$ are defined in equation~\eqref{eq:def_lambda}, and $\vec{\eta}$ is a vector of uncorrelated variables with distributions $\mathcal{N}(0,1)$. 
-	Moreover, if $\vec{x_0}$ is distributed according to equation~\eqref{eq:eq_distribution}, then $\vx$ and $\vx_0$ are distributed according to equation~\eqref{eq:OUjoint}. 
-	Note that equation \eqref{eq:OUsample} is quite different from the Langevin equation~\eqref{eq:langevin}, even though they have similar forms. 
-	While the Langevin equation describes the motion of $\vx$ in the potential $\bm{J}$, eq.~\eqref{eq:OUsample} directly samples from the OU process. \\
-	Given an already sampled internal node in the tree, equation~\eqref{eq:OUsample} allows to sample a configuration for each of its children. 
-	To sample the whole tree, we first sample the root note $\vx_0$ from the equilibrium distribution~\eqref{eq:eq_distribution}. 
-	By recursive applications of~\eqref{eq:OUsample}, we then simply work our way down the tree until all leaves are sampled.  
+We are interested in the case where the \DIFdelbegin \DIFdel{described }\DIFdelend \DIFaddbegin \DIFadd{dynamics of the $L$-dimensional }\DIFaddend Ornstein-Uhlenbeck process takes place on a tree. For example, if configurations $\vec{x}$ represent quantitative traits of some organisms, the tree can represent the genealogy or phylogeny of these organisms. Therefore, \DIFaddbegin \DIFadd{to generate our datasets, }\DIFaddend we have to be able to simulate the OU process on a tree. In practice, given a rooted tree such as the one shown in \DIFdelbegin \DIFdel{figure~\ref{fig:sample_tree} of the main text}\DIFdelend \DIFaddbegin \DIFadd{Fig.~\ref{fig:sample_tree} above}\DIFaddend , we want to sample a configuration $\vec{x}$ for every node in such a way that \DIFdelbegin \DIFdel{equation}\DIFdelend \DIFaddbegin \DIFadd{Eq.}\DIFaddend ~\eqref{eq:OUjoint} holds for every pair of nodes, the time $\Delta t$ \DIFdelbegin \DIFdel{then being the branch length connecting them. 
+	}%DIFDELCMD < \\
+%DIFDELCMD < 	%%%
+\DIFdelend \DIFaddbegin \DIFadd{being the path length connecting the nodes along the tree. 
+	}
+
+\DIFaddend We use a simple methodology to achieve this. First, note that given an arbitrary configuration $\vec{x}_0$ and a time $\Delta t$, we can generate a new configuration $\vec{x}$ distributed according to the propagator \DIFdelbegin \DIFdel{in equation}\DIFdelend \DIFaddbegin \DIFadd{Eq.}\DIFaddend ~\eqref{eq:OUpropagator} by \DIFdelbegin \DIFdel{the transformation
+	}\DIFdelend \DIFaddbegin \DIFadd{exploiting the transformation
+}\DIFaddend \begin{equation}
+	\vx = \Lam^{\Delta t}\vx_0 + \Sig^{1/2}\vec{\eta}\DIFaddbegin \DIFadd{\ ,
+	}\DIFaddend \label{eq:OUsample}
+\end{equation}
+where $\Lam$ and $\Sig$ are defined in \DIFdelbegin \DIFdel{equation}\DIFdelend \DIFaddbegin \DIFadd{Eq.}\DIFaddend ~\eqref{eq:def_lambda}, and $\vec{\eta}$ is a vector of uncorrelated variables \DIFdelbegin \DIFdel{with distributions }\DIFdelend \DIFaddbegin \DIFadd{drawn individually from the normal distribution }\DIFaddend $\mathcal{N}(0,1)$. Moreover, if $\vec{x_0}$ is distributed according to \DIFdelbegin \DIFdel{equation}\DIFdelend \DIFaddbegin \DIFadd{the equilibrium distribution Eq.}\DIFaddend ~\eqref{eq:eq_distribution}, then $\vx$ and $\vx_0$ are distributed according to \DIFdelbegin \DIFdel{equation}\DIFdelend \DIFaddbegin \DIFadd{the joint distribution Eq.}\DIFaddend ~\eqref{eq:OUjoint} \DIFaddbegin \DIFadd{describing two equilibrium configurations at finite time difference}\DIFaddend . Note that \DIFdelbegin \DIFdel{equation }\DIFdelend \DIFaddbegin \DIFadd{Eq.~}\DIFaddend \eqref{eq:OUsample} is quite different from the Langevin \DIFdelbegin \DIFdel{equation}\DIFdelend \DIFaddbegin \DIFadd{Eq.}\DIFaddend ~\eqref{eq:langevin}, \DIFdelbegin \DIFdel{even though they have similar forms. 
+	While the Langevin equation describes the motion }\DIFdelend \DIFaddbegin \DIFadd{which describes the instantaneous dynamics }\DIFaddend of  $\vx$ in the potential \DIFaddbegin \DIFadd{given by }\DIFaddend $\bm{J}$, \DIFdelbegin \DIFdel{eq.~}%DIFDELCMD < \eqref{eq:OUsample} %%%
+\DIFdel{directly samples from the OU process. 
+	}%DIFDELCMD < \\
+%DIFDELCMD < 	%%%
+\DIFdel{Given an }\DIFdelend \DIFaddbegin \DIFadd{and which could also be simulated in more complicated situation where no analytical expression for the propagator can be derived. 
+	}
+
+\DIFadd{Given any }\DIFaddend already sampled internal node in the tree, \DIFdelbegin \DIFdel{equation}\DIFdelend \DIFaddbegin \DIFadd{Eq.}\DIFaddend ~\eqref{eq:OUsample} allows to \DIFdelbegin \DIFdel{sample }\DIFdelend \DIFaddbegin \DIFadd{emit }\DIFaddend a configuration for each of its \DIFdelbegin \DIFdel{children}\DIFdelend \DIFaddbegin \DIFadd{child nodes}\DIFaddend . To sample the whole tree, we first \DIFdelbegin \DIFdel{sample the root note }\DIFdelend \DIFaddbegin \DIFadd{draw the root configuration }\DIFaddend $\vx_0$ from the equilibrium distribution \DIFaddbegin \DIFadd{Eq.}\DIFaddend ~\eqref{eq:eq_distribution}. By recursive applications of \DIFaddbegin \DIFadd{Eq.}\DIFaddend ~\eqref{eq:OUsample}, we then simply work our way down the tree until all leaves are sampled. \DIFaddbegin \DIFadd{Only the configurations in the leaves form the data set, the internal configuration remain hidden to our model-learning task.  
+}\DIFaddend 
 
 
  % subsection generating_artificial_data (end)
@@ -736,16 +758,21 @@ Agreement No. 734439 InferNet.
 \subsection{Initializing parameters} % (fold)
 \label{sub:initializing_parameters}
 
-	\subsubsection{Eigenvalues and eigenvectors of $\mathbf{C}^{-1}$} % (fold)
+\subsubsection{Eigenvalues and eigenvectors of $\mathbf{C}^{-1}$}
+%DIF <  (fold)
 	\label{ssub:eigenvalues_and_eigenvectors}
 
-	The initial value that we take for the covariance matrix is the empirical one
-	\begin{equation*}
-		\mathbf{C}^{emp} = \frac{1}{N}\sum_{i=1}^{N}\vx_i \cdot\vx_i^{\,T}.
-	\end{equation*}
-	Its eigenmodes $\{\rho^0_a, \vsa^{\,0}\}$ determine the starting point of the optimization. 
+\DIFdelbegin \DIFdel{The initial value that we take for }\DIFdelend \DIFaddbegin \DIFadd{We initialize }\DIFaddend the covariance matrix \DIFdelbegin \DIFdel{is }\DIFdelend \DIFaddbegin \DIFadd{using }\DIFaddend the empirical one\DIFaddbegin \DIFadd{:
+}\DIFaddend \begin{equation*}
+	\mathbf{C}^{emp} = \frac{1}{N}\sum_{i=1}^{N}\vx_i \cdot\vx_i^{\,T}\DIFaddbegin \DIFadd{\ }\DIFaddend .
+\end{equation*}
+Its eigenmodes $\{\rho^0_a, \vsa^{\,0}\}$ determine the starting point of the optimization. \DIFdelbegin %DIFDELCMD < 
 
-	[Insert here how we go from $\vsa^{\,0}$ to the corresponding set of Eulerian angles or to the corresponding skew symmetric matrix.]
+%DIFDELCMD < 	[%%%
+\DIFdel{Insert here how we go from }\DIFdelend \DIFaddbegin \DIFadd{A suitable parametrization of }\DIFaddend $\vsa^{\,0}$ \DIFdelbegin \DIFdel{to the corresponding set of }\DIFdelend \DIFaddbegin \DIFadd{in terms of generalized }\DIFaddend Eulerian angles or \DIFdelbegin \DIFdel{to the corresponding }\DIFdelend \DIFaddbegin \DIFadd{a }\DIFaddend skew symmetric matrix \DIFdelbegin \DIFdel{.}%DIFDELCMD < ]
+%DIFDELCMD < 	%%%
+\DIFdelend \DIFaddbegin \DIFadd{is described below in Sec.~\ref{sub:parametrizations_of_eigenvectors}.
+	}\DIFaddend 
 
 	% From empirical covariance matrix $c^*=\frac{1}{N}\sum_{n=1}^{N}\mathbf{x}_n \mathbf{x}_n^T$ we could extract information  to  initialize the parameters in the optimization process. 
 
@@ -763,47 +790,56 @@ Agreement No. 734439 InferNet.
 
 	% subsubsection eigenvalues_and_eigenvectors (end)
 
-	\subsubsection{Time scale parameter $\gamma$}
+\subsubsection{Time scale parameter $\gamma$}
 
-	The optimization also requires that we initialize the time scale $\gamma$. 
-	For this, we try to find the optimal $\gamma$ given the data $\mathbf{X}$, the tree, and the OU process defined by the empirical covariance matrix. 
+The optimization also requires that we initialize the time scale $\gamma$. For \DIFdelbegin \DIFdel{this, we try }\DIFdelend \DIFaddbegin \DIFadd{coherence with the last section, we need }\DIFaddend to find the optimal $\gamma$ given the data $\mathbf{X}$, the tree, and the OU process defined by the empirical covariance matrix. 
 
-	The probability distribution $P$ for the configurations of two leaves $\vx_i$ and  $\vx_j$  separated by time $\Delta t_{ij}$ is given by equation~\eqref{eq:OUjoint} of the main text. 
-	With this distribution we can calculate analytically the average of the scalar product $\vx_i^{\,T}\vx_j$:
-	\begin{align*}
-		\langle \vx_i^{\,T}\vx_j \rangle_P &= \int \ddroit \vx_i \ddroit \vx_j P(\vx_i,\vx_j|\Delta t_{ij}) \sum_{a=1}^L   x_i^{a}x_j^{a}  \\
-		&=\sum_{i=a}^L \langle  x_i^{a} x_j^a \rangle_{P}.\\
+The probability distribution $P$ for the configurations of two leaves $\vx_i$ and  $\vx_j$  separated by time $\Delta t_{ij}$ is given by \DIFdelbegin \DIFdel{equation}\DIFdelend \DIFaddbegin \DIFadd{Eq.}\DIFaddend ~\eqref{eq:OUjoint} of the main text. With this distribution we can \DIFdelbegin \DIFdel{calculate analytically }\DIFdelend \DIFaddbegin \DIFadd{analytically calculate }\DIFaddend the average of the scalar product \DIFdelbegin \DIFdel{$\vx_i^{\,T}\vx_j$:
+}\begin{align*}
+		\DIFdel{\langle \vx_i^{\,T}\vx_j \rangle_P }&\DIFdel{= \int \ddroit \vx_i \ddroit \vx_j P(\vx_i,\vx_j|\Delta t_{ij}) \sum_{a=1}^L   x_i^{a}x_j^{a}  }\\
+		&\DIFdel{=\sum_{i=a}^L \langle  x_i^{a} x_j^a \rangle_{P}.}\\
 	\end{align*}
-	The covariance $\langle  x_i^{a} x_j^a \rangle_{P}$ between observations separated by a time $\Delta t_{ij}$ is given by equation~\eqref{eq:pairwisecov} of the main text.
-	Using this, we now have
-	\begin{align}
-		\nonumber\langle \vx_i^{\,T}\vx_j \rangle_P &= \sum_{a=1}^L \left( \Lam^{\Delta t_{ij}} \mathbf{C} \right)_{aa}\\
+	%DIFAUXCMD
+\DIFdelend \DIFaddbegin \DIFadd{$\vx_i^{\,T}\cdot\vx_j$ of two equilibrium configurations at given time separation:
+}\begin{align}
+\DIFadd{\langle \vx_i^{\,T}\cdot\vx_j \rangle_P }&\DIFadd{= \int \ddroit \vx_i \ddroit \vx_j P(\vx_i,\vx_j|\Delta t_{ij}) \sum_{a=1}^L   x_i^{a}x_j^{a}  \nonumber }\\
+	&\DIFadd{=\sum_{a=1}^L \langle  x_i^{a} x_j^a \rangle_{P}.
+}\end{align}
+\DIFaddend The covariance $\langle  x_i^{a} x_j^a \rangle_{P}$ \DIFdelbegin \DIFdel{between }\DIFdelend \DIFaddbegin \DIFadd{of two }\DIFaddend observations separated by \DIFdelbegin \DIFdel{a }\DIFdelend time $\Delta t_{ij}$ is given by \DIFdelbegin \DIFdel{equation}\DIFdelend \DIFaddbegin \DIFadd{Eq.}\DIFaddend ~\eqref{eq:pairwisecov}\DIFdelbegin \DIFdel{of the main text}\DIFdelend . Using this, we \DIFdelbegin \DIFdel{now have
+	}\DIFdelend \DIFaddbegin \DIFadd{find
+}\DIFaddend \begin{align}
+		\nonumber\langle \vx_i^{\,T}\DIFaddbegin \DIFadd{\cdot}\DIFaddend \vx_j \rangle_P &= \sum_{a=1}^L \left( \Lam^{\Delta t_{ij}} \mathbf{C} \right)_{aa}\\
 		\nonumber&= \Tr\left( \Lam^{\Delta t_{ij}} \mathbf{C} \right)\\
 		&= \sum_{a=1}^L \rho_a^{-1}e^{-\gamma\rho_a\Delta t_{ij}}.
 		\label{eq:scalar_product}
-	\end{align}
-	Having initialized the covariance matrix $\mathbf{C}$ at its empirical value, we know the values of all members of the r.h.s. of equation~\eqref{eq:scalar_product} except that of $\gamma$. 
-	On the other hand, equivalent versions of equation~\eqref{eq:scalar_product} can be written for all pairs of configurations $i$ and $j$. 
-	To find an initial value of $\gamma$ which is consistent with the data and the empirical covariance matrix, we search for one that best explains the observed scalar products between configurations. 
-	We thus define $\gamma^0$ to be the argument minimizing the functional $F(\gamma)$: 
-	\begin{equation}
-	 	F(\gamma) = \sum_{1\leq i<j\leq N}\left[ \vx_i^{\,T}\vx_j - \sum_{a=1}^L \rho_a^{-1}e^{-\gamma\rho_a\Delta t_{ij}} \right].
-	\end{equation} 
-	As $F$ depends on one scalar parameter, it is straightforward to minimize it, allowing us to initialize $\gamma$ to a reasonable value.
+\end{align}
+Having initialized the covariance matrix $\mathbf{C}$ \DIFdelbegin \DIFdel{at }\DIFdelend \DIFaddbegin \DIFadd{with }\DIFaddend its empirical value, we know the values of all members of the r.h.s. of \DIFdelbegin \DIFdel{equation}\DIFdelend \DIFaddbegin \DIFadd{Eq.}\DIFaddend ~\eqref{eq:scalar_product} except \DIFdelbegin \DIFdel{that of }\DIFdelend \DIFaddbegin \DIFadd{the one of }\DIFaddend $\gamma$\DIFdelbegin \DIFdel{. 
+	On the other hand, equivalent versions of equation~}%DIFDELCMD < \eqref{eq:scalar_product} %%%
+\DIFdel{can be written for all pairs of configurations $i$ and $j$}\DIFdelend . To find an initial value of $\gamma$ which is consistent with the data and the empirical covariance matrix \DIFaddbegin \DIFadd{for all pairs of data configurations $i<j$}\DIFaddend , we search for one that best explains the observed scalar products between configurations. We thus define $\gamma^0$ to be the argument minimizing the functional $F(\gamma)$: 
+\begin{equation}
+    F(\gamma) = \sum_{1\leq i<j\leq N}\left[ \vx_i^{\,T}\DIFaddbegin \DIFadd{\cdot}\DIFaddend \vx_j - \sum_{a=1}^L \rho_a^{-1}e^{-\gamma\rho_a\Delta t_{ij}} \right].
+\end{equation} 
+\DIFdelbegin \DIFdel{As }\DIFdelend \DIFaddbegin \DIFadd{Since }\DIFaddend $F$ depends on \DIFdelbegin \DIFdel{one }\DIFdelend \DIFaddbegin \DIFadd{a single }\DIFaddend scalar parameter, it is straightforward to minimize it \DIFdelbegin \DIFdel{, allowing us }\DIFdelend \DIFaddbegin \DIFadd{and thereby }\DIFaddend to initialize $\gamma$ to \DIFdelbegin \DIFdel{a }\DIFdelend \DIFaddbegin \DIFadd{an empirically }\DIFaddend reasonable value.
 
-% subsection initializing_parameters (end)
+%DIF <  subsection initializing_parameters (end)
+\DIFdelbegin %DIFDELCMD < 
 
+%DIFDELCMD < %%%
+%DIF <  section supplementary_material (end)
+%DIFDELCMD < 
 
-% section supplementary_material (end)
-
-\subsection{Parametrizations of  eigenvectors } % (fold)
+%DIFDELCMD < %%%
+\DIFdelend \subsection{Parametrizations of  eigenvectors } % (fold)
 \label{sub:parametrizations_of_eigenvectors}
-\subsubsection{Parametrization in term of generalized Eulerian angles}
-The aim is to  parameterize each base vector $\vec{s}_a$ according to the $a-th$ column of an arbitrary orthogonal matrix $\bm S$ parameterized   in terms of $L(L-1)/2$ independent variables  $\theta_ {pq}, p =1,2, ..., L; q =1,2, ..., L; p <q $, named Generalized Eulerian angles (Eulerian angles is for L=3).
+\subsubsection{Parametrization \DIFdelbegin \DIFdel{in term of }\DIFdelend \DIFaddbegin \DIFadd{using }\DIFaddend generalized Eulerian angles}
+The \DIFdelbegin \DIFdel{aim is to parameterize each base vector }\DIFdelend \DIFaddbegin \DIFadd{idea is to write the base vectors }\DIFaddend $\vec{s}_a$ \DIFdelbegin \DIFdel{according to the $a-th$ column of an arbitrary }\DIFdelend \DIFaddbegin \DIFadd{as columns of an }\DIFaddend orthogonal matrix $\bm S$\DIFdelbegin \DIFdel{parameterized   }\DIFdelend \DIFaddbegin \DIFadd{, and to parameterize this matrix }\DIFaddend in terms of $L(L-1)/2$ independent variables  \DIFdelbegin \DIFdel{$\theta_ {pq}, p =1,2, ..., L; q =1,2, ..., L; p <q $, named Generalized Eulerian angles(Eulerian angles is for L=3)}\DIFdelend \DIFaddbegin \DIFadd{$\theta_ {pq}$ with $1 \leq p <q \leq L $. These parameters are called generalized Eulerian angles, since they generalize Eulerian angles to $L>3$}\DIFaddend . 
 
-To construct this matrix we start from a  transformation in a two-dimensional subspace of an $L-dimensional$ space which is given by an L-dimensional matrix of the  form:
+To construct this matrix we start from a \DIFaddbegin \DIFadd{rotational }\DIFaddend transformation in a two-dimensional subspace of an \DIFdelbegin \DIFdel{$L-dimensional$ spacewhich }\DIFdelend \DIFaddbegin \DIFadd{$L$-dimensional space. It }\DIFaddend is given by an \DIFdelbegin \DIFdel{L-dimensional }\DIFdelend \DIFaddbegin \DIFadd{$L$-dimensional }\DIFaddend matrix of the form
+\DIFdelbegin \DIFdel{:
+}%DIFDELCMD < 
 
-\begin{equation} 
+%DIFDELCMD < %%%
+\DIFdelend \begin{equation} 
 \bm T_{pq} =  \left(
 \begin{array}{cccccc}
 1 &   &  &  &  &\\
@@ -813,94 +849,147 @@ To construct this matrix we start from a  transformation in a two-dimensional su
 & &  -\sin\theta_{pq}& & \cos\theta_{pq} &\\
 & &  & &  & 1\\
 \end{array}
-\right)
-\end{equation}
-where all diagonal elements are unity except the diagonal elements in the $pth$ column and the $qth$ column, which are $\cos\theta_{pq}$ and all off-diagonal elements are zero except the one corresponding to the intersection of the $pth$ row and the $qth$ column, which is $\sin\theta_{pq}$, and that on the intersection of the $qth$ row and the $pth$ column, which is $-\sin\theta_{pq}$. There are $L(L - 1)/2$  matrices of the form indicated in Equation (1), corresponding to all choices of $p$ and $q$ with $p <q$.
+\right) \DIFaddbegin \DIFadd{\ ,
+}\DIFaddend \end{equation}
+where all diagonal elements are unity except \DIFaddbegin \DIFadd{for }\DIFaddend the diagonal elements in the \DIFdelbegin \DIFdel{$pth$ column and the $qth$ }\DIFdelend \DIFaddbegin \DIFadd{$p$th and the $q$th }\DIFaddend column, which \DIFdelbegin \DIFdel{are }\DIFdelend \DIFaddbegin \DIFadd{equal }\DIFaddend $\cos\theta_{pq}$\DIFdelbegin \DIFdel{and all }\DIFdelend \DIFaddbegin \DIFadd{. All }\DIFaddend off-diagonal elements are zero except \DIFaddbegin \DIFadd{for }\DIFaddend the one corresponding to the intersection of the \DIFdelbegin \DIFdel{$pth$ }\DIFdelend \DIFaddbegin \DIFadd{$p$th }\DIFaddend row and the \DIFdelbegin \DIFdel{$qth$ }\DIFdelend \DIFaddbegin \DIFadd{$q$th }\DIFaddend column, which is $\sin\theta_{pq}$, and that on the intersection of the \DIFdelbegin \DIFdel{$qth$ }\DIFdelend \DIFaddbegin \DIFadd{$q$th }\DIFaddend row and the \DIFdelbegin \DIFdel{$pth$ }\DIFdelend \DIFaddbegin \DIFadd{$p$th }\DIFaddend column, which \DIFdelbegin \DIFdel{is }\DIFdelend \DIFaddbegin \DIFadd{equals }\DIFaddend $-\sin\theta_{pq}$. There are $L(L - 1)/2$  matrices of \DIFdelbegin \DIFdel{the formindicated in Equation (1)}\DIFdelend \DIFaddbegin \DIFadd{this form}\DIFaddend , corresponding to all choices of $p$ and $q$ with \DIFdelbegin \DIFdel{$p <q$}\DIFdelend \DIFaddbegin \DIFadd{$1\leq p <q\leq L$}\DIFaddend . 
 
-An arbitrary  $L-dimensional$ orthogonal matrix $\bm S$ can be represented as a product of these $L(L-1)/2$ orthogonal matrices with appropriate values of the $L(L-1)/2$ independent parameters $\theta_{pq}$.
+An arbitrary \DIFdelbegin \DIFdel{$L-dimensional$ }\DIFdelend \DIFaddbegin \DIFadd{$L$-dimensional }\DIFaddend orthogonal matrix $\bm S$ can be represented as a product of these $L(L-1)/2$ orthogonal matrices with appropriate values of the $L(L-1)/2$ independent parameters $\theta_{pq}$\DIFdelbegin \DIFdel{.
+}%DIFDELCMD < 
 
-\begin{equation}
-\bm S (\bm \theta)=\prod_{\left\lbrace pq\right\rbrace }T_{pq}(\theta_{pq})
-\end{equation}
+%DIFDELCMD < %%%
+\DIFdelend \DIFaddbegin \DIFadd{:
+}\DIFaddend \begin{equation}
+\DIFaddbegin \label{eq:eulerprod}
+\DIFaddend \bm S (\bm \theta)=\prod_{\left\lbrace pq\right\rbrace }T_{pq}(\theta_{pq}) \DIFaddbegin \DIFadd{\ .
+}\DIFaddend \end{equation}
+\DIFdelbegin %DIFDELCMD < 
 
- This matrix is in charge of rotations of vectors in $L-dimensional$ space. For $L=3$ we get the classical Eulerian matrix. 
+%DIFDELCMD <  %%%
+\DIFdel{This matrix is in charge of rotations of vectors in $L-dimensional$ space}\DIFdelend \DIFaddbegin \DIFadd{The basic idea is to express a general rotation in $L$ dimensions as the result of $L(L-1)/2$ successive rotations by angles $\theta_ {pq}$ in the two-dimensional subspaces given by the components $p, q$}\DIFaddend . For $L=3$ we get the classical Eulerian matrix. 
 
- In reference [7] is explained an recursive algorithm to efficiently perform this multiplication,  as well as the   construction of the matrix   derivatives respect to parameters $\theta_{pq}$. 
+\DIFdelbegin \DIFdel{In reference }\DIFdelend \DIFaddbegin \DIFadd{Ref.~}{\color{red} \DIFaddend [7] \DIFdelbegin \DIFdel{is explained an }\DIFdelend \DIFaddbegin \DIFadd{CHECK, is it }[\DIFadd{18}]\DIFadd{? use ref}} \DIFadd{exposes a }\DIFaddend recursive algorithm to efficiently perform this multiplication, as well as the   construction of the matrix derivatives respect to parameters $\theta_{pq}$. \DIFdelbegin %DIFDELCMD < 
 
-For the first, equation  (2) is transformed in  the recurrence equations:
+%DIFDELCMD < %%%
+\DIFdel{For the first, equation  (2) is transformed in  the recurrence equations}\DIFdelend \DIFaddbegin \DIFadd{To start, Eq.~}[\eqref{eq:eulerprod}] \DIFadd{is transformed into a set of recursive equations, with $\bm S$ being equal to the final step
+}\begin{equation}
+\DIFadd{\bm S(\bm \theta)=\bm T^{(L)} \ .
+}\end{equation}
+\DIFadd{For all $1\leq k < l\leq L$ we iterate over $n$}\DIFaddend : \DIFdelbegin %DIFDELCMD < 
 
-\begin{equation}
-\bm S(\vec{\theta} )=\bm T^{(L)}
-\end{equation}
+%DIFDELCMD < %%%
+\begin{displaymath}
+\DIFdel{\bm S(\vec{\theta} )=\bm T^{(L)}
+}\end{displaymath}
+%DIFAUXCMD
+%DIFDELCMD < 
 
-with $\theta_ {pq}, p =1,2, ..., L; q =1,2, ..., L; p <q$ and 
+%DIFDELCMD < %%%
+\DIFdel{with $\theta_ {pq}, p =1,2, ..., L; q =1,2, ..., L; p <q$ and 
+}%DIFDELCMD < 
 
-
-\begin{equation}
-T^{(n)}_{kl}=\cos\theta_{kn} * t^{(n)}_{kl}-\sin\theta_{kn}* s^{(n)}_{kl}
+%DIFDELCMD < %%%
+\DIFdelend \DIFaddbegin {\color{red} [\DIFadd{7}] \DIFadd{What is the initialization? Please check carefully, also the correct ranges of the $kl$ which seem to go to $n$ only. It would also be better to avoid $s$, which we use for the eigenvectors.}}
+\DIFaddend \begin{equation}
+    T^{(n)}_{kl}=\cos\theta_{kn} * t^{(n)}_{kl}-\sin\theta_{kn}* s^{(n)}_{kl}
 \end{equation}
 with
 \begin{equation}
-\begin{split}
-&s^{(n)}_{k+1,l}=\sin\theta_{kn} * t^{(n)}_{kl}+\cos\theta_{kn}*s^{(n)}_{kl}\\
-&s^{(n)}_{k+1,n}=\cos\theta_{kn}*s^{(n)}_{kn}\\
-&s^{(n)}_{1,l}=-\delta_{ln}\\
-&\theta_{nn}=\pi/2\\
-&\end{split}
-\end{equation}
+    \DIFdelbegin %DIFDELCMD < \begin{split}
+%DIFDELCMD < &s^{(n)}_{k+1,l}=\sin\theta_{kn} * t^{(n)}_{kl}+\cos\theta_{kn}*s^{(n)}_{kl}\\
+%DIFDELCMD < &s^{(n)}_{k+1,n}=\cos\theta_{kn}*s^{(n)}_{kn}\\
+%DIFDELCMD < &s^{(n)}_{1,l}=-\delta_{ln}\\
+%DIFDELCMD < &\theta_{nn}=\pi/2\\
+%DIFDELCMD < &\end{split}
+%DIFDELCMD < %%%
+\DIFdelend \DIFaddbegin \begin{split}
+        s^{(n)}_{k+1,l}&=\sin\theta_{kn} * t^{(n)}_{kl}+\cos\theta_{kn}*s^{(n)}_{kl}\\
+        s^{(n)}_{k+1,n}&=\cos\theta_{kn}*s^{(n)}_{kn}\\
+        s^{(n)}_{1,l}&=-\delta_{ln}\\
+        \theta_{nn}&=\pi/2
+    \end{split}
+\DIFaddend \end{equation}
 and
 \begin{equation} 
 \bm t^{(n)} =  \left(
-\begin{array}{cc}
+\DIFdelbegin %DIFDELCMD < \begin{array}{cc}
+%DIFDELCMD < \bm T^{(n-1)} & \bm 0  \\
+%DIFDELCMD < \bm 0 &  \bm I\\
+%DIFDELCMD < 
+%DIFDELCMD < \end{array}
+%DIFDELCMD < %%%
+\DIFdelend \DIFaddbegin \begin{array}{cc}
 \bm T^{(n-1)} & \bm 0  \\
-\bm 0 &  \bm I\\
-
+\bm 0 &  \bm I
 \end{array}
-\right)
+\DIFaddend \right)
 \end{equation}
 
-This mean that the eigenvectors $\vec{s}_a$ of the matrix $\bm C$ with dimensions $L\times L$ can be written as:
+\DIFdelbegin \DIFdel{This mean that }\DIFdelend \DIFaddbegin \DIFadd{As a consequence, }\DIFaddend the eigenvectors $\vec{s}_a$ of the matrix $\bm C$ with dimensions $L\times L$ can be written as:
 \begin{equation}
-s^{k}_a=T^{(L)}_{.,a}=\cos\theta_{kL} * t^{(L)}_{ka}-\sin\theta_{kL}* s^{(L)}_{ka} \;\;\; \text{for} \;k=1,..,L
-\end{equation}
+s^{k}_a=T^{(L)}_{.,a}=\cos\theta_{kL} * t^{(L)}_{ka}-\sin\theta_{kL}* \DIFaddbegin {\color{red} \DIFaddend s\DIFaddbegin }\DIFaddend ^{(L)}_{ka} \;\;\; \text{for} \;k=1,..,L \DIFaddbegin \DIFadd{\ .
+}\DIFaddend \end{equation}
+\DIFdelbegin %DIFDELCMD < 
 
+%DIFDELCMD < %%%
+\DIFdel{Then there is another  important problem : how }\DIFdelend \DIFaddbegin \DIFadd{To use this expression, we still need }\DIFaddend to determine parameters $\bm \theta$  given an orthogonal matrix \DIFdelbegin \DIFdel{$\bm Q$ }\DIFdelend \DIFaddbegin \DIFadd{$\bm S$, }\DIFaddend such that all equations
+\DIFdelbegin %DIFDELCMD < 
 
+%DIFDELCMD < %%%
+\begin{displaymath}\DIFdel{S_{ij}(\bm \theta)=Q_{ij}}\end{displaymath}
+%DIFAUXCMD
+%DIFDELCMD < 
 
-Then there is another  important problem : how to determine parameters $\bm \theta$  given an orthogonal matrix $\bm Q$ such that all equations 
+%DIFDELCMD < %%%
+\DIFdelend \DIFaddbegin \begin{equation}
+    \DIFadd{S_{ij}(\bm \theta)=S_{ij}
+}\end{equation}
+\DIFaddend are satisfied. This system of nonlinear transcendental equations  \DIFdelbegin \DIFdel{can't be algebraically solved , however it 's possible }\DIFdelend \DIFaddbegin \DIFadd{cannot be solved algebraically. However, it is possible to }\DIFaddend overcome this issue finding the set of $\bm \theta$ which minimize the \DIFdelbegin \DIFdel{function: 
+}\DIFdelend \DIFaddbegin \DIFadd{square distance between the target and the parametrized matrices: 
+}\DIFaddend \begin{equation}
+ \DIFdelbegin \DIFdel{f(}%DIFDELCMD < \bm %%%
+\DIFdel{\theta)}\DIFdelend \DIFaddbegin {\bm{\hat \theta}} \DIFaddend = \DIFaddbegin \DIFadd{\text{argmin}_{\bm \theta} }\DIFaddend \sum\DIFdelbegin \DIFdel{_{i,j}}\DIFdelend \DIFaddbegin \DIFadd{_{i<j}}\DIFaddend \left[ \DIFdelbegin \DIFdel{Q}\DIFdelend \DIFaddbegin \DIFadd{S}\DIFaddend _{ij}-S_{ij}(\bm \theta)\right] ^2 \DIFaddbegin \DIFadd{\ .
+}\DIFaddend \end{equation}
+This is useful when we initialize parameters $\bm \theta$ \DIFdelbegin \DIFdel{from }\DIFdelend \DIFaddbegin \DIFadd{for }\DIFaddend the matrix formed by \DIFaddbegin \DIFadd{the }\DIFaddend eigenvectors of the empirical covariance matrix.
+\DIFaddbegin 
 
-$$S_{ij}(\bm \theta)=Q_{ij}$$
+\DIFaddend \subsubsection{Parametrization in term of the exponential of a skew-symmetric matrix }
+\DIFdelbegin \DIFdel{The }\DIFdelend \DIFaddbegin 
 
-are satisfied. This system of nonlinear transcendental equations  can't be algebraically solved, however it's possible overcome  this issue finding the set of $\bm \theta$ which minimize the function:   
+\DIFadd{Any orthogonal matrix can be written as the }\DIFaddend exponential of a skew-symmetric matrix $\bm X=-\bm X^T$: 
 \begin{equation}
-f(\bm \theta)=\sum_{i,j}\left[ Q_{ij}-S_{ij}(\bm \theta)\right] ^2
-\end{equation}
-This is useful when we initialize parameters $\bm \theta$  from the matrix formed by eigenvectors of the empirical covariance matrix.
-\subsubsection{Parametrization in term of the exponential of a skew-symmetric matrix }
-The exponential of a skew-symmetric matrix $\bm X=-\bm X^T$  : 
- \begin{equation}
- \bm S=\exp (\bm X)
- \end{equation}
+    \bm S=\exp (\bm X)\DIFaddbegin \DIFadd{\ ,
+}\DIFaddend \end{equation}
+\DIFdelbegin %DIFDELCMD < 
 
- is  an  orthogonal  matrix : $\exp(X)^T=\exp(X^T)=\exp(-X)=\exp(X)^{-1}$. 
+%DIFDELCMD <  %%%
+\DIFdel{is  an  orthogonal  matrix : $\exp(X)^T=\exp(X^T)=\exp(-X)=\exp(X)^{-1}$}\DIFdelend \DIFaddbegin \DIFadd{since $\exp(\bm X)^T=\exp(\bm X^T)=\exp(-\bm X)=\exp(\bm X)^{-1}$}\DIFaddend . 
 
- The derivatives on $L(L-1)/2$ independent variables of $\bm X$  is formally defined by
+The derivatives \DIFdelbegin \DIFdel{on }\DIFdelend \DIFaddbegin \DIFadd{with respect to the }\DIFaddend $L(L-1)/2$ independent variables of $\bm X$ is formally defined by
+\DIFdelbegin %DIFDELCMD < 
 
- \begin{equation}
+%DIFDELCMD <  %%%
+\DIFdelend \begin{equation}
  \frac{\partial \bm S}{\partial X_{jk}}=\lim_{h\rightarrow 0} \frac{1}{h} \left( \exp(\bm X+ h \bm E^{jk}) - \exp(\bm X)\right) 
- \end{equation}
+\end{equation}
+\DIFdelbegin %DIFDELCMD < 
 
- where $\bm E^{jk}$ for $j > k$ is defined as a skew-symmetric matrix that has only two nonzero elements:
- \begin{equation}
- E^{pq}_{jk}=\delta_{pj}\delta_{qk}-\delta_{pk}\delta_{qj}
- \end{equation}
+%DIFDELCMD <  %%%
+\DIFdelend where $\bm E^{jk}$ for $j > k$ is defined as a skew-symmetric matrix that has only two nonzero \DIFdelbegin \DIFdel{elements}\DIFdelend \DIFaddbegin \DIFadd{entries in positions $(j,k)$ and $(k,j)$}\DIFaddend :
+\begin{equation}
+    E^{pq}_{jk}=\delta_{pj}\delta_{qk}-\delta_{pk}\delta_{qj}
+\end{equation}
 
-To obtain   a skew-symmetric matrix    $\bm X$ from an orthogonal matrix $\bm Q$    is enough invert the exponential relation :
- $$\bm X=\log \bm Q$$
+To obtain a skew-symmetric matrix $\bm X$ from an orthogonal matrix $\bm Q$\DIFdelbegin \DIFdel{is enough }\DIFdelend \DIFaddbegin \DIFadd{, it is sufficient to }\DIFaddend invert the exponential relation\DIFdelbegin \DIFdel{:
+ }\begin{displaymath}\DIFdel{\bm X=\log \bm Q}\end{displaymath}
+ %DIFAUXCMD
+%DIFDELCMD < 
 
-  If we write eigenvectors of the likelihood function as the columns of the exponential of the skew-symmetric matrix $\bm X$, then we are able to perform the optimization over it's $L(L-1)$ independent variables of $\bm X$.
+%DIFDELCMD <   %%%
+\DIFdelend \DIFaddbegin \DIFadd{,
+$\bm X=\log \bm Q$. }\DIFaddend If we write eigenvectors of the \DIFdelbegin \DIFdel{likelihood function }\DIFdelend \DIFaddbegin \DIFadd{covariance matrix }\DIFaddend as the columns of the exponential of the skew-symmetric matrix $\bm X$, \DIFdelbegin \DIFdel{then }\DIFdelend we are able to perform the optimization over \DIFdelbegin \DIFdel{it's $L(L-1)$ independent variables of $\bm X$}\DIFdelend \DIFaddbegin \DIFadd{its $L(L-1)/2$ independent entries}\DIFaddend .
 
- Furthermore, as the eigenvectors were parameterized by an algebraic function, the complete likelihood  is described in terms of arithmetics operation and elementary functions. This allow to compute  the gradient via  automatic differentiation (AD), making computations in our optimization process faster. 
- The idea  is to represent a function as a computational graph, also called a Wengert list , where each node  in this list will represent an intermediate result of the computation. The intermediate results can then be assembled using the chain rule to get the final derivative we’re looking for. There is two    main algorithms  to traverses the chain rule in AD: forward mode and reverse mode, here we used reverse mode  algorithm  which is the of choice for back-propagation in deep learning . In particular we implemented  it using the Julia package Zygote.jl . 
+Furthermore, as the eigenvectors \DIFdelbegin \DIFdel{were parameterized }\DIFdelend \DIFaddbegin \DIFadd{are parametrized }\DIFaddend by an algebraic function, the complete likelihood is described in terms of \DIFdelbegin \DIFdel{arithmetics operation }\DIFdelend \DIFaddbegin \DIFadd{arithmetic operations }\DIFaddend and elementary functions. This allow to compute the gradient via automatic differentiation (AD) 
+\DIFaddbegin {\color{red} \DIFadd{CITE}}\DIFaddend , making computations in our optimization process faster. The idea  is to represent a function as a computational graph, also called \DIFdelbegin \DIFdel{a Wengert list }\DIFdelend \DIFaddbegin \DIFadd{Wengert list }{\color{red} \DIFadd{CITE}}\DIFaddend , where each node in \DIFdelbegin \DIFdel{this list will represent }\DIFdelend \DIFaddbegin \DIFadd{the list represents }\DIFaddend an intermediate result of the computation. The intermediate results can \DIFdelbegin \DIFdel{then }\DIFdelend be assembled using the chain rule to get the final derivative we \DIFdelbegin \DIFdel{’re }\DIFdelend \DIFaddbegin \DIFadd{are }\DIFaddend looking for. There \DIFdelbegin \DIFdel{is }\DIFdelend \DIFaddbegin \DIFadd{are }\DIFaddend two main algorithms to \DIFdelbegin \DIFdel{traverses }\DIFdelend \DIFaddbegin \DIFadd{traverse }\DIFaddend the chain rule in AD: \DIFaddbegin \DIFadd{a }\DIFaddend forward mode and \DIFdelbegin \DIFdel{reverse mode, here we used reverse mode  algorithmwhich is }\DIFdelend \DIFaddbegin \DIFadd{a reverse mode. Here, we used }\DIFaddend the \DIFaddbegin \DIFadd{reverse-mode algorithm, which is also the one }\DIFaddend of choice for back-propagation in deep learning. In particular we implemented it using the Julia package Zygote.jl. 
 
  \subsection{Homogeneous and fully balanced tree}
  \label{sub:homogeneous_and_fully_balanced_tree}
@@ -973,29 +1062,22 @@ for $n-dimensions$ $\hat{H}$ is undetermined, the various QNMs differ in their c
 
 $$\hat{H}_{k+1}=\hat{H}_{k}+\frac{y_k y^{T}_k}{y_k\Delta x_k} - \frac{\hat{H}_k\Delta x_k(\hat{H}_k\Delta x_k)^T}{\Delta x^T_k\hat{H}_k\Delta x_k} \;\;\;\text{and}\;\;\; y_k=\nabla L(\vec{x}_k+1)-\nabla L(\vec{x}_k)$$
 
-The method implementation was done using   NLopt package \DIFdelbegin \DIFdel{(see reference) }%DIFDELCMD < \pierre{Add reference?}%%%
-\DIFdelend \DIFaddbegin \DIFadd{\mbox{%DIFAUXCMD
-\cite{NLopt} }\hspace{0pt}%DIFAUXCMD
-}\DIFaddend .
+The method implementation was done using   NLopt package \cite{NLopt} .
 
-\subsection{Supplementary figures}
+\subsection{\DIFdelbegin \DIFdel{Supplementary }\DIFdelend \DIFaddbegin \DIFadd{Supporting }\DIFaddend figures}
 \label{sub:supplementary_figures}
 
 \begin{figure}[!htb]
 	\centering
-	\DIFdelbeginFL %DIFDELCMD < \includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/error_Ciid_vs_numb_of_seq.pdf}
-%DIFDELCMD < 	%%%
-\DIFdelendFL \DIFaddbeginFL \includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/error_Ciid_vs_numb_of_seq.pdf}
-	\DIFaddendFL \caption{Relative $l2$-error between the empirical covariance matrix calculated from an \emph{i.i.d.} sample and the true covariance matrix, for system sizes $L=4$ and $L=10$. The dashed vertical line corresponds to the number of leaves of the tree used in the simulations.}
+	\includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/error_Ciid_vs_numb_of_seq.pdf}
+	\caption{Relative $l2$-error between the empirical covariance matrix calculated from an \emph{i.i.d.} sample and the true covariance matrix, for system sizes $L=4$ and $L=10$. The dashed vertical line corresponds to the number of leaves of the tree used in the simulations.}
 	\label{fig:error_vs_nseqs}
 \end{figure}
 
 \begin{figure}[!htb]
 	\centering
-	\DIFdelbeginFL %DIFDELCMD < \includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/scatter_gamma_L4_100.pdf}
-%DIFDELCMD < 	%%%
-\DIFdelendFL \DIFaddbeginFL \includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/scatter_gamma_L4_100.pdf}
-	\DIFaddendFL \caption{Inferred $\gamma$ values as a function of real $\gamma$, for system size $L=4$. $\gamma_{emp}$ is the value obtained by the process described in section \ref{sub:initializing_parameters} of the SM. $\gamma_{max}$ is the value inferred by the maximum-likelihood calculation. 
+	\includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/scatter_gamma_L4_100.pdf}
+	\caption{Inferred $\gamma$ values as a function of real $\gamma$, for system size $L=4$. $\gamma_{emp}$ is the value obtained by the process described in section \ref{sub:initializing_parameters} of the SM. $\gamma_{max}$ is the value inferred by the maximum-likelihood calculation. 
 	The inset represents the ratio of both inferred parameters $\gamma_{emp}$ or $\gamma_{max}$ to the real $\gamma$.}
 	\label{fig:scatter_gamma_L4}
 \end{figure}
@@ -1003,53 +1085,37 @@ The method implementation was done using   NLopt package \DIFdelbegin \DIFdel{(s
 
 \begin{figure}[!htb]
 	\centering
-	\DIFdelbeginFL %DIFDELCMD < \includegraphics[keepaspectratio=true,width=0.55\textwidth]{Figures/Pearson_correlation_rate_full_range.pdf}
-%DIFDELCMD < 	%%%
-\DIFdelendFL \DIFaddbeginFL \includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/Pearson_correlation_rate_full_range.pdf}
-	\DIFaddendFL \caption{  Ratio between Pearson correlation of the  maximum-likelihood  and true covariance  matrix to the Pearson correlation of the  empirical and true covariances matrices for the two system sizes $L=4$ and $L=10$.}
+	\includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/Pearson_correlation_rate_full_range.pdf}
+	\caption{  Ratio between Pearson correlation of the  maximum-likelihood  and true covariance  matrix to the Pearson correlation of the  empirical and true covariances matrices for the two system sizes $L=4$ and $L=10$.}
 	\label{fig:pearson_corr_comp_L4}
 \end{figure}
 
 \begin{figure}[!htb]
 	\centering
-	\DIFdelbeginFL %DIFDELCMD < \includegraphics[keepaspectratio=true,width=0.65\textwidth]{Figures/corr_C_L10_balanced_tree_100_rep.pdf}
-%DIFDELCMD < 	%%%
-\DIFdelendFL \DIFaddbeginFL \includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/corr_C_L10_balanced_tree_100_rep.pdf}
-	\DIFaddendFL \caption{ Pearson correlation between empirical /maximum-likelihood   covariance matrices and the true covariance matrix, the inset plot represent the ratio between the person correlation for the  maximum-likelihood covariance matrix and the one for the empirical covariance matrix.}
+	\includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/corr_C_L10_balanced_tree_100_rep.pdf}
+	\caption{ Pearson correlation between empirical /maximum-likelihood   covariance matrices and the true covariance matrix, the inset plot represent the ratio between the person correlation for the  maximum-likelihood covariance matrix and the one for the empirical covariance matrix.}
 	\label{fig:pears_L10}
 \end{figure}
 
 
 \begin{figure}[!htb]
 	\centering
-	\DIFdelbeginFL %DIFDELCMD < \includegraphics[keepaspectratio=true,width=0.65\textwidth]{Figures/scatter_gamma_L10_100.pdf}
-%DIFDELCMD < 	%%%
-\DIFdelendFL \DIFaddbeginFL \includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/scatter_gamma_L10_100.pdf}
-	\DIFaddendFL \caption{Inferred $\gamma$ values as a function of real $\gamma$, for system size $L=10$. $\gamma_{emp}$ is the value obtained by the process described in section \ref{sub:initializing_parameters} of the SM. $\gamma_{max}$ is the value inferred by the maximum-likelihood calculation. 
+	\includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/scatter_gamma_L10_100.pdf}
+	\caption{Inferred $\gamma$ values as a function of real $\gamma$, for system size $L=10$. $\gamma_{emp}$ is the value obtained by the process described in section \ref{sub:initializing_parameters} of the SM. $\gamma_{max}$ is the value inferred by the maximum-likelihood calculation. 
 	The inset represents the ratio of both inferred parameters $\gamma_{emp}$ or $\gamma_{max}$ to the real $\gamma$. }
 	\label{fig:scatter_gamma_L10}
 \end{figure}
 
 
  \begin{figure*}[!htb]
- 	\DIFdelbeginFL %DIFDELCMD < \begin{subfigure}{}
-%DIFDELCMD <  			\centering\includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/epsilon_error_C_L10_balanced_tree_100.pdf}
-%DIFDELCMD <  		\end{subfigure}
-%DIFDELCMD <  		%%%
-\DIFdelFL{\hspace{1mm}
- }%DIFDELCMD < \begin{subfigure}{}
-%DIFDELCMD <  			%%%
-\DIFdelendFL %DIF > 	\begin{subfigure}{}
- 			\centering\DIFdelbeginFL %DIFDELCMD < \includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/epsilon_error_J_L10_balanced_tree_100.pdf}
-%DIFDELCMD <  		\end{subfigure}
-%DIFDELCMD <  	%%%
-\DIFdelendFL \DIFaddbeginFL \includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/epsilon_error_L10_balanced_tree_100.pdf}
- %DIF > 		\end{subfigure}
- 		\DIFaddFL{\hspace{1mm}
- %DIF > 		\begin{subfigure}{}
- %DIF > 			\centering\includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/epsilon_error_J_L10_balanced_tree_100.pdf}
- %DIF > 		\end{subfigure}
- 	}\DIFaddendFL \caption{\textbf{Left:} Relative $l2$-error between empirical or maximum-likelihood covariance matrices and the true covariance matrix. \textbf{Right}: Relative $l2$-error between empirical /maximum-likelihood coupling matrices and the true coupling matrix. Logarithmic scale is chosen for the y-axis because of large values of the error at low $\gamma$. The inset in both panels show the ratio between the two errors. For system size $L=10$.}
+ 	%	\begin{subfigure}{}
+ 			\centering\includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/epsilon_error_L10_balanced_tree_100.pdf}
+ %		\end{subfigure}
+ 		\hspace{1mm}
+ %		\begin{subfigure}{}
+ %			\centering\includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/epsilon_error_J_L10_balanced_tree_100.pdf}
+ %		\end{subfigure}
+ 	\caption{\textbf{Left:} Relative $l2$-error between empirical or maximum-likelihood covariance matrices and the true covariance matrix. \textbf{Right}: Relative $l2$-error between empirical /maximum-likelihood coupling matrices and the true coupling matrix. Logarithmic scale is chosen for the y-axis because of large values of the error at low $\gamma$. The inset in both panels show the ratio between the two errors. For system size $L=10$.}
  	\label{fig:error_1_L10}
  \end{figure*}
 
@@ -1058,10 +1124,8 @@ The method implementation was done using   NLopt package \DIFdelbegin \DIFdel{(s
   
 \begin{figure}[!htb]
 	\centering
-	\DIFdelbeginFL %DIFDELCMD < \includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/PPVs_L10.png}
-%DIFDELCMD < 	%%%
-\DIFdelendFL \DIFaddbeginFL \includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/PPVs_L10.pdf}
-	\DIFaddendFL \caption{Quality of prediction of interactions for  different values of $\gamma$ and system size $L=4$. Interactions are defined as non-zero elements of the coupling matrix. In the $L=4$ case, there are $6$ possible interactions. Predictions are made by taking the largest elements (in absolute terms) of the inferred coupling matrix. The PPV is the fraction of correctly predicted contacts for a given number of predictions.}
+	\includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/PPVs_L10.pdf}
+	\caption{Quality of prediction of interactions for  different values of $\gamma$ and system size $L=4$. Interactions are defined as non-zero elements of the coupling matrix. In the $L=4$ case, there are $6$ possible interactions. Predictions are made by taking the largest elements (in absolute terms) of the inferred coupling matrix. The PPV is the fraction of correctly predicted contacts for a given number of predictions.}
 	\label{fig:PPV_L10}
 \end{figure}
 

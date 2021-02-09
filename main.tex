@@ -607,7 +607,7 @@ Agreement No. 734439 InferNet.
 \subsection{Generating artificial data} % (fold)
 \label{sub:generating_artificial_data}
 
-We are interested in the case where the dynamics of the $L$-dimensional Ornstein-Uhlenbeck process takes place on a tree. For example, if configurations $\vec{x}$ represent quantitative traits of some organisms, the tree can represent the genealogy or phylogeny of these organisms. Therefore, to generate our datasets, we have to be able to simulate the OU process on a tree. In practice, given a rooted tree such as the one shown in Fig.~\ref{fig:sample_tree} above, we want to sample a configuration $\vec{x}$ for every node in such a way that Eq.~\eqref{eq:OUjoint} holds for every pair of nodes, the time $\Delta t$ being the path length connecting the nodes along the tree. 
+We are interested in the case where the dynamics of the $L$-dimensional Ornstein-Uhlenbeck process takes place on a tree. For example, if configurations $\{\vec{x}\}$ represent quantitative traits of some organisms, the tree can represent the genealogy or phylogeny of these organisms. Therefore, to generate our datasets, we have to be able to simulate the OU process on a tree. In practice, given a rooted tree such as the one shown in Fig.~\ref{fig:sample_tree}  of the main text, we want to sample a configuration $\vec{x}$ for every node in such a way that Eq.~\eqref{eq:OUjoint} holds for every pair of nodes, with time $\Delta t$ being the path length connecting the nodes along the tree. 
 	
 We use a simple methodology to achieve this. First, note that given an arbitrary configuration $\vec{x}_0$ and a time $\Delta t$, we can generate a new configuration $\vec{x}$ distributed according to the propagator Eq.~\eqref{eq:OUpropagator} by exploiting the transformation
 \begin{equation}
@@ -616,7 +616,7 @@ We use a simple methodology to achieve this. First, note that given an arbitrary
 \end{equation}
 where $\Lam$ and $\Sig$ are defined in Eq.~\eqref{eq:def_lambda}, and $\vec{\eta}$ is a vector of uncorrelated variables drawn individually from the normal distribution $\mathcal{N}(0,1)$. Moreover, if $\vec{x_0}$ is distributed according to the equilibrium distribution Eq.~\eqref{eq:eq_distribution}, then $\vx$ and $\vx_0$ are distributed according to the joint distribution Eq.~\eqref{eq:OUjoint} describing two equilibrium configurations at finite time difference. Note that Eq.~\eqref{eq:OUsample} is quite different from the Langevin Eq.~\eqref{eq:langevin}, which describes the instantaneous dynamics of  $\vx$ in the potential given by $\bm{J}$, and which could also be simulated in more complicated situation where no analytical expression for the propagator can be derived. 
 	
-Given any already sampled internal node in the tree, Eq.~\eqref{eq:OUsample} allows to emit a configuration for each of its child nodes. To sample the whole tree, we first draw the root configuration $\vx_0$ from the equilibrium distribution Eq.~\eqref{eq:eq_distribution}. By recursive applications of Eq.~\eqref{eq:OUsample}, we then simply work our way down the tree until all leaves are sampled. Only the configurations in the leaves form the data set, the internal configuration remain hidden to our model-learning task.  
+Given any already sampled internal node in the tree, Eq.~\eqref{eq:OUsample} allows to emit a configuration for each of its child nodes. To sample the whole tree, we first draw the root configuration $\vx_r$ from the equilibrium distribution Eq.~\eqref{eq:eq_distribution}. By recursive applications of Eq.~\eqref{eq:OUsample}, we then simply work our way down the tree until all leaves are sampled. Only the configurations at the leaves form the data set, and the internal configuration remain hidden to our model-learning task.  
 
 
  % subsection generating_artificial_data (end)
@@ -631,7 +631,7 @@ We initialize the covariance matrix using the empirical one:
 \begin{equation*}
 	\mathbf{C}^{emp} = \frac{1}{N}\sum_{i=1}^{N}\vx_i \cdot\vx_i^{\,T}\ .
 \end{equation*}
-Its eigenmodes $\{\rho^0_a, \vsa^{\,0}\}$ determine the starting point of the optimization. A suitable parametrization of $\vsa^{\,0}$ in terms of generalized Eulerian angles or a skew symmetric matrix is described below in Sec.~\ref{sub:parametrizations_of_eigenvectors}.
+Its eigenmodes $\{\rho^0_a, \vsa^{\;0}\}$ determine the starting point of the optimization. A suitable parametrization of $\vsa^{\;0}$ in terms of generalized Eulerian angles or a skew symmetric matrix is described below in Sec.~\ref{sub:parametrizations_of_eigenvectors}.
 	
 	% From empirical covariance matrix $c^*=\frac{1}{N}\sum_{n=1}^{N}\mathbf{x}_n \mathbf{x}_n^T$ we could extract information  to  initialize the parameters in the optimization process. 
 
@@ -654,10 +654,13 @@ Its eigenmodes $\{\rho^0_a, \vsa^{\,0}\}$ determine the starting point of the op
 The optimization also requires that we initialize the time scale $\gamma$. For coherence with the last section, we need to find the optimal $\gamma$ given the data $\mathbf{X}$, the tree, and the OU process defined by the empirical covariance matrix. 
 
 The probability distribution $P$ for the configurations of two leaves $\vx_i$ and  $\vx_j$  separated by time $\Delta t_{ij}$ is given by Eq.~\eqref{eq:OUjoint} of the main text. With this distribution we can analytically calculate the average of the scalar product $\vx_i^{\,T}\cdot\vx_j$ of two equilibrium configurations at given time separation:
-\begin{align}
-\langle \vx_i^{\,T}\cdot\vx_j \rangle_P &= \int \ddroit \vx_i \ddroit \vx_j P(\vx_i,\vx_j|\Delta t_{ij}) \sum_{a=1}^L   x_i^{a}x_j^{a}  \nonumber \\
-	&=\sum_{a=1}^L \langle  x_i^{a} x_j^a \rangle_{P}.
-\end{align}
+% \begin{align}
+% \langle \vx_i^{\,T}\cdot\vx_j \rangle_P &= \int \ddroit \vx_i \ddroit \vx_j P(\vx_i,\vx_j|\Delta t_{ij}) \sum_{a=1}^L   x_i^{a}x_j^{a}  \nonumber \\
+% 	&=\sum_{a=1}^L \langle  x_i^{a} x_j^a \rangle_{P}.
+% \end{align}
+\begin{equation}
+	\langle \vx_i^{\,T}\cdot\vx_j \rangle_P = \sum_{a=1}^L \langle  x_i^{a} x_j^a \rangle_{P}.
+\end{equation}
 The covariance $\langle  x_i^{a} x_j^a \rangle_{P}$ of two observations separated by time $\Delta t_{ij}$ is given by Eq.~\eqref{eq:pairwisecov}. Using this, we find
 \begin{align}
 		\nonumber\langle \vx_i^{\,T}\cdot\vx_j \rangle_P &= \sum_{a=1}^L \left( \Lam^{\Delta t_{ij}} \mathbf{C} \right)_{aa}\\
@@ -698,11 +701,11 @@ An arbitrary $L$-dimensional orthogonal matrix $\bm S$ can be represented as a p
 \end{equation}
 The basic idea is to express a general rotation in $L$ dimensions as the result of $L(L-1)/2$ successive rotations by angles $\theta_ {pq}$ in the two-dimensional subspaces given by the components $p, q$. For $L=3$ we get the classical Eulerian matrix. 
 
-Ref.~{\color{red} [7] CHECK, is it [18]? use ref} exposes a recursive algorithm to efficiently perform this multiplication, as well as the   construction of the matrix derivatives respect to parameters $\theta_{pq}$. To start, Eq.~\eqref{eq:eulerprod} is transformed into a set of recursive equations, with $\bm S$ being equal to the final step
+Ref.~{\color{red} [7] CHECK, is it [18]? use ref} exposes a recursive algorithm to efficiently perform the matrix multiplication of Eq.~\eqref{eq:eulerprod}, as well as the construction of the derivatives of $\bm S$ with respect to parameters $\theta_{pq}$. To start, Eq.~\eqref{eq:eulerprod} is transformed into a set of recursive equations, with $\bm S$ being equal to the final step
 \begin{equation}
 \bm S(\bm \theta)=\bm T^{(L)} \ .
 \end{equation}
-For all $1\leq k < l\leq L$ we iterate over $n$: {\color{red} [7] What is the initialization? Please check carefully, also the correct ranges of the $kl$ which seem to go to $n$ only. It would also be better to avoid $s$, which we use for the eigenvectors.}
+For all $1\leq k < l\leq L$ we iterate over $n$: {\color{red} [7] What is the initialization? Please check carefully, also the correct ranges of the $kl$ which seem to go to $n$ only. It would also be better to avoid $s$, which we use for the eigenvectors.} \pierre{Adding on Martin's comment above: I don't understand the equations below. Matrices $T_{pq}$ defined above are not used at all (I'm guessing they're used in the initialization but it's not said). It's not said that $1\leq n \leq L$ (is it the case?). I don't really understand what $s^{(n)}_{kl}$ is (Eq. (A9) gives some information but it's quite confusing) and as Martin points it has the same name as the eigenvectors we want to compute. We also use several different set of indices to go from $1$ to $L$: $(p,q)$, $n$, $(k,l)$ and $(i,j)$. In the maintext we use $(a,b)$ for this, making this confusing. Finally, I think the $*$ symbol should not be here if it just stands for normal multiplication, or maybe replaced by $\cdot$ if needed. Finally, this does not say how we compute the derivative of $\bm S$ w.r. to $\{\theta_{pq}\}$, which is the most important part. Much more explanations needed (at least for me...)! }
 \begin{equation}
     T^{(n)}_{kl}=\cos\theta_{kn} * t^{(n)}_{kl}-\sin\theta_{kn}* s^{(n)}_{kl}
 \end{equation}
@@ -743,30 +746,35 @@ This is useful when we initialize parameters $\bm \theta$ for the matrix formed 
 
 Any orthogonal matrix can be written as the exponential of a skew-symmetric matrix $\bm X=-\bm X^T$: 
 \begin{equation}
+	\label{eq:sksym_def}
     \bm S=\exp (\bm X)\ ,
 \end{equation}
-since $\exp(\bm X)^T=\exp(\bm X^T)=\exp(-\bm X)=\exp(\bm X)^{-1}$. 
- 
-The derivatives with respect to the $L(L-1)/2$ independent variables of $\bm X$ is formally defined by
+since $\exp(\bm X)^T=\exp(\bm X^T)=\exp(-\bm X)=\exp(\bm X)^{-1}$. \pierre{This does not prove the statement above but the other implication: the exponential of a skew-symmetric is orthogonal.}
+To obtain a skew-symmetric matrix $\bm X$ from an orthogonal matrix $\bm S$, it is sufficient to invert the exponential relation, $\bm X=\log \bm S$. \pierre{What needs to be proven is that $\log \bm S$ is always defined if $\bm S$ is orthogonal, and that $\bm$ X is skew-symetric.}
+
+The advantage of expressing $\bm S$ in this form is that $\bm X$ has $L(L-1)/2$ entries that can be varied independently. 
+This allows us to perform the optimization over $L(L-1)/2$ independent parameters, with derivatives with respect to the independent entries of $\bm X$ being defined by
 \begin{equation}
- \frac{\partial \bm S}{\partial X_{jk}}=\lim_{h\rightarrow 0} \frac{1}{h} \left( \exp(\bm X+ h \bm E^{jk}) - \exp(\bm X)\right) 
+	\frac{\partial \bm S}{\partial X_{jk}}=\lim_{h\rightarrow 0} \frac{1}{h} \left( \exp(\bm X+ h \bm E^{jk}) - \exp(\bm X)\right) 
+	\label{eq:derivative_sksym}
 \end{equation}
 where $\bm E^{jk}$ for $j > k$ is defined as a skew-symmetric matrix that has only two nonzero entries in positions $(j,k)$ and $(k,j)$:
 \begin{equation}
     E^{pq}_{jk}=\delta_{pj}\delta_{qk}-\delta_{pk}\delta_{qj}
 \end{equation}
- 
-To obtain a skew-symmetric matrix $\bm X$ from an orthogonal matrix $\bm Q$, it is sufficient to invert the exponential relation,
-$\bm X=\log \bm Q$. If we write eigenvectors of the covariance matrix as the columns of the exponential of the skew-symmetric matrix $\bm X$, we are able to perform the optimization over its $L(L-1)/2$ independent entries.
- 
-Furthermore, as the eigenvectors are parametrized by an algebraic function, the complete likelihood is described in terms of arithmetic operations and elementary functions. This allow to compute the gradient via automatic differentiation (AD) 
-{\color{red} CITE}, making computations in our optimization process faster. The idea  is to represent a function as a computational graph, also called Wengert list {\color{red} CITE}, where each node in the list represents an intermediate result of the computation. The intermediate results can be assembled using the chain rule to get the final derivative we are looking for. There are two main algorithms to traverse the chain rule in AD: a forward mode and a reverse mode. Here, we used the reverse-mode algorithm, which is also the one of choice for back-propagation in deep learning. In particular we implemented it using the Julia package Zygote.jl. 
+
+It is not possible to give a simple analytical form to Eq.~\eqref{eq:derivative_sksym}. 
+However, since $\bm S$ is obtained through a simple algebraic expression (Eq.~\eqref{eq:sksym_def}), it is possible to compute its derivative with respect to entries of $\bm X$ through automatic differentiation techniques {\color{red} CITE}. 
+\pierre{About what is below: I don't think it's necessary to explain how AD works. It's a technique at the base of all deep-learning methods, so we could just say that plus cite something.}
+The idea  is to represent a function as a computational graph, also called Wengert list {\color{red} CITE}, where each node in the list represents an intermediate result of the computation. 
+The intermediate results can be assembled using the chain rule to get the final derivative we are looking for. There are two main algorithms to traverse the chain rule in AD: a forward mode and a reverse mode. Here, we used the reverse-mode algorithm, which is also the one of choice for back-propagation in deep learning. In particular we implemented it using the Julia package Zygote.jl \cite{Zygote.jl-2018}.
+
  
  \subsection{Homogeneous and fully balanced tree}
  \label{sub:homogeneous_and_fully_balanced_tree}
 
 Let's assume that the tree is binary, symmetric and completely homogeneous with all branches having the same length $\Delta t$. 
-As an example, the covariance matrix for such a tree with $K=2$ branching events and four leaves is
+As an example, the covariance matrix for such a tree with $K=2$ levels with branching and four leaves is
 \begin{equation} 
 \mathbb{G} =  \left(
 \begin{array}{cccc}
@@ -780,60 +788,77 @@ As an example, the covariance matrix for such a tree with $K=2$ branching events
 
 The associated matrix $\bm G^a=z(\rho_a,\gamma,\Delta t)$  defined in Eq.~\eqref{eq:G} becomes
 
+% \begin{equation} 
+% \bm G^a =  \left(
+% \begin{array}{cccc}
+% {  \rho^{-1}_a } & {\rho^{-1}_a } e ^{-2\gamma\rho_a\Delta t} & {\rho^{-1}_a } e ^{-4\gamma\rho_a\Delta t}& {e ^{-4\gamma\rho_a\Delta t}} \\
+% {\rho^{-1}_a } e ^{-2\gamma\rho_a\Delta t} & {\rho^{-1}_a } & {\rho^{-1}_a } e ^{-4\gamma\rho_a\Delta t} & {\rho^{-1}_a } e ^{-4\gamma\rho_a\Delta t} \\
+% {\rho^{-1}_a } e ^{-4\gamma\rho_a\Delta t} & {\rho^{-1}_a} e ^{-4\gamma\rho_a\Delta t}& {\rho^{-1}_a } & {\rho^{-1}_a } e ^{-2\gamma\rho_a\Delta t}\\
+% {\rho^{-1}_a } e ^{-4\gamma\rho_a\Delta t} & {\rho^{-1}_a } e ^{-4\gamma\rho_a\Delta t} & {\rho^{-1}_a } e ^{-2\gamma\rho_a\Delta t} & {\rho^{-1}_a } \\
+% \end{array}\label{eq:G_a}
+% \right).
+% \end{equation}
 \begin{equation} 
-\bm G^a =  \left(
+\bm G^a =  \rho_a^{-1}\left(
 \begin{array}{cccc}
-{  \rho^{-1}_a } & {\rho^{-1}_a } e ^{-2\gamma\rho_a\Delta t} & {\rho^{-1}_a } e ^{-4\gamma\rho_a\Delta t}& {e ^{-4\gamma\rho_a\Delta t}} \\
-{\rho^{-1}_a } e ^{-2\gamma\rho_a\Delta t} & {\rho^{-1}_a } & {\rho^{-1}_a } e ^{-4\gamma\rho_a\Delta t} & {\rho^{-1}_a } e ^{-4\gamma\rho_a\Delta t} \\
-{\rho^{-1}_a } e ^{-4\gamma\rho_a\Delta t} & {\rho^{-1}_a} e ^{-4\gamma\rho_a\Delta t}& {\rho^{-1}_a } & {\rho^{-1}_a } e ^{-2\gamma\rho_a\Delta t}\\
-{\rho^{-1}_a } e ^{-4\gamma\rho_a\Delta t} & {\rho^{-1}_a } e ^{-4\gamma\rho_a\Delta t} & {\rho^{-1}_a } e ^{-2\gamma\rho_a\Delta t} & {\rho^{-1}_a } \\
+1 & e ^{-2\gamma\rho_a\Delta t} & e ^{-4\gamma\rho_a\Delta t}& {e ^{-4\gamma\rho_a\Delta t}} \\
+e ^{-2\gamma\rho_a\Delta t} & 1 & e ^{-4\gamma\rho_a\Delta t} & e ^{-4\gamma\rho_a\Delta t} \\
+e ^{-4\gamma\rho_a\Delta t} & e ^{-4\gamma\rho_a\Delta t}& 1 & e ^{-2\gamma\rho_a\Delta t}\\
+e ^{-4\gamma\rho_a\Delta t} & e ^{-4\gamma\rho_a\Delta t} & e ^{-2\gamma\rho_a\Delta t} & 1 \\
 \end{array}\label{eq:G_a}
 \right).
 \end{equation}
 
-For hyper-geometric matrices as \eqref{eq:G_a} of dimension $2^K$, there are $K+1$ different eigenvalues  given by: 
+Matrices such as the one in \eqref{eq:G_a} are called \emph{hyper-geometric}.
+For dimensions $2^K$, they have $K+1$ different eigenvalues given by: \pierre{ref?}
 
 \begin{equation}
 \label{eq:lambda_hyper}
 \lambda_k(\rho_a,\gamma) =\rho^{-1}_a *
 \begin{cases}
- (1+\sum_{l=1}^{k-1} 2^{l-1} e ^{-2l\gamma\rho_a\Delta t}-2^{k-1} e ^{-2k\gamma\rho_a\Delta t})\;\;\; k\in[1,K] \\
- (1+\sum_{l=1}^{K} 2^{l-1} e ^{-2l\gamma\rho_a\Delta t}) \;\;\;\;\;\;\;k=K+1
+ 1+\sum_{l=1}^{k-1} 2^{l-1} e ^{-2l\gamma\rho_a\Delta t}-2^{k-1} e ^{-2k\gamma\rho_a\Delta t}, \;\text{for}\; k\in[1,K] \\
+ 1+\sum_{l=1}^{K} 2^{l-1} e ^{-2l\gamma\rho_a\Delta t}, \;\text{for}\; k=K+1
 \end{cases}
 \end{equation}
 
-where $\lambda_{K+1}\ge\lambda_{K}\cdots\ge\lambda_{1}$. For $k<K+1$, the degeneracy of eigenvalue $\lambda_k$ is $d_k=2^{K-k}$.  
-The associated eigenvectors are independent of the parameter $\rho_a$and reflect the events in the phylogenetic tree.
-Each eigenvector $\vec{u}_k$ captures the duplication events in the $(K+1 -k) st$ generation:
+where $\lambda_{K+1}\ge\lambda_{K}\cdots\ge\lambda_{1}$. 
+For $k<K+1$, the degeneracy of eigenvalue $\lambda_k$ is $d_k=2^{K-k}$.  
+The associated eigenvectors are independent of the parameter $\rho_a$ and reflect the events in the phylogenetic tree.
+Each eigenvector $\vec{u}_k$ of length $2^K$ captures the duplication events in the $(K+1 -k) st$ generation:
 
 \begin{equation} 
 \nonumber
  \vec{u}_k =
 \begin{cases}
-{(\underbrace{\overbrace{1,\ldots,1}^{2^{k-1}},\overbrace{-1,\ldots,-1}^{2^{k-1}}}_Q,0,\ldots,0)\ \bigcup \Gamma(u_k) } \;\;\; k\in[1,K] \\
-(1,1,1,\ldots,1,1,1)\;\;\;\;\;\;\;k=K+1
+{(\underbrace{\overbrace{1,\ldots,1}^{2^{k-1}},\overbrace{-1,\ldots,-1}^{2^{k-1}}}_Q,0,\ldots,0)\ \bigcup \Gamma(u_k) }, \;\text{for}\; k\in[1,K] \\
+(1,1,1,\ldots,1,1,1), \;\text{for}\; k=K+1
 \label{eq:eigenvec_simpler_case}
 \end{cases}	
 \end{equation}
 
-where $\Gamma(\vec{u}_k )$ represents the $d_k$ combinations obtained by shifting the block of length $Q$, generating all eigenvectors corresponding to the eigenvalue $\lambda_k$.  The eigenvectors are orthogonal to each other, and can be  normalized and arranged horizontally into a matrix $U$. 
+where $\Gamma(\vec{u}_k )$ represents the $d_k$ combinations obtained by shifting the block of length $Q=2^k$, generating all eigenvectors corresponding to the eigenvalue $\lambda_k$.  
+The eigenvectors are orthogonal to each other, and can be  normalized and arranged horizontally into a matrix $U$. 
 
-To compute the gradient of the likelihood, we need  derivatives of $\lambda_k(\rho_a,\gamma)$ with respect to $\rho_a$ and $\gamma$, which can be directly obtained from expression \eqref{eq:lambda_hyper}.
+To compute the gradient of the likelihood, derivatives of $\lambda_k(\rho_a,\gamma)$ with respect to $\rho_a$ and $\gamma$ can be directly obtained from expression \eqref{eq:lambda_hyper}.
 
 
 \subsection{Optimization scheme}
 \label{sub:optimization_scheme}
 
-The proposed inference scheme was transformed into a multidimensional nonlinear optimization problem for which a variant  of quasi-Newton Methods (QNMs) was used.  The main feature in QNMs is that Hessian matrix $\hat{H}$  does not need to be computed instead it’s approximated. The Hessian approximation $\hat{H}$ is chosen to satisfy the secant equation:
+The proposed inference scheme was transformed into a multidimensional nonlinear optimization problem for which we can compute the gradient of the optimized quantity $\mathcal{L}$.
+To solve it, we used a variant of the quasi-Newton methods (QNM).  
+The main feature in QNM when compared to standard Newton method is that the Hessian matrix $\bm H$ is approximated instead of computed exactly. 
+The Hessian approximation $\mathbf{\hat{H}}$ is chosen to satisfy the secant equation: \pierre{What's $\vec{x}_k$? I suppose it stands for parameters after the $k$th iteration? }
 
-$$\nabla L(\vec{x}_k+\Delta\vec{x})=\nabla L(\vec{x}_k)+\hat{H} \Delta\vec{x} $$
+$$\nabla \mathcal{L}(\vec{x}_k+\Delta\vec{x})=\nabla \mathcal{L}(\vec{x}_k)+\mathbf{\hat{H}} \Delta\vec{x} $$.
 
 
-for $n-dimensions$ $\hat{H}$ is undetermined, the various QNMs differ in their choice of the solution to the secant equation. We used LBFGS variant  (limited memory version of BFGS), this particular method is based in choosing $\hat{H}$ as a positive definite matrix where
+for $n-dimensions$ $\mathbf{\hat{H}}$ is undetermined \pierre{what do you mean "for $n$ dimensions"?}, the various QNMs differ in their choice of the solution to the secant equation. We used LBFGS variant \pierre{maybe a reference}. This particular method is based on choosing $\mathbf{\hat{H}}$ as a positive definite matrix where
 
-$$\hat{H}_{k+1}=\hat{H}_{k}+\frac{y_k y^{T}_k}{y_k\Delta x_k} - \frac{\hat{H}_k\Delta x_k(\hat{H}_k\Delta x_k)^T}{\Delta x^T_k\hat{H}_k\Delta x_k} \;\;\;\text{and}\;\;\; y_k=\nabla L(\vec{x}_k+1)-\nabla L(\vec{x}_k)$$
+$$\mathbf{\hat{H}}_{k+1}=\mathbf{\hat{H}}_{k}+\frac{y_k y^{T}_k}{y_k\Delta x_k} - \frac{\mathbf{\hat{H}}_k\Delta x_k(\mathbf{\hat{H}}_k\Delta x_k)^T}{\Delta x^T_k\mathbf{\hat{H}}_k\Delta x_k} \;\;\;\text{and}\;\;\; y_k=\nabla \mathcal{L}(\vec{x}_k+1)-\nabla \mathcal{L}(\vec{x}_k)$$
+\pierre{What's $H_k$? I'm guessing Hessian matrix at iteration $k$, but then all above equations should have been with $H_k$ as well instead of just $H$.}
 
-The method implementation was done using   NLopt package \cite{NLopt} .
+Implementation of the method was done using NLopt package \cite{NLopt} .
  
 \subsection{Supporting figures}
 \label{sub:supplementary_figures}
