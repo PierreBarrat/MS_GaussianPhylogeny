@@ -9,9 +9,9 @@
 \citation{bury2013market,borysov2015us}
 \citation{jaynes1957information}
 \citation{Inverse_problem_Berg}
+\citation{sayers_genbank_2019,uniprotconsortium_uniprot_2018}
 \citation{levy_potts_2017,cocco_inverse_2018}
-\citation{durbin1998biological,felsenstein2004inferring}
-\citation{sayers_genbank_2019,uniprotconsortium_uniprot_2018,el2019pfam}
+\citation{durbin1998biological}
 \citation{felsenstein_phylogenies_1988,felsenstein2004inferring}
 \citation{levy_potts_2017,cocco_inverse_2018}
 \@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{2}{}}
@@ -25,13 +25,13 @@
 \@writefile{toc}{\contentsline {section}{\numberline {II}The multivariate Ornstein-Uhlenbeck process}{4}{}}
 \newlabel{sec:ornstein_uhlenbeck_dynamics}{{II}{4}{}{}{}}
 \newlabel{eq:eq_distribution}{{1}{4}{}{}{}}
-\newlabel{eq:langevin}{{2}{4}{}{}{}}
 \citation{singh2017multiOU}
+\newlabel{eq:langevin}{{2}{5}{}{}{}}
 \newlabel{eq:FP}{{3}{5}{}{}{}}
 \newlabel{eq:OUpropagator}{{4}{5}{}{}{}}
 \newlabel{eq:def_lambda}{{5}{5}{}{}{}}
 \newlabel{eq:OUjoint}{{6}{5}{}{}{}}
-\newlabel{eq:pairwisecov}{{7}{5}{}{}{}}
+\newlabel{eq:pairwisecov}{{7}{6}{}{}{}}
 \@writefile{toc}{\contentsline {section}{\numberline {III}Methods}{6}{}}
 \newlabel{sec:methods}{{III}{6}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {A}Statement of the problem}{6}{}}
@@ -44,7 +44,7 @@
 \newlabel{eq:multiOU_jointall}{{9}{9}{}{}{}}
 \newlabel{eq:jointcov_1}{{10}{9}{}{}{}}
 \newlabel{eq:jointcov_2}{{11}{9}{}{}{}}
-\newlabel{eq:likelihood_2}{{12}{9}{}{}{}}
+\newlabel{eq:likelihood_2}{{12}{10}{}{}{}}
 \newlabel{eq:z}{{13}{10}{}{}{}}
 \newlabel{eq:subG_def}{{14}{10}{}{}{}}
 \newlabel{eq:Sdef}{{15}{10}{}{}{}}
@@ -53,9 +53,9 @@
 \citation{Zygote.jl-2018}
 \@writefile{toc}{\contentsline {subsection}{\numberline {C}Maximizing the likelihood}{12}{}}
 \newlabel{sub:maximization_of_the_likelihood}{{III\tmspace  +\thinmuskip {.1667em}C}{12}{}{}{}}
-\newlabel{eq:gradlikelihood_1}{{18}{12}{}{}{}}
 \citation{matrix_cook_book}
 \citation{NLopt}
+\newlabel{eq:gradlikelihood_1}{{18}{13}{}{}{}}
 \newlabel{eq:gradlikelihood_2}{{19}{13}{}{}{}}
 \newlabel{eq:gradlikelihood_3}{{20}{13}{}{}{}}
 \newlabel{eq:grad_eigval}{{21}{13}{}{}{}}
@@ -66,10 +66,10 @@
 \newlabel{fig:pears_L4}{{2}{15}{}{}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textbf  {Left:}Relative $l2$-error between empirical or maximum-likelihood covariance matrices and the true covariance matrix. \textbf  {Right:}Relative $l2$-error between empirical /maximum-likelihood coupling matrices and the true coupling matrix. Logarithmic scale is chosen for the $y$-axis because of large values of the error at low $\gamma $. The inset in both panels show the ratio between the two errors.}}{16}{}}
 \newlabel{fig:error_1_L4}{{3}{16}{}{}{}}
-\@writefile{toc}{\contentsline {section}{\numberline {V}Discussion}{16}{}}
-\newlabel{sec:discussion}{{V}{16}{}{}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Quality of prediction of interactions for different values of $\gamma $ and system size $L=4$. Interactions are defined as non-zero elements of the coupling matrix. In the $L=4$ case, there are $6$ possible interactions. Predictions are made by taking the largest elements (in absolute terms) of the inferred coupling matrix. The PPV is the fraction of correctly predicted contacts for a given number of predictions.}}{17}{}}
 \newlabel{fig:PPV_L4}{{4}{17}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Discussion}{17}{}}
+\newlabel{sec:discussion}{{V}{17}{}{}{}}
 \citation{mitov_fast_2020}
 \citation{jones_psicov_2012,barton_large_2014,baldassi_fast_2014}
 \bibdata{mainNotes,bib_phylo}
@@ -83,60 +83,81 @@
 \bibcite{bury2013market}{{8}{}{{}}{{}}}
 \bibcite{borysov2015us}{{9}{}{{}}{{}}}
 \bibcite{jaynes1957information}{{10}{}{{}}{{}}}
-\bibcite{durbin1998biological}{{11}{}{{}}{{}}}
-\bibcite{felsenstein2004inferring}{{12}{}{{}}{{}}}
+\bibcite{sayers_genbank_2019}{{11}{}{{}}{{}}}
+\bibcite{uniprotconsortium_uniprot_2018}{{12}{}{{}}{{}}}
 \@writefile{toc}{\contentsline {section}{\numberline {}References}{20}{}}
-\bibcite{sayers_genbank_2019}{{13}{}{{}}{{}}}
-\bibcite{uniprotconsortium_uniprot_2018}{{14}{}{{}}{{}}}
-\bibcite{el2019pfam}{{15}{}{{}}{{}}}
-\bibcite{felsenstein_phylogenies_1988}{{16}{}{{}}{{}}}
-\bibcite{obermayer2014inverse}{{17}{}{{}}{{}}}
-\bibcite{rodriguez2019toward}{{18}{}{{}}{{}}}
-\bibcite{qin_power_2018}{{19}{}{{}}{{}}}
-\bibcite{horta2020phylogenetic}{{20}{}{{}}{{}}}
-\bibcite{uhlenbeck_theory_1930}{{21}{}{{}}{{}}}
-\bibcite{hansen_stabilizing_1997}{{22}{}{{}}{{}}}
-\bibcite{bartoszek_phylogenetic_2012}{{23}{}{{}}{{}}}
-\bibcite{mitov_fast_2020}{{24}{}{{}}{{}}}
-\bibcite{jones_psicov_2012}{{25}{}{{}}{{}}}
-\bibcite{barton_large_2014}{{26}{}{{}}{{}}}
-\bibcite{baldassi_fast_2014}{{27}{}{{}}{{}}}
-\bibcite{morcos_direct-coupling_2011}{{28}{}{{}}{{}}}
-\bibcite{figliuzzi_coevolutionary_2016}{{29}{}{{}}{{}}}
-\bibcite{russ_evolution-based_2020}{{30}{}{{}}{{}}}
-\bibcite{singh2017multiOU}{{31}{}{{}}{{}}}
-\bibcite{Raffenetti1970GEA}{{32}{}{{}}{{}}}
-\bibcite{Shepard_param_OM}{{33}{}{{}}{{}}}
-\bibcite{Zygote.jl-2018}{{34}{}{{}}{{}}}
-\bibcite{matrix_cook_book}{{35}{}{{}}{{}}}
-\bibcite{NLopt}{{36}{}{{}}{{}}}
-\newlabel{LastBibItem}{{36}{23}{}{}{}}
+\bibcite{durbin1998biological}{{13}{}{{}}{{}}}
+\bibcite{felsenstein_phylogenies_1988}{{14}{}{{}}{{}}}
+\bibcite{felsenstein2004inferring}{{15}{}{{}}{{}}}
+\bibcite{obermayer2014inverse}{{16}{}{{}}{{}}}
+\bibcite{rodriguez2019toward}{{17}{}{{}}{{}}}
+\bibcite{qin_power_2018}{{18}{}{{}}{{}}}
+\bibcite{horta2020phylogenetic}{{19}{}{{}}{{}}}
+\bibcite{uhlenbeck_theory_1930}{{20}{}{{}}{{}}}
+\bibcite{hansen_stabilizing_1997}{{21}{}{{}}{{}}}
+\bibcite{bartoszek_phylogenetic_2012}{{22}{}{{}}{{}}}
+\bibcite{mitov_fast_2020}{{23}{}{{}}{{}}}
+\bibcite{jones_psicov_2012}{{24}{}{{}}{{}}}
+\bibcite{barton_large_2014}{{25}{}{{}}{{}}}
+\bibcite{baldassi_fast_2014}{{26}{}{{}}{{}}}
+\bibcite{morcos_direct-coupling_2011}{{27}{}{{}}{{}}}
+\bibcite{figliuzzi_coevolutionary_2016}{{28}{}{{}}{{}}}
+\bibcite{russ_evolution-based_2020}{{29}{}{{}}{{}}}
+\bibcite{singh2017multiOU}{{30}{}{{}}{{}}}
+\bibcite{Raffenetti1970GEA}{{31}{}{{}}{{}}}
+\bibcite{Shepard_param_OM}{{32}{}{{}}{{}}}
+\bibcite{Zygote.jl-2018}{{33}{}{{}}{{}}}
+\bibcite{matrix_cook_book}{{34}{}{{}}{{}}}
+\bibcite{NLopt}{{35}{}{{}}{{}}}
+\bibcite{griewank_automatic_1989}{{36}{}{{}}{{}}}
+\newlabel{LastBibItem}{{36}{22}{}{}{}}
 \@writefile{toc}{\appendix }
-\@writefile{toc}{\contentsline {section}{\numberline {A}Description of technical details}{24}{}}
-\newlabel{sec:supplementary_material}{{A}{24}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {1}Generating artificial data}{24}{}}
-\newlabel{sub:generating_artificial_data}{{A\tmspace  +\thinmuskip {.1667em}1}{24}{}{}{}}
-\newlabel{eq:OUsample}{{A1}{24}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {2}Initializing parameters}{25}{}}
-\newlabel{sub:initializing_parameters}{{A\tmspace  +\thinmuskip {.1667em}2}{25}{}{}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {a}Eigenvalues and eigenvectors of $\mathbf  {C}^{-1}$}{25}{}}
-\newlabel{ssub:eigenvalues_and_eigenvectors}{{A\tmspace  +\thinmuskip {.1667em}2\tmspace  +\thinmuskip {.1667em}a}{25}{}{}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {b}Time scale parameter $\gamma $}{25}{}}
-\newlabel{eq:scalar_product}{{A3}{25}{}{}{}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {3}Parametrizations of eigenvectors }{26}{}}
-\newlabel{sub:parametrizations_of_eigenvectors}{{A\tmspace  +\thinmuskip {.1667em}3}{26}{}{}{}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {a}Parametrization using generalized Eulerian angles}{26}{}}
-\newlabel{eq:eulerprod}{{A6}{27}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Description of technical details}{23}{}}
+\newlabel{sec:supplementary_material}{{A}{23}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1}Generating artificial data}{23}{}}
+\newlabel{sub:generating_artificial_data}{{A\tmspace  +\thinmuskip {.1667em}1}{23}{}{}{}}
+\newlabel{eq:OUsample}{{A1}{23}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2}Initializing parameters}{24}{}}
+\newlabel{sub:initializing_parameters}{{A\tmspace  +\thinmuskip {.1667em}2}{24}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {a}Eigenvalues and eigenvectors of $\mathbf  {C}^{-1}$}{24}{}}
+\newlabel{ssub:eigenvalues_and_eigenvectors}{{A\tmspace  +\thinmuskip {.1667em}2\tmspace  +\thinmuskip {.1667em}a}{24}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {b}Time scale parameter $\gamma $}{24}{}}
+\newlabel{eq:scalar_product}{{A3}{24}{}{}{}}
+\citation{Raffenetti1970GEA}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3}Parametrizations of eigenvectors }{25}{}}
+\newlabel{sub:parametrizations_of_eigenvectors}{{A\tmspace  +\thinmuskip {.1667em}3}{25}{}{}{}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {a}Parametrization using generalized Eulerian angles}{25}{}}
+\newlabel{EP_eq:1}{{A5}{25}{}{}{}}
+\newlabel{EP_eq:2}{{A6}{26}{}{}{}}
+\newlabel{EP_eq:3}{{A7}{26}{}{}{}}
+\newlabel{EP_eq:4}{{A8}{26}{}{}{}}
+\newlabel{EP_eq:init}{{A9}{26}{}{}{}}
+\newlabel{EP_eq:5}{{A10}{26}{}{}{}}
+\newlabel{EP_eq:6}{{A11}{26}{}{}{}}
+\newlabel{EP_eq:7}{{A12}{26}{}{}{}}
+\newlabel{EP_eq:8}{{A13}{26}{}{}{}}
+\newlabel{EP_eq:10}{{A16}{27}{}{}{}}
+\newlabel{EP_eq:11}{{A17}{27}{}{}{}}
+\newlabel{EP_eq:12}{{A18}{27}{}{}{}}
+\newlabel{EP_eq:13}{{A19}{27}{}{}{}}
+\citation{Shepard_param_OM}
+\newlabel{EP_eq:14}{{A20}{28}{}{}{}}
+\newlabel{EP_eq:15}{{A21}{28}{}{}{}}
+\newlabel{EP_eq:17}{{A22}{28}{}{}{}}
+\newlabel{EP_eq:18}{{A23}{28}{}{}{}}
+\newlabel{EP_eq:19}{{A24}{28}{}{}{}}
+\newlabel{EP_eq:20}{{A25}{28}{}{}{}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {b}Parametrization in term of the exponential of a skew-symmetric matrix }{28}{}}
-\newlabel{eq:sksym_def}{{A14}{28}{}{}{}}
-\newlabel{eq:derivative_sksym}{{A15}{28}{}{}{}}
+\newlabel{eq:sksym_def}{{A26}{28}{}{}{}}
+\citation{griewank_automatic_1989}
 \citation{Zygote.jl-2018}
+\newlabel{eq:derivative_sksym}{{A27}{29}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {4}Homogeneous and fully balanced tree}{29}{}}
 \newlabel{sub:homogeneous_and_fully_balanced_tree}{{A\tmspace  +\thinmuskip {.1667em}4}{29}{}{}{}}
-\newlabel{eq:G}{{A17}{29}{}{}{}}
-\newlabel{eq:G_a}{{A18}{29}{}{}{}}
-\newlabel{eq:lambda_hyper}{{A19}{30}{}{}{}}
-\newlabel{eq:eigenvec_simpler_case}{{A20}{30}{}{}{}}
+\newlabel{eq:G}{{A29}{29}{}{}{}}
+\newlabel{eq:G_a}{{A30}{29}{}{}{}}
+\newlabel{eq:lambda_hyper}{{A31}{30}{}{}{}}
+\newlabel{eq:eigenvec_simpler_case}{{A32}{30}{}{}{}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {5}Optimization scheme}{30}{}}
 \newlabel{sub:optimization_scheme}{{A\tmspace  +\thinmuskip {.1667em}5}{30}{}{}{}}
 \citation{NLopt}
@@ -146,16 +167,14 @@
 \newlabel{sub:supplementary_figures}{{A\tmspace  +\thinmuskip {.1667em}6}{31}{}{}{}}
 \@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Relative $l2$-error between the empirical covariance matrix calculated from an \emph  {i.i.d.} sample and the true covariance matrix, for system sizes $L=4$ and $L=10$. The dashed vertical line corresponds to the number of leaves of the tree used in the simulations.}}{31}{}}
 \newlabel{fig:error_vs_nseqs}{{5}{31}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Inferred $\gamma $ values as a function of real $\gamma $, for system size $L=4$. $\gamma _{emp}$ is the value obtained by the process described in section A\tmspace  +\thinmuskip {.1667em}2{}{}{}\hbox {} of the SM. $\gamma _{max}$ is the value inferred by the maximum-likelihood calculation. The inset represents the ratio of both inferred parameters $\gamma _{emp}$ or $\gamma _{max}$ to the real $\gamma $.}}{32}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Inferred $\gamma $ values as a function of real $\gamma $, for system size $L=4$. $\gamma _{emp}$ is the value obtained by the process described in section A\tmspace  +\thinmuskip {.1667em}2{}{}{}\hbox {} of the appendix. $\gamma _{max}$ is the value inferred by the maximum-likelihood calculation. The inset represents the ratio of both inferred parameters $\gamma _{emp}$ or $\gamma _{max}$ to the real $\gamma $.}}{32}{}}
 \newlabel{fig:scatter_gamma_L4}{{6}{32}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces  Ratio between Pearson correlation of the maximum-likelihood and true covariance matrix to the Pearson correlation of the empirical and true covariances matrices for the two system sizes $L=4$ and $L=10$.}}{32}{}}
-\newlabel{fig:pearson_corr_comp_L4}{{7}{32}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces  Pearson correlation between empirical /maximum-likelihood covariance matrices and the true covariance matrix, the inset plot represent the ratio between the person correlation for the maximum-likelihood covariance matrix and the one for the empirical covariance matrix.}}{33}{}}
-\newlabel{fig:pears_L10}{{8}{33}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Inferred $\gamma $ values as a function of real $\gamma $, for system size $L=10$. $\gamma _{emp}$ is the value obtained by the process described in section A\tmspace  +\thinmuskip {.1667em}2{}{}{}\hbox {} of the SM. $\gamma _{max}$ is the value inferred by the maximum-likelihood calculation. The inset represents the ratio of both inferred parameters $\gamma _{emp}$ or $\gamma _{max}$ to the real $\gamma $. }}{33}{}}
-\newlabel{fig:scatter_gamma_L10}{{9}{33}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces \textbf  {Left:} Relative $l2$-error between empirical or maximum-likelihood covariance matrices and the true covariance matrix. \textbf  {Right}: Relative $l2$-error between empirical /maximum-likelihood coupling matrices and the true coupling matrix. Logarithmic scale is chosen for the y-axis because of large values of the error at low $\gamma $. The inset in both panels show the ratio between the two errors. For system size $L=10$.}}{34}{}}
-\newlabel{fig:error_1_L10}{{10}{34}{}{}{}}
-\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Quality of prediction of interactions for different values of $\gamma $ and system size $L=4$. Interactions are defined as non-zero elements of the coupling matrix. In the $L=4$ case, there are $6$ possible interactions. Predictions are made by taking the largest elements (in absolute terms) of the inferred coupling matrix. The PPV is the fraction of correctly predicted contacts for a given number of predictions.}}{35}{}}
-\newlabel{fig:PPV_L10}{{11}{35}{}{}{}}
-\newlabel{LastPage}{{}{35}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces  Pearson correlation between empirical /maximum-likelihood covariance matrices and the true covariance matrix, the inset plot represent the ratio between the person correlation for the maximum-likelihood covariance matrix and the one for the empirical covariance matrix.}}{32}{}}
+\newlabel{fig:pears_L10}{{7}{32}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Inferred $\gamma $ values as a function of real $\gamma $, for system size $L=10$. $\gamma _{emp}$ is the value obtained by the process described in section A\tmspace  +\thinmuskip {.1667em}2{}{}{}\hbox {} of the appendix. $\gamma _{max}$ is the value inferred by the maximum-likelihood calculation. The inset represents the ratio of both inferred parameters $\gamma _{emp}$ or $\gamma _{max}$ to the real $\gamma $. }}{33}{}}
+\newlabel{fig:scatter_gamma_L10}{{8}{33}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces \textbf  {Left:} Relative $l2$-error between empirical or maximum-likelihood covariance matrices and the true covariance matrix. \textbf  {Right}: Relative $l2$-error between empirical /maximum-likelihood coupling matrices and the true coupling matrix. Logarithmic scale is chosen for the y-axis because of large values of the error at low $\gamma $. The inset in both panels show the ratio between the two errors. For system size $L=10$.}}{33}{}}
+\newlabel{fig:error_1_L10}{{9}{33}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Quality of prediction of interactions for different values of $\gamma $ and system size $L=10$. Interactions are defined as non-zero elements of the coupling matrix. In the $L=10$ case, there are $45$ possible interactions. Predictions are made by taking the largest elements (in absolute terms) of the inferred coupling matrix. The PPV is the fraction of correctly predicted contacts for a given number of predictions.}}{34}{}}
+\newlabel{fig:PPV_L10}{{10}{34}{}{}{}}
+\newlabel{LastPage}{{}{34}{}{}{}}
