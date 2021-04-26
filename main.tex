@@ -146,7 +146,7 @@ A successful example in this regard is the representation of protein sequences b
 The prototypical datasets in this context are multiple-sequence alignments (MSA), with lines being a so-called homologous, {\em i.e.} evolutionarily related sequences, and columns specific positions deriving from some common ancestral position \cite{durbin1998biological}.  
 The MSA contains at least two kinds complementary information:
 \begin{itemize}
-    \item {\it Phylogenetic information:} the distances between sequences carry information about the evolutionary time since their common ancestor. Using phylogeny inference methods \cite{felsenstein_phylogenies_1988,felsenstein2004inferring} we may reconstruct the evolutionary history of our dataset, represented by a phylogenetic tree.  
+    \item {\it Phylogenetic information:} the distances between sequences carry information about the evolutionary time since their common ancestor. Using phylogeny inference methods \cite{felsenstein_phylogenies_1988,felsenstein_joseph_inferring_2003} we may reconstruct the evolutionary history of our dataset, represented by a phylogenetic tree.  
     \item {\it Co-evolutionary information:} positions in a sequence typically do not evolve independently, but rather in a correlated way. This co-evolution carries important information about the selection forces acting on evolving entities. This fact has been extensively studied in the case of protein sequences, and used to predict structure, mutational landscapes or networks of interacting proteins \cite{levy_potts_2017,cocco_inverse_2018}.  
 \end{itemize}
 These two types of information are contained in two complementary features of the data: phylogenetic inference is based on the comparative analysis of different sequences, while co-evolutionary information is contained in the correlation of different columns of the MSA. 
@@ -169,7 +169,7 @@ In this work, we are interested in constructing an inference method for paramete
 Our approach is purely methodological, and the data can represent any set of continuous phenotypic traits, \emph{e.g.} from different organisms, with the tree indicating the phylogenetic relations between data points. 
 Inferred parameters then represent the selection forces without biasing effects from the phylogeny. 
 The manuscript is divided as follows: we first review in section \ref{sec:ornstein_uhlenbeck_dynamics} the main characteristics of the multivariate OU process. 
-We then describe the setting of the inference problem that we want to solve in section \ref{sub:statement_of_the_problem}, propose a solution in sections \ref{sub:Calculation_of_the_likelihood} and \ref{sub:maximization_of_the_likelihood}.
+We then describe the setting of the inference problem that we want to solve in section \ref{sec:statement_of_the_problem} and propose a solution in section \ref{sec:methods}.
 Finally, we present results obtained on simulated data in section \ref{sec:Results}, with the context of pairwise models of protein sequences in mind. 
 
 
@@ -241,13 +241,12 @@ By inverting this block matrix, given that $\Lam$ and $\Sig$ commute and are inv
 \end{equation}
 
 
-Eq.~\eqref{eq:pairwisecov} allows us to readily distinguish two regimes. 
+Eq.~\eqref{eq:pairwisecov} allows us to identify typical timescales associated to the OU process. 
 Let us call $\rho_a$ the eigenvalues of $\bm{J}$. 
 The eigenvalues of $\Lam^{\Delta t}\bm{C}$ are then equal to $\rho_a^{-1}e^{-\gamma\rho_a\Delta t}$. 
-Since all $\rho_a$ are positive, the eigenvalues of $\Lam^{\Delta t}\bm{C}$ vanish exponentially over time. The slowest timescale of exponential decay is set by $\tau_c^{-1} = \gamma\rho_{min}$, with $\rho_{min}$ being the smallest eigenvalue of $\bm{J}$. 
-Thus, for $\Delta t / \tau_c \gg 1$, $\vx_1$ and $\vx_2$ are uncorrelated. 
-If this is verified for all pairs of observations $\vx_i$ and $\vx_j$, the regime is that of \emph{uncorrelated} data -- the inference of $\bm{J}$ can simply be performed by inverting the empirical covariance matrix extracted from the data. 
-Inversely, for $\Delta t / \tau_c \ll 1$, $\vx_1$ and $\vx_2$ are highly correlated, defining a \emph{strongly correlated} regime. 
+Since all $\rho_a$ are positive, the eigenvalues of $\Lam^{\Delta t}\bm{C}$ vanish exponentially over time over timescales of the form $\rho_a\Delta t$. 
+The slowest timescale of exponential decay is set by $\tau_c^{-1} = \gamma\rho_{min}$, with $\rho_{min}$ being the smallest eigenvalue of $\bm{J}$. 
+Thus, for $\Delta t / \tau_c \gg 1$, $\vx_1$ and $\vx_2$ are uncorrelated, whereas they are highly correlated for $\Delta t / \tau_c \ll 1$, $\vx_1$ and $\vx_2$.
 It should be noted that for $\Delta t = 0$, the joint correlation matrix of $\vx_1$ and $\vx_2$ becomes non invertible, and Eq.~\eqref{eq:pairwisecov} becomes irrelevant. Actually, $\vx_1$ and $\vx_2$ coincide at that point, \ie~we have $P(\vx_1,\vx_2|\,\Delta t=0) = P_{eq}(\vx_1) \times \delta(\vx_1 - \vx_2)$ using the $L$-dimensional Dirac distribution.
 
 
@@ -255,11 +254,9 @@ It should be noted that for $\Delta t = 0$, the joint correlation matrix of $\vx
 
 
 
-\section{Methods}
-\label{sec:methods}
 
-\subsection{Statement of the problem}
-\label{sub:statement_of_the_problem}
+\section{Statement of the problem}
+\label{sec:statement_of_the_problem}
 
 
 \begin{figure}[!htb]
@@ -290,8 +287,8 @@ Hence, the joint statistics of the leaf configurations $\{\vx_i\}_{i=1,...,N}$ (
 The aim of this work is to derive a method for inferring the most likely values of $\bm C$ and $\gamma$ given the knowledge of the data $\mathcal{D}=\{\vx_i\}_{i=1,...,N}$ and the underlying tree $\mathcal{T}$. We consider here that both the topology and the branch lengths of $\mathcal{T}$ are known. 
 
 This problem shows two notable extreme cases: 
-The first one is the case where the typical branch length of the tree is short compared to the timescales of the OU process.
-As a consequence, leaf configurations are close to identical to the root, \ie~$\vx_i\simeq\vx_r$, and the inference of $\bm C$ becomes impossible. 
+The first one is the case where the typical branch length of the tree is short compared to the timescales introduced in section \ref{sec:ornstein_uhlenbeck_dynamics}
+As a consequence, leaf configurations are close to identical to the root, \ie~$\vx_i\simeq\vx_r$, and the inference of $\bm C$ becomes impossible due to lack of independent samples from $P_{eq}$. 
 The second one is the opposite case where the typical branch length of the tree is long compared to the longest timescale of the OU process $\tau_c$.
 In this case, the configuration of a child node is close to independent from that of its ancestor, and leaf configurations can be considered as independent samples from the equilibrium distribution $P_{eq}$.
 $\bm C$ can then be readily estimated by computing the empirical covariance matrix. 
@@ -305,6 +302,10 @@ We adopt a Bayesian inference approach by writing the probability of a given set
 \end{equation}
 with the proportionality constant not depending on the parameters $\{\bm C, \gamma\}$. Here, $P(\bm C, \gamma)$ can be any arbitrarily chosen prior distribution. The difficulty in Eq.~\eqref{eq:bayesian_likelihood} lies in the estimation of the likelihood $P(\mathcal{D}\vert\bm C, \gamma, \mathcal{T})$,
 \ie~of the joint probability of the datapoints $\mathcal{D}=\{\vx_i\}_{i=1,...,N}$ for an OU process given by its parameters $\{\bm C, \gamma\}$ and the tree $\mathcal{T}$.  We detail the computation of this probability in the following section. 
+
+
+\section{Methods}
+\label{sec:methods}
 
 \subsection{Calculation of the likelihood} % (fold)
 \label{sub:Calculation_of_the_likelihood}
@@ -358,15 +359,15 @@ As the next step, we introduce $N\times N$-dimensional matrices ${\bm G}^a, a=1,
 In other words, for a given index $1\leq a\leq L$, ${\bm G}^a$ is the matrix built by replacing all blocks of $\mathbb{G}$ by their respective $a$th eigenvalue.
 Matrices ${\bm G}^a$ are symmetric and have their own eigenmodes, that we denote by $\left\{\lambda_{ka}, \vuka\right\}_{k=1,...,N}$.
 
-To obtain the eigenmodes of the joint covariance matrix $\mathbb{G}$ as a function of the $\vsa$ and $\vuka$, we construct the direct product of vectors $\vsa$ and $\vuka$, defining vectors $\vec{S}_{ka}$ of dimension $L\times N$:
+To obtain the eigenmodes of the joint covariance matrix $\mathbb{G}$ as a function of the $\vsa$ and $\vuka$, we construct the direct product of vectors $\vuka$ and $\vsa$, defining vectors $\vec{S}_{ka}$ of dimension $L\cdot N$:
 \begin{equation}
 	\begin{split}
 		\vec{S}_{ka} &= \vuka \otimes \vsa \\
-		&= [u_{ka}^1\cdot\vsa, \ldots, u_{ka}^N\cdot\vsa].
-		% &= [u_{ka}(1)s_a(1), \ldots, u_{ka}(1)s_a(L); \ldots; u_{ka}(N)s_a(1), \ldots, u_{ka}(N)s_a(L)]
+		&= [u_{ka}^1\cdot\vsa, \ldots, u_{ka}^N\cdot\vsa],
 	\end{split}
 	\label{eq:Sdef}
 \end{equation}
+where the superindex $i\in\{1\ldots N\}$ refers to components of $\vuka$.
 The $i$th block vector of $\vec{S}_{ka}$ will thus be written as $\vec{S}_{ka}^i = u_{ka}^i\cdot\vsa$. 
 We can now show that $\vec{S}_{ka}$ are eigenvectors of matrix $\mathbb{G}$ by considering the $i$th block vector of the product $\mathbb{G}\cdot\vec{S}_{ka}$:
 \begin{equation}
@@ -406,7 +407,7 @@ This means that the likelihood in equation~\eqref{eq:likelihood_3} is in fact a 
 
 As stated at the beginning of this section, our main task is to find the equilibrium covariance matrix $\bm C$ that maximizes the likelihood of the data. 
 We also need to find the optimal time scale $\gamma$. 
-In Eq.~(\eqref{eq:likelihood_3}), the likelihood is expressed as a function of $\gamma$ and $\{\rho_a, \vsa\}$, \ie~the eigenvalues and eigenvectors of $\iC$, either directly or through the quantities $\{\lambda_{ka}, \vuka \}$. 
+In Eq.~\eqref{eq:likelihood_3}, the likelihood is expressed as a function of $\gamma$ and $\{\rho_a, \vsa\}$, \ie~the eigenvalues and eigenvectors of $\iC$, either directly or through the quantities $\{\lambda_{ka}, \vuka \}$. 
 We know attempt to maximize the likelihood with respect to the eigenmodes $\{\rho_a, \vsa\}$ and to the time scale $\gamma$. 
 
 In order to perform this optimization, we need to compute the gradient of the likelihood with repsect to the eigenvectors $\{\vsa\}$. 
@@ -434,7 +435,7 @@ This gives us  three equations:
 \end{equation}
 % dL / d theta
 \begin{equation}
-	\frac{\partial \mathcal{L}}{\partial\theta_{\alpha\beta}} = \sum_{k=1}^N \lambda_k^{-1} \left(\sum_{i=1}^N u_k^i\vx_i\cdot\vsa\right) \left(\sum_{i=1}^N u_k^i \vx_i\cdot\frac{\partial \vsa}{\partial\theta_{\alpha\beta}}\right),
+	\frac{\partial \mathcal{L}}{\partial\theta_{\alpha\beta}} = -\sum_{k=1}^N \lambda_k^{-1} \left(\sum_{i=1}^N u_k^i\vx_i\cdot\vsa\right) \left(\sum_{i=1}^N u_k^i \vx_i\cdot\frac{\partial \vsa}{\partial\theta_{\alpha\beta}}\right),
 	\label{eq:gradlikelihood_2}
 \end{equation}
 and
@@ -473,8 +474,14 @@ This gives us all the quantities to estimate the gradient of $\mathcal{L}$ with 
 \label{sec:Results}
 % \subsection{Choosing an appropriate time scale interval}
 
-In order to evaluate our inference procedure, we generate artificial data corresponding to the process described in section \ref{sub:statement_of_the_problem}. 
-We first build a  balanced binary tree $\mathcal{T}$ with $2^9=512$ leaves. 
+In order to evaluate the accuracy of our inference procedure, we want to estimate how close the covariance matrix reconstructed by likelihood maximization $\bm{C}_{max}$ is to the real covariance matrix $\bm{C}$. 
+To establish  a reference point for inference quality, we have to compare $\bm{C}$ to the empirical covariance matrix $\bm{C}_{emp}$ computed as if observations were independent, \emph{i.e.} $\bm{C}_{emp}(a,b) = N^{-1}\sum_{i=1}^N x_i^a x_i^b$. 
+Note that it is also possible to estimate the accuracy of the method by comparing the coupling matrices obtained by inverting each covariance matrix, namely $\bm{J}$, $\bm{J}_{max}$ and $\bm{J}_{emp}$. 
+Here, we described results obtained on artificial data. 
+
+
+Data is generated according to the process described in section \ref{sec:statement_of_the_problem}. 
+We first build a  balanced binary tree $\mathcal{T}$ with $N=2^9=512$ leaves. 
 The length of each branch of $\mathcal{T}$ is chosen from a uniform distribution in the interval $[0,1]$. 
 We also sample positive semi-definite coupling matrix $\bm{J}$ of size $L\times L$ with $L=4$ or $L=10$, with entries normally distributed with mean $\mu_J=0.8$ and $\sigma_J=0.2$. 
 
@@ -489,17 +496,18 @@ In order to investigate the different regimes of tree-induced correlation, we va
 \end{equation}
 where $\Delta t_{av}$ is the average branch length separating two leaves of $\mathcal{T}$. 
 For $\gamma \gg \gamma_d$, leaf configurations are on average well decorrelated, whereas for $\gamma \ll \gamma_d$ all leaves will be strongly correlated. 
-By simulating data using different $\gamma$ in the range $[10^{-2},2]\cdot\gamma_d$, we investigate all relevant temporal regimes.  
+By simulating data using a range of values of $\gamma$, we can investigate these different regimes. 
+Empirically, we find that the range $\gamma\in[10^{-2},2]\cdot\gamma_d$ covers all relevant temporal regimes.  
 For each value of $\gamma$, we then sample  configurations of leaves of $\mathcal{T}$ using the process described in section \ref{sub:generating_artificial_data} of the supplementary material. 
 To avoid statistical noise when assessing the quality of our inference, we repeat the sampling of leaf configurations 100 times for each value of $\gamma$.
 
 For each repetition of the sampling process, we perform our maximum likelihood procedure and obtain an inferred covariance matrix $\bm{C}_{max}$. 
-As a means of comparison, we also compute the empirical covariance matrix $\bm{C}_{emp}$ as if leaf configurations were independent. 
+We also compute the empirical covariance matrix $\bm{C}_{emp}$ as if leaf configurations were independent. 
 Fig.~\ref{fig:pears_L4} shows the Pearson correlation between the real covariance matrix $\bm{C}=\bm{J}^{-1}$ and the empirical or inferred ones in the $L=4$ case (similar figures for $L=10$ are in Appendix \ref{sub:supplementary_figures}). 
 As expected, both methods perform well in the large $\gamma$ limit with a correlation close to $1$, and worse in the low $\gamma$ limit. 
 In this latter case, correlations due to phylogeny are too strong for our maximum likelihood method to pick up signal, and both methods perform equally poorly. 
 However, there exists an intermediate regime where $\bm{C}_{max}$ is much closer to the actual correlation than  $\bm{C}_{emp}$. 
-In Fig.~\ref{fig:error_1_L4}, we plot the relative $l2$-error between either covariance matrices in the left panel or coupling matrices in the right panel. 
+In Fig.~\ref{fig:error_1_L4}, we plot the relative $l2$-error between either covariance matrices in the left panel or coupling matrices in the right panel, where the $l2$-error is defined as the $l2$-norm of the difference between two matrices, \emph{e.g.} $\vert\vert\bm{C}_{max} - \bm{C}\vert\vert_2$. 
 In both cases, our maximum-likelihood method results in a consistent improvement over the empirical estimator. 
 However, the relative error still reaches high values in the low $\gamma$ regime, which is likely due to $\bm{C}_{max}$ and $\bm{C}_{emp}$ being close to singular in this case. 
 
@@ -520,11 +528,18 @@ However, the relative error still reaches high values in the low $\gamma$ regime
 	%	\begin{subfigure}{}
 	%		\centering\includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/epsilon_error_J_L4_balanced_tree_100.pdf}
 	%	\end{subfigure}
-	\caption{\textbf{Left:}Relative $l2$-error between empirical or maximum-likelihood  covariance matrices and the true covariance matrix.  \textbf{Right:}Relative $l2$-error between empirical /maximum-likelihood  coupling matrices and the true coupling matrix. Logarithmic scale is chosen for the $y$-axis because of large values of the error at low $\gamma$. The inset in both panels show the ratio between the two errors.}
+	\caption{\textbf{Left:}Relative $l2$-error between empirical or maximum-likelihood  covariance matrices and the true covariance matrix.  \textbf{Right:}Relative $l2$-error between empirical /maximum-likelihood  coupling matrices and the true coupling matrix. Logarithmic scale is chosen for the $y$-axis because of large values of the error at low $\gamma$. The inset shows the ratio between the two errors.}
 	\label{fig:error_1_L4}
 \end{figure*}
 
-An interesting way to illustrate the benefits of reconstructing the covariance matrix using knowledge of the tree is to evaluate the gain in {\em effective sample size}. Intuitively, the use of correlated samples reduces the information contained in the data, as compared to an equally large dataset of \emph{i.i.d.} configurations. It is therefore interesting to compare the accuracy of our inferences with the accuracy obtained on smaller but \emph{i.i.d.} samples. To do so, we report in Fig.~\sref{fig:error_vs_nseqs} the $l2$-error between true and empirical covariances computed from a \emph{i.i.d.} samples of variable sizes $N$. As expected,  the error increases with decreasing values of $N$. 
+An interesting way to illustrate the benefits of reconstructing the covariance matrix using knowledge of the tree is to evaluate the gain in {\em effective sample size}. 
+Intuitively, the use of correlated samples reduces the information contained in the data, as compared to an equally large dataset of \emph{i.i.d.} configurations. 
+It is therefore interesting to compare the accuracy of our inferences with the accuracy obtained by computing the empirical covariance matrix using \emph{i.i.d.} samples. 
+This can serve as a baseline for the minimal error that can be achieved for a given sample size $N$, but also to estimate the \emph{i.i.d.} sample size that the difference between $\bm{C}_{max}$ and $\bm{C}$ corresponds to. 
+In other words, for each value of $\vert\vert \bm{C}_{max} - \bm{C}\vert\vert_2$ corresponds an \emph{i.i.d.} sample size $N$ for which the same $l2$-error is obtained. 
+
+We report in Fig.~\sref{fig:error_vs_nseqs} the $l2$-error between true and empirical covariances computed from a \emph{i.i.d.} samples of variable sizes $N$. 
+As expected, the error increases with decreasing values of $N$. 
 We can use this in turn to express values of the $l2$-error in correlated samples in terms of effective \emph{i.i.d.} sample sizes.   
 For example, the error reached by $\bm{C}_{emp}$ for $\gamma/\gamma_d\in[0.5, 1]$ and $L=4$ corresponds to the one obtained for an \emph{i.i.d.} sample of size $\sim 16$, whereas it corresponds to a sample of size $\sim 32-64$ for $\bm{C}_{max}$.
 Thus, our correction is equivalent to increasing by a factor 2-4 the number of effective samples.
@@ -545,7 +560,7 @@ It is however much larger in the intermediate regime, with a significantly impro
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/PPVs_L4.pdf}
-	\caption{Quality of prediction of interactions for  different values of $\gamma$ and system size $L=4$. Interactions are defined as non-zero elements of the coupling matrix. In the $L=4$ case, there are $6$ possible interactions. Predictions are made by taking the largest elements (in absolute terms) of the inferred coupling matrix. The PPV is the fraction of correctly predicted contacts for a given number of predictions.}
+	\caption{Quality of prediction of interactions for  different values of $\gamma$ and system size $L=4$. Interactions are defined as non-zero elements of the coupling matrix. In the $L=4$ case, there are $6$ possible interactions. Predictions are made by taking the largest elements (in absolute terms) of the inferred coupling matrix. The PPV is the fraction of correctly predicted contacts for a given number of predictions. The perfect prediction is to the one that would be made using the real coupling matrix $\bm{J}$.}
 	\label{fig:PPV_L4}
 \end{figure}
 
@@ -606,9 +621,7 @@ Agreement No. 734439 InferNet.
 \clearpage
 \bibliographystyle{unsrt}
 \bibliography{bib_phylo}
-% \begin{thebibliography}{}
-%    % \input{main.bbl}
-% \end{thebibliography}
+
 
 \newpage
 \appendix
@@ -1011,7 +1024,7 @@ Implementation of the method was done using NLopt package \cite{NLopt} .
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[keepaspectratio=true,width=0.5\textwidth]{Figures/error_Ciid_vs_numb_of_seq.pdf}
-	\caption{Relative $l2$-error between the empirical covariance matrix calculated from an \emph{i.i.d.} sample and the true covariance matrix, for system sizes $L=4$ and $L=10$. The dashed vertical line corresponds to the number of leaves of the tree used in the simulations.}
+	\caption{Relative $l2$-error between the empirical covariance matrix calculated from an \emph{i.i.d.} sample and the true covariance matrix, for system sizes $L=4$ and $L=10$. An \emph{i.i.d.} sample size $N$ can be attributed to each value of the $l2$-error. By comparing values of the $l2$-error with results in figures \ref{fig:error_1_L4} and \ref{fig:error_1_L10}, we can formulate the gain in accuracy in terms of a gain in effective sample size. The dashed vertical line corresponds to the number of leaves of the tree used in the simulations.}
 	\label{fig:error_vs_nseqs}
 \end{figure}
 
@@ -1056,7 +1069,7 @@ Implementation of the method was done using NLopt package \cite{NLopt} .
  %		\begin{subfigure}{}
  %			\centering\includegraphics[keepaspectratio=true,width=0.45\textwidth]{Figures/epsilon_error_J_L10_balanced_tree_100.pdf}
  %		\end{subfigure}
- 	\caption{\textbf{Left:} Relative $l2$-error between empirical or maximum-likelihood covariance matrices and the true covariance matrix. \textbf{Right}: Relative $l2$-error between empirical /maximum-likelihood coupling matrices and the true coupling matrix. Logarithmic scale is chosen for the y-axis because of large values of the error at low $\gamma$. The inset in both panels show the ratio between the two errors. For system size $L=10$.}
+ 	\caption{\textbf{Left:} Relative $l2$-error between empirical or maximum-likelihood covariance matrices and the true covariance matrix. \textbf{Right}: Relative $l2$-error between empirical /maximum-likelihood coupling matrices and the true coupling matrix. Logarithmic scale is chosen for the y-axis because of large values of the error at low $\gamma$. The inset shows the ratio between the two errors. For system size $L=10$.}
  	\label{fig:error_1_L10}
  \end{figure*}
 
@@ -1066,7 +1079,7 @@ Implementation of the method was done using NLopt package \cite{NLopt} .
 \begin{figure}[!htb]
 	\centering
 	\includegraphics[keepaspectratio=true,width=1.0\textwidth]{Figures/PPVs_L10.pdf}
-	\caption{Quality of prediction of interactions for  different values of $\gamma$ and system size $L=10$. Interactions are defined as non-zero elements of the coupling matrix. In the $L=10$ case, there are $45$ possible interactions. Predictions are made by taking the largest elements (in absolute terms) of the inferred coupling matrix. The PPV is the fraction of correctly predicted contacts for a given number of predictions.}
+	\caption{Quality of prediction of interactions for  different values of $\gamma$ and system size $L=10$. Interactions are defined as non-zero elements of the coupling matrix. In the $L=10$ case, there are $45$ possible interactions. Predictions are made by taking the largest elements (in absolute terms) of the inferred coupling matrix. The PPV is the fraction of correctly predicted contacts for a given number of predictions. The perfect prediction is to the one that would be made using the real coupling matrix $\bm{J}$.}
 	\label{fig:PPV_L10}
 \end{figure}
 
